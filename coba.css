@@ -1,12 +1,12 @@
 /* =========================================
-   1. GLOBAL & TYPOGRAPHY (DISAMAKAN)
+   1. GLOBAL & BACKGROUND POLA TITIK
    ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 body {
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #ffffff;
-    /* Menambahkan efek pola titik agar sama dengan index */
+    /* Efek Pola Titik (Dotted Background) */
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
     color: #333;
@@ -14,8 +14,12 @@ body {
     padding: 20px; 
 }
 
+h2 { 
+    color: #2d6a4f; 
+}
+
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - IDENTIK INDEX
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
    ========================================= */
 .navbar {
     display: flex;
@@ -27,14 +31,11 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
     
-    position: sticky;
-    top: 20px;
-    z-index: 1000;
-    margin: 0 auto 20px; /* Membuat navbar ke tengah */
-    
-    /* Tambahan agar terlihat melayang (Glassmorphism) */
-    backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.9);
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
 }
 
 .nav-logo img {
@@ -63,10 +64,9 @@ body {
 }
 
 .nav-links li a:hover {
-    color: #ed8805; /* Oranye khas HeyaCamp */
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
 }
 
-/* Penyelarasan ikon dan teks stack */
 .nav-links li a i {
     font-size: 18px;
 }
