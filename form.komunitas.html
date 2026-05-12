@@ -24,7 +24,7 @@
             <li><a href="boking.html"><i class="fa-solid fa-mountain"></i>Alat Yang Sedang Disewa</a></li>
             <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i>Lokasi</a></li>
             <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i>Cara Sewa</a></li>
-            <li><a href="#"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
             <li>
                 <a href="#">
                     <i class="fa-solid fa-tent"></i> 
@@ -45,73 +45,120 @@
         </div>
     </header>
 
-    <main class="form-grid">
-        <section class="input-column">
-            <div class="form-card">
-                <h3><i class="fa-regular fa-image"></i> Cover & Logo</h3>
-                <div class="upload-cover">
-                    <div class="upload-box">
-                        <i class="fa-solid fa-upload"></i>
-                        <p>Upload Cover Region</p>
-                        <span>PNG, JPG recommended</span>
-                    </div>
-                </div>
-                <div class="upload-logo-section">
-                    <div class="circle-preview"><i class="fa-regular fa-image"></i></div>
-                    <button class="btn-outline"><i class="fa-solid fa-upload"></i> Upload Logo</button>
-                    <span class="hint">Disarankan rasio 1:1 (Persegi)</span>
+<main class="form-grid">
+    <section class="input-column">
+        <div class="form-card">
+            <h3><i class="fa-regular fa-image"></i> Cover & Logo</h3>
+            <div class="upload-cover">
+                <input type="file" id="inputCover" accept="image/*" style="display: none;">
+                <div class="upload-box" id="dropAreaCover" style="border: 2px dashed #ffead4; padding: 30px; text-align: center; border-radius: 10px; margin-top: 15px; cursor: pointer;">
+                    <i class="fa-solid fa-upload" style="font-size: 24px; color: #ed8805;"></i>
+                    <p id="labelCover" style="font-size: 14px; margin: 10px 0;">Upload Cover Region</p>
+                    <span style="font-size: 12px; color: #94a3b8;">PNG, JPG recommended</span>
                 </div>
             </div>
+            
+            <div class="upload-logo-section" style="margin-top: 20px; display: flex; align-items: center; gap: 15px;">
+                <input type="file" id="inputLogo" accept="image/*" style="display: none;">
+                <div class="circle-preview" id="previewLogoCircle" style="width: 60px; height: 60px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #ddd;">
+                    <i class="fa-regular fa-image"></i>
+                </div>
+                <button type="button" id="btnUploadLogo" class="btn-outline" style="padding: 8px 15px; border-radius: 8px; border: 1px solid #ddd; cursor: pointer;">Upload Logo</button>
+            </div>
+        </div>
 
-            <div class="form-card">
-                <h3><i class="fa-regular fa-file-lines"></i> Informasi Region</h3>
-                <div class="input-group">
-                    <label>Nama Region <span class="required">*</span></label>
-                    <input type="text" placeholder="Contoh: Yurucamp Jawa Barat">
-                </div>
-                <div class="input-group">
-                    <label>Slug URL <span class="required">*</span></label>
-                    <div class="input-addon">
-                        <span>yurucamp.id/r/</span>
-                        <input type="text">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label>Deskripsi <span class="required">*</span></label>
-                    <textarea placeholder="Deskripsikan tentang komunitas region ini..."></textarea>
+        <div class="form-card">
+            <h3><i class="fa-regular fa-file-lines"></i> Informasi Region</h3>
+            <div class="input-group">
+                <label>Nama Region <span class="required" style="color: red;">*</span></label>
+                <input type="text" id="namaRegion" placeholder="Contoh: Yurucamp Jawa Barat">
+            </div>
+            <div class="input-group">
+                <label>Deskripsi <span class="required" style="color: red;">*</span></label>
+                <textarea id="deskripsiRegion" placeholder="Deskripsikan tentang komunitas region ini..." style="height: 100px;"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <aside class="preview-column">
+        <div class="preview-card-container">
+            <h3 style="font-size: 16px; margin-bottom: 15px;"><i class="fa-solid fa-magnifying-glass"></i> Preview Card</h3>
+            <div class="community-card" style="background: white; border-radius: 15px; overflow: hidden; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <div class="preview-cover" style="height: 100px; background: #ed8805;"></div>
+                <div style="padding: 15px; position: relative; padding-top: 30px;">
+                    <div class="mini-logo" style="width: 50px; height: 50px; background: white; border-radius: 10px; position: absolute; top: -25px; left: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: bold; color: #ed8805;">R</div>
+                    <h4 id="previewNama" style="margin: 0; font-size: 16px;">Nama Region</h4>
+                    <p style="font-size: 12px; color: #64748b; margin: 5px 0;"><i class="fa-solid fa-users"></i> 0 anggota</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <aside class="preview-column">
-            <div class="preview-card-container">
-                <div class="preview-header">
-                    <i class="fa-solid fa-earth-asia"></i> Preview Card
-                </div>
-                <div class="actual-card">
-                    <div class="card-cover"></div>
-                    <div class="card-content">
-                        <div class="mini-logo">R</div>
-                        <h4>Nama Region</h4>
-                        <p><i class="fa-solid fa-users"></i> 0 anggota</p>
-                        <span>Deskripsi region akan muncul di sini...</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <i class="fa-solid fa-circle-info"></i>
-                <div>
-                    <strong>Proses Pengajuan</strong>
-                    <p>Region baru akan berstatus <strong>Pending</strong> sampai disetujui oleh Superadmin.</p>
-                </div>
-            </div>
-
-            <button class="btn-submit">
-                <i class="fa-solid fa-earth-asia"></i> Ajukan Region Baru
-            </button>
-        </aside>
-    </main>
+        <button class="btn-submit" id="submitBtn">
+            <i class="fa-solid fa-earth-asia"></i> Ajukan Region Baru
+        </button>
+    </aside>
+</main>
 </div>
+<script>
+    let base64Cover = "";
+    let base64Logo = "";
+
+    // Fungsi Konversi
+    function encodeImageFileAsURL(element, callback) {
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function() { callback(reader.result); }
+        reader.readAsDataURL(file);
+    }
+
+    // Input Events untuk Preview Teks
+    document.getElementById('namaRegion').addEventListener('input', function() {
+        document.getElementById('previewNama').innerText = this.value || "Nama Region";
+    });
+
+    // Logika Upload
+    document.getElementById('dropAreaCover').addEventListener('click', () => document.getElementById('inputCover').click());
+    document.getElementById('inputCover').addEventListener('change', function() {
+        encodeImageFileAsURL(this, function(base64) {
+            base64Cover = base64;
+            document.getElementById('labelCover').innerText = "Cover Terpilih!";
+            document.querySelector('.preview-cover').style.backgroundImage = `url(${base64})`;
+            document.querySelector('.preview-cover').style.backgroundSize = "cover";
+        });
+    });
+
+    document.getElementById('btnUploadLogo').addEventListener('click', () => document.getElementById('inputLogo').click());
+    document.getElementById('inputLogo').addEventListener('change', function() {
+        encodeImageFileAsURL(this, function(base64) {
+            base64Logo = base64;
+            document.getElementById('previewLogoCircle').innerHTML = `<img src="${base64}" style="width:100%; height:100%; object-fit:cover;">`;
+            document.querySelector('.mini-logo').innerHTML = `<img src="${base64}" style="width:100%; height:100%; border-radius:8px; object-fit:cover;">`;
+        });
+    });
+
+    // Simpan Data
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const nama = document.getElementById('namaRegion').value;
+        const deskripsi = document.getElementById('deskripsiRegion').value;
+
+        if (!nama || !deskripsi) {
+            alert("Harap isi Nama dan Deskripsi!");
+            return;
+        }
+
+        let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+        daftarKomunitas.push({
+            nama: nama,
+            deskripsi: deskripsi,
+            anggota: 0,
+            cover: base64Cover,
+            logo: base64Logo
+        });
+
+        localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
+        alert("Komunitas berhasil diajukan!");
+        window.location.href = "komunitas.html";
+    });
+</script>
 </body>
 </html>

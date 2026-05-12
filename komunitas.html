@@ -32,23 +32,49 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
-    <section class="community-header">
+   <section class="community-header">
     <div class="header-content">
         <div class="tag-regional">
             <i class="fa-solid fa-earth-asia"></i> Komunitas Regional
         </div>
-        
         <div class="title-group">
             <h1>Gabung <span class="highlight">Komunitas</span></h1>
             <p>Temukan dan bergabung dengan komunitas camper di daerahmu</p>
         </div>
     </div>
-
     <div class="header-action">
         <a href="form.komunitas.html" class="btn-create">
             <i class="fa-solid fa-plus"></i> Buat Komunitas
         </a>
     </div>
-</section>
+</section> <div id="listKomunitasBaru" class="community-grid"></div>
+
+<script>
+    window.onload = function() {
+        const container = document.getElementById('listKomunitasBaru');
+        const dataTersimpan = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+
+        if (dataTersimpan.length > 0) {
+            // Kita tambahkan parameter 'index' pada map
+            container.innerHTML = dataTersimpan.map((item, index) => `
+                <a href="detail-komunitas.html?id=${index}" class="card-link">
+                    <div class="community-card">
+                        <div class="card-cover">
+                            <img src="${item.cover || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500'}" alt="Cover">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-logo">
+                                <img src="${item.logo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama)}" alt="Logo">
+                            </div>
+                            <h4 class="card-title">${item.nama}</h4>
+                            <p class="card-stats"><i class="fa-solid fa-users"></i> ${item.anggota} anggota</p>
+                            <p class="card-desc">${item.deskripsi}</p>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+    }
+</script>
 </body>
 </html>

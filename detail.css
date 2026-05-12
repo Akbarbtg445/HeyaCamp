@@ -1,0 +1,336 @@
+/* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
+/* =========================================
+   1. GLOBAL & RESET
+   ========================================= */
+:root {
+    --primary: #ed8805;
+    --bg-body: #f8fafc; /* Warna background lebih soft */
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Nunito', 'Inter', sans-serif;
+    background-color: var(--bg-body);
+    /* Hapus padding top berlebih jika navbar sticky sudah ada marginnya */
+    margin: 0;
+    color: var(--text-main);
+}
+
+/* Pola titik tetap ada di background body */
+.body-pattern {
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+}
+
+/* =========================================
+   2. HERO SECTION REFINEMENT
+   ========================================= */
+.hero-section {
+    position: relative;
+    height: 350px; /* Sedikit lebih tinggi agar lega */
+    background-color: #2d3748;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 50px;
+    z-index: 1;
+    margin-top: -20px; /* Menyesuaikan jika navbar punya margin bawah */
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* Gradient gelap di bawah agar teks putih terbaca jelas */
+    background: linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.7));
+}
+
+.hero-content {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Pastikan konten rata bawah */
+}
+
+.profile-header {
+    display: flex;
+    gap: 25px;
+    align-items: flex-end;
+    transform: translateY(30px); /* Membuat logo & teks sedikit 'keluar' dari hero */
+}
+
+.profile-logo-wrapper {
+    width: 160px;
+    height: 160px;
+    background: var(--white);
+    border-radius: 28px;
+    padding: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border: 5px solid var(--white); /* Frame putih tebal seperti di gambar */
+    flex-shrink: 0;
+}
+
+.profile-logo-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.profile-info {
+    padding-bottom: 10px;
+    color: var(--white);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.profile-info h1 {
+    font-size: 42px;
+    margin: 0;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.profile-meta {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    align-items: center;
+}
+
+/* =========================================
+   3. CONTENT LAYOUT
+   ========================================= */
+.container {
+    max-width: 1200px;
+    margin: 60px auto; /* Jarak setelah hero */
+    padding: 0 40px;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 30px;
+}
+
+/* Kolom Kiri: Tab Menu */
+.tab-menu {
+    background: var(--white);
+    padding: 8px;
+    border-radius: 18px;
+    display: flex;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+.tab-item {
+    border: none;
+    background: none;
+    padding: 14px 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.tab-item.active {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.activity-card {
+    background: var(--white);
+    border-radius: 24px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e2e8f0;
+    color: var(--text-muted);
+}
+
+/* =========================================
+   4. SIDEBAR (ABOUT CARD)
+   ========================================= */
+.about-card {
+    background: var(--white);
+    padding: 32px;
+    border-radius: 28px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 100px; /* Agar melayang saat scroll */
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-weight: 800;
+    font-size: 20px;
+}
+
+.badge {
+    background: #f1f5f9;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.description {
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.avatar-group {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.avatar-group img, .avatar-more, .avatar-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--white);
+    margin-left: -12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.avatar-group img:first-child { margin-left: 0; }
+
+.avatar-more {
+    background: #e2e8f0;
+    color: var(--text-muted);
+}
+
+.btn-all {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.btn-all:hover { color: var(--primary); }
+
+/* Tombol Keluar */
+.btn-leave {
+    background: #ef4444;
+    color: var(--white);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-leave:hover {
+    transform: translateY(-2px);
+    background: #dc2626;
+}

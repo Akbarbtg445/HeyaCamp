@@ -171,3 +171,106 @@ h2 {
         justify-content: center;
     }
 }
+/* Layout Grid Utama */
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Desain Kartu Komunitas */
+.community-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.community-card:hover {
+    transform: translateY(-8px);
+}
+
+/* Gambar Sampul (Top) */
+.card-cover {
+    height: 150px;
+    width: 100%;
+}
+
+.card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Bagian Isi Kartu */
+.card-body {
+    padding: 20px;
+    position: relative;
+    padding-top: 40px; /* Ruang untuk logo yang naik ke atas */
+}
+
+/* Logo Komunitas (Yang memotong gambar) */
+.card-logo {
+    position: absolute;
+    top: -30px; /* Menarik logo ke atas gambar sampul */
+    left: 20px;
+    width: 65px;
+    height: 65px;
+    background: white;
+    border-radius: 12px;
+    padding: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-logo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Tipografi */
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.card-stats {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.card-desc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Membatasi teks maksimal 3 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* Menghilangkan gaya default link pada kartu */
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Agar seluruh area kartu bisa diklik */
+}
+
+.community-card {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.community-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
