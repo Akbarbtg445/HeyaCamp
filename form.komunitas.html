@@ -68,16 +68,33 @@
         </div>
 
         <div class="form-card">
-            <h3><i class="fa-regular fa-file-lines"></i> Informasi Region</h3>
-            <div class="input-group">
-                <label>Nama Region <span class="required" style="color: red;">*</span></label>
-                <input type="text" id="namaRegion" placeholder="Contoh: Yurucamp Jawa Barat">
-            </div>
-            <div class="input-group">
-                <label>Deskripsi <span class="required" style="color: red;">*</span></label>
-                <textarea id="deskripsiRegion" placeholder="Deskripsikan tentang komunitas region ini..." style="height: 100px;"></textarea>
-            </div>
+    <h3><i class="fa-regular fa-comment-dots"></i> Sosial Media & Kontak</h3>
+    
+    <div class="input-group">
+        <label>Instagram</label>
+        <div class="input-with-icon" style="position: relative;">
+            <i class="fa-brands fa-instagram" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #e1306c;"></i>
+            <input type="text" id="igKomunitas" placeholder="https://instagram.com/komunitas" style="padding-left: 45px;">
         </div>
+    </div>
+
+    <div class="input-group">
+        <label>No. WhatsApp Admin ( Opsional )</label>
+        <div class="input-with-icon" style="position: relative;">
+            <i class="fa-solid fa-phone" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #25d366;"></i>
+            <input type="text" id="waAdmin" placeholder="628123456789" style="padding-left: 45px;">
+        </div>
+        <small style="font-size: 11px; color: #64748b; margin-top: 5px; display: block;">Format: 628xxx tanpa + atau spasi</small>
+    </div>
+
+    <div class="input-group">
+        <label>Link Grup WhatsApp ( Opsional )</label>
+        <div class="input-with-icon" style="position: relative;">
+            <i class="fa-brands fa-whatsapp" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #25d366;"></i>
+            <input type="text" id="linkGroup" placeholder="https://chat.whatsapp.com/xxx" style="padding-left: 45px;">
+        </div>
+    </div>
+</div>
     </section>
 
     <aside class="preview-column">
@@ -137,28 +154,38 @@
     });
 
     // Simpan Data
-    document.getElementById('submitBtn').addEventListener('click', function() {
-        const nama = document.getElementById('namaRegion').value;
-        const deskripsi = document.getElementById('deskripsiRegion').value;
+   document.getElementById('submitBtn').addEventListener('click', function() {
+    const nama = document.getElementById('namaRegion').value;
+    const deskripsi = document.getElementById('deskripsiRegion').value;
+    // AMBIL DATA BARU
+    const instagram = document.getElementById('igKomunitas').value;
+    const whatsapp = document.getElementById('waAdmin').value;
+    const grupWa = document.getElementById('linkGroup').value;
 
-        if (!nama || !deskripsi) {
-            alert("Harap isi Nama dan Deskripsi!");
-            return;
+    if (!nama || !deskripsi) {
+        alert("Harap isi Nama dan Deskripsi!");
+        return;
+    }
+
+    let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+    daftarKomunitas.push({
+        nama: nama,
+        deskripsi: deskripsi,
+        anggota: 0,
+        cover: base64Cover,
+        logo: base64Logo,
+        // SIMPAN KE DALAM OBJEK
+        sosmed: {
+            instagram: instagram,
+            whatsapp: whatsapp,
+            grupWa: grupWa
         }
-
-        let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-        daftarKomunitas.push({
-            nama: nama,
-            deskripsi: deskripsi,
-            anggota: 0,
-            cover: base64Cover,
-            logo: base64Logo
-        });
-
-        localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
-        alert("Komunitas berhasil diajukan!");
-        window.location.href = "komunitas.html";
     });
+
+    localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
+    alert("Komunitas berhasil diajukan!");
+    window.location.href = "komunitas.html";
+});
 </script>
 </body>
 </html>

@@ -92,9 +92,11 @@ h2 {
 body {
     font-family: 'Nunito', 'Inter', sans-serif;
     background-color: var(--bg-body);
-    /* Hapus padding top berlebih jika navbar sticky sudah ada marginnya */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px); /* Pola titik */
+    background-size: 25px 25px;
     margin: 0;
     color: var(--text-main);
+    padding: 0; /* Padding diatur oleh container, bukan body agar Hero bisa full-width */
 }
 
 /* Pola titik tetap ada di background body */
@@ -333,4 +335,131 @@ body {
 .btn-leave:hover {
     transform: translateY(-2px);
     background: #dc2626;
+}
+/* Gaya untuk Container Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Ikon Lingkaran Halus */
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #fffaf5; /* Krem sangat muda */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.icon-circle i {
+    font-size: 35px;
+    color: #ffead4; /* Warna garis ikon */
+}
+
+.empty-state h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 16px;
+    max-width: 300px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Tombol Oranye HeyaCamp */
+.btn-post {
+    background: linear-gradient(135deg, #ff8c05 0%, #ed8805 100%);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(237, 136, 5, 0.3);
+    transition: all 0.3s ease;
+    border-bottom: 4px solid #d67a04; /* Efek 3D sedikit di bawah */
+}
+
+.btn-post:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(237, 136, 5, 0.4);
+}
+
+.btn-post:active {
+    transform: translateY(0);
+    border-bottom-width: 0;
+}
+/* Sembunyikan semua tab secara default */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Tampilkan tab yang memiliki class active */
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Memastikan ikon di dalam button tab rapi */
+.tab-item i {
+    margin-right: 8px;
+}
+/* Pastikan sidebar memiliki layout kolom yang rapi */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Memberikan jarak antar kartu otomatis */
+}
+
+/* Style umum untuk semua kartu di sidebar */
+.about-card {
+    background: white;
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    position: relative; /* Agar z-index bekerja jika diperlukan */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Khusus kartu Bagikan Komunitas agar tombol tidak terpotong */
+.share-card {
+    background-color: #f0f7ff;
+    border: none;
+}
+
+.btn-share-link {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #0066ff;
+    background: white; /* Ubah ke putih agar teks biru terlihat jelas */
+    color: #0066ff;
+    border-radius: 50px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-share-link:hover {
+    background: #0066ff;
+    color: white;
 }

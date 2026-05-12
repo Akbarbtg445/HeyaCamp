@@ -56,41 +56,87 @@
     <main class="container">
         <div class="content-grid">
             <section class="feed-section">
-                <nav class="tab-menu">
-                    <button class="tab-item active">Aktivitas Terbaru</button>
-                    <button class="tab-item">Event (0)</button>
-                </nav>
-                <div class="activity-card">
-                    <div class="empty-state">
-                        <div class="icon-circle">
-                            <i class="fa-regular fa-comments"></i>
-                        </div>
-                        <p>Belum ada aktivitas terbaru</p>
-                    </div>
-                </div>
-            </section>
+    <!-- Menambahkan ID pada button agar bisa diklik -->
+    <nav class="tab-menu">
+        <button class="tab-item active" onclick="openTab(event, 'tabAktivitas')">
+            <i class="fa-regular fa-comment-dots"></i> Aktivitas Terbaru
+        </button>
+        <button class="tab-item" onclick="openTab(event, 'tabEvent')">
+            <i class="fa-regular fa-calendar-check"></i> Event (0)
+        </button>
+    </nav>
 
-            <aside class="sidebar">
-                <div class="about-card">
-                    <div class="card-header">
-                        <h3>Tentang Komunitas</h3>
-                        <span class="badge">12 Anggota</span>
-                    </div>
-                    <p id="commDesc" class="description">
-                        Memadukan vibes camping dan seni fotografi dalam sebuah perjalanan maupun cerita kecil yang dikenang kembali. 🏕️🌿
-                    </p>
-                    <div class="members-section">
-                        <h4>ANGGOTA TERBARU</h4>
-                        <div class="avatar-group">
-                            <img src="https://ui-avatars.com/api/?name=User1&background=random" alt="u1">
-                            <img src="https://ui-avatars.com/api/?name=User2&background=random" alt="u2">
-                            <img src="https://ui-avatars.com/api/?name=User3&background=random" alt="u3">
-                            <div class="avatar-more">+9</div>
-                        </div>
-                        <a href="#" class="btn-all">Lihat Semua Anggota</a>
-                    </div>
+    <!-- Konten Tab Aktivitas -->
+    <div id="tabAktivitas" class="tab-content active">
+        <div class="activity-card">
+            <div class="empty-state">
+                <div class="icon-circle">
+                    <i class="fa-regular fa-comment-dots"></i>
                 </div>
-            </aside>
+                <h3>Belum ada aktivitas</h3>
+                <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
+                <button class="btn-post" onclick="alert('Fitur postingan akan segera hadir!')">
+                    Buat Postingan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Konten Tab Event (Sesuai gambar image_9dd720.png) -->
+    <div id="tabEvent" class="tab-content">
+        <div class="activity-card">
+            <div class="empty-state">
+                <div class="icon-circle">
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+                <h3>Belum ada event</h3>
+                <p>Region ini belum memiliki event mendatang.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+         <aside class="sidebar">
+    <div class="about-card share-card">
+        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+            <div style="width: 40px; height: 40px; background: #e0eeff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0066ff;">
+                <i class="fa-solid fa-share-nodes"></i>
+            </div>
+            <div>
+                <h3 style="margin: 0; font-size: 16px;">Bagikan Komunitas</h3>
+                <p style="margin: 0; font-size: 13px; color: #64748b;">Undang temanmu bergabung!</p>
+            </div>
+        </div>
+        <button class="btn-share-link" onclick="copyToClipboard()">
+            Salin Link Region
+        </button>
+    </div>
+
+    <div class="about-card">
+        <div class="card-header">
+            <h3>Tentang Komunitas</h3>
+            <span class="badge" id="sideBadge">0 Anggota</span>
+        </div>
+        <p id="commDesc" class="description">Deskripsi...</p>
+        <div class="members-section">
+            <h4>ANGGOTA TERBARU</h4>
+            <div class="avatar-group">
+                <div class="avatar-placeholder">U1</div>
+                <div class="avatar-placeholder">U2</div>
+                <div class="avatar-more">+9</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-card" style="padding: 0; overflow: hidden; border: 1px solid #e2e8f0;">
+        <div style="background: #f0fff4; padding: 15px 20px; display: flex; align-items: center; gap: 10px; color: #2d6a4f;">
+            <i class="fa-regular fa-comment"></i>
+            <h3 style="margin: 0; font-size: 16px;">Sosial Media & Kontak</h3>
+        </div>
+        <div id="containerSosmed" style="padding: 20px; background: white;">
+            </div>
+    </div>
+</aside>
         </div>
     </main>
 
@@ -102,9 +148,59 @@
     const komunitas = dataTersimpan[commId];
 
     if (komunitas) {
+        // Tambahkan ini di bawah pengecekan 'if (komunitas)'
+if (komunitas && komunitas.sosmed) {
+    const containerSosmed = document.getElementById('containerSosmed');
+    let htmlSosmed = '';
+
+    // Tampilkan Instagram jika ada
+    if (komunitas.sosmed.instagram) {
+        htmlSosmed += `
+            <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
+                    <div>
+                        <span style="display: block; font-size: 12px; color: #64748b;">Instagram</span>
+                        <strong style="color: #1e293b;">@${komunitas.sosmed.instagram.split('/').pop()}</strong>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+            </a>
+        `;
+    }
+
+    // Tampilkan Grup WA jika ada
+    if (komunitas.sosmed.grupWa) {
+        htmlSosmed += `
+            <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
+                    <div>
+                        <span style="display: block; font-size: 12px; color: #64748b;">WhatsApp Group</span>
+                        <strong style="color: #1e293b;">Gabung Grup</strong>
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+            </a>
+        `;
+    }
+
+    containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
+}
+
+// Fungsi Salin Link
+function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link komunitas berhasil disalin ke clipboard!");
+}
         // Tampilkan Nama & Deskripsi
         document.getElementById('commName').innerText = komunitas.nama;
         document.getElementById('commDesc').innerText = komunitas.deskripsi;
+
+        // --- TAMBAHKAN INI AGAR JUMLAH ANGGOTA DINAMIS ---
+        const memberCount = komunitas.anggota || 0;
+        document.querySelector('.badge').innerText = `${memberCount} Anggota`;
+        // ------------------------------------------------
 
         // Tampilkan Gambar Banner/Cover
         const heroBg = document.getElementById('heroBg');
@@ -119,6 +215,7 @@
         } else {
             logoWrapper.innerHTML = `<div class="placeholder" style="font-size: 40px; font-weight: bold; color: #ed8805; display: flex; align-items: center; justify-content: center; height: 100%;">${komunitas.nama.charAt(0)}</div>`;
         }
+        
     }
 
     // 2. Logika Tombol Hapus (Diletakkan di luar IF komunitas agar tetap bisa diakses)
@@ -137,7 +234,24 @@
             alert("Komunitas telah berhasil dihapus.");
             window.location.href = "komunitas.html";
         }
-    });
+    })
+    function openTab(evt, tabName) {
+    // 1. Ambil semua elemen dengan class "tab-content" dan sembunyikan
+    const tabContent = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContent.length; i++) {
+        tabContent[i].classList.remove("active");
+    }
+
+    // 2. Ambil semua elemen dengan class "tab-item" dan hilangkan class "active"
+    const tabLinks = document.getElementsByClassName("tab-item");
+    for (let i = 0; i < tabLinks.length; i++) {
+        tabLinks[i].classList.remove("active");
+    }
+
+    // 3. Tampilkan tab yang dipilih dan tambahkan class "active" pada button yang diklik
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+};
 </script>
 </body>
 </html>
