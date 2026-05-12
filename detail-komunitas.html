@@ -46,7 +46,10 @@
     </div>
     <button class="btn-leave" onclick="window.location.href='komunitas.html'">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
-            </button>
+    </button>
+    <button class="btn-delete" id="deleteCommBtn" style="background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; cursor: pointer;">
+        <i class="fa-solid fa-trash-can"></i> Hapus
+    </button>
 </div>
     </header>
 
@@ -91,33 +94,50 @@
         </div>
     </main>
 
-    <script>
-    // Ambil data komunitas berdasarkan ID dari URL
-const urlParams = new URLSearchParams(window.location.search);
-const commId = urlParams.get('id');
-const dataTersimpan = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-const komunitas = dataTersimpan[commId];
+<script>
+    // 1. Ambil data komunitas berdasarkan ID dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const commId = urlParams.get('id');
+    const dataTersimpan = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+    const komunitas = dataTersimpan[commId];
 
-if (komunitas) {
-    // 1. Memunculkan Gambar Banner/Cover
-    const heroBg = document.getElementById('heroBg');
-    if (komunitas.cover) {
-        // Pastikan id 'heroBg' ada di elemen <header> atau <section> banner Anda
-        heroBg.style.backgroundImage = `url(${komunitas.cover})`;
-        heroBg.style.backgroundSize = "cover";
-        heroBg.style.backgroundPosition = "center";
+    if (komunitas) {
+        // Tampilkan Nama & Deskripsi
+        document.getElementById('commName').innerText = komunitas.nama;
+        document.getElementById('commDesc').innerText = komunitas.deskripsi;
+
+        // Tampilkan Gambar Banner/Cover
+        const heroBg = document.getElementById('heroBg');
+        if (komunitas.cover) {
+            heroBg.style.backgroundImage = `url(${komunitas.cover})`;
+        }
+
+        // Tampilkan Logo
+        const logoWrapper = document.getElementById('commLogo');
+        if (komunitas.logo) {
+            logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
+        } else {
+            logoWrapper.innerHTML = `<div class="placeholder" style="font-size: 40px; font-weight: bold; color: #ed8805; display: flex; align-items: center; justify-content: center; height: 100%;">${komunitas.nama.charAt(0)}</div>`;
+        }
     }
 
-    // 2. Memunculkan Logo
-    const logoWrapper = document.getElementById('commLogo');
-    if (komunitas.logo) {
-        // Memasukkan tag img ke dalam wrapper logo
-        logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
-    } else {
-        // Fallback jika tidak ada logo (menampilkan inisial)
-        logoWrapper.innerHTML = `<div class="placeholder">${komunitas.nama.charAt(0)}</div>`;
-    }
-}
-    </script>
+    // 2. Logika Tombol Hapus (Diletakkan di luar IF komunitas agar tetap bisa diakses)
+    document.getElementById('deleteCommBtn').addEventListener('click', function() {
+        const yakin = confirm("Apakah Anda yakin ingin menghapus komunitas ini?");
+        
+        if (yakin && commId !== null) {
+            let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+            
+            // Hapus data dari array
+            daftarKomunitas.splice(commId, 1);
+            
+            // Simpan kembali ke localStorage
+            localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
+            
+            alert("Komunitas telah berhasil dihapus.");
+            window.location.href = "komunitas.html";
+        }
+    });
+</script>
 </body>
 </html>
