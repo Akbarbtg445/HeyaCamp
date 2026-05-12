@@ -1,23 +1,21 @@
 /* =========================================
-   1. GLOBAL & TYPOGRAPHY
+   1. GLOBAL & TYPOGRAPHY (DISAMAKAN)
    ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f5f7; /* Warna background abu-abu muda */
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Menambahkan efek pola titik agar sama dengan index */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
     color: #333;
     margin: 0;
-    padding: 20px; /* Memberi jarak aman di sekeliling layar */
-}
-
-h2 { 
-    color: #2d6a4f; 
+    padding: 20px; 
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE)
-   ========================================= */
-/* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR CUSTOM (PILL-SHAPE) - IDENTIK INDEX
    ========================================= */
 .navbar {
     display: flex;
@@ -29,15 +27,18 @@ h2 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
     
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 0 auto 20px; /* Membuat navbar ke tengah */
+    
+    /* Tambahan agar terlihat melayang (Glassmorphism) */
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-logo img {
-    height: 40px; /* Sesuaikan ukuran logo */
+    height: 40px;
     object-fit: contain;
 }
 
@@ -52,7 +53,7 @@ h2 {
 
 .nav-links li a {
     text-decoration: none;
-    color: #4a5568; /* Warna teks abu-abu kebiruan */
+    color: #4a5568; 
     font-weight: 700;
     font-size: 15px;
     display: flex;
@@ -62,14 +63,14 @@ h2 {
 }
 
 .nav-links li a:hover {
-    color: #ed8805; /* Warna saat di-hover */
+    color: #ed8805; /* Oranye khas HeyaCamp */
 }
 
+/* Penyelarasan ikon dan teks stack */
 .nav-links li a i {
     font-size: 18px;
 }
 
-/* Khusus untuk teks yang bertumpuk (seperti Camp Area) */
 .text-stack {
     display: flex;
     flex-direction: column;
@@ -79,20 +80,15 @@ h2 {
 }
 
 /* =========================================
-   3. LAYOUT & CONTAINERS
+   3. LAYOUT KHUSUS KATALOG & BOOKING
    ========================================= */
 .container { 
-    max-width: 900px; 
-    margin: 20px auto; 
+    max-width: 1000px; /* Sedikit diperlebar agar seimbang dengan navbar */
+    margin: 40px auto; 
     padding: 20px; 
 }
 
-.card { 
-    background: white; 
-    padding: 20px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-}
+/* ... Sisa kode .grid, .item, dan table kamu tetap di bawah sini ... */
 
 /* =========================================
    4. KATALOG GRID & ITEMS
