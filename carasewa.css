@@ -1,37 +1,41 @@
 /* =========================================
-   1. GLOBAL STYLES & FONTS
+   1. GLOBAL & BACKGROUND POLA TITIK
    ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #ffffff;
-    /* Efek Pola Titik Lembut */
-    background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-    background-size: 30px 30px;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
     margin: 0;
-    padding: 20px;
-    color: #334155;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
 }
 
 /* =========================================
-   2. STICKY NAVBAR (PILL SHAPE)
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
    ========================================= */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 10px 30px;
-    border-radius: 100px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    margin: 0 auto 40px;
-    position: sticky;
-    top: 20px;
-    z-index: 1000;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
 }
 
 .nav-logo img {
@@ -42,7 +46,7 @@ body {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 25px;
     margin: 0;
     padding: 0;
     align-items: center;
@@ -50,9 +54,9 @@ body {
 
 .nav-links li a {
     text-decoration: none;
-    color: #475569;
+    color: #4a5568; 
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -60,14 +64,19 @@ body {
 }
 
 .nav-links li a:hover {
-    color: #ed8805;
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
 }
 
 .text-stack {
     display: flex;
     flex-direction: column;
-    line-height: 1;
-    font-size: 12px;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
 }
 
 /* =========================================
