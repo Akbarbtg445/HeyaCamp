@@ -162,27 +162,37 @@
 
     // Simpan Data
     document.getElementById('submitBtn').addEventListener('click', function() {
-        const nama = document.getElementById('namaRegion').value;
-        const deskripsi = document.getElementById('deskripsiRegion').value;
+    const nama = document.getElementById('namaRegion').value;
+    const deskripsi = document.getElementById('deskripsiRegion').value;
+    // AMBIL DATA BARU
+    const instagram = document.getElementById('igKomunitas').value;
+    const whatsapp = document.getElementById('waAdmin').value;
+    const grupWa = document.getElementById('linkGroup').value;
 
-        if (!nama || !deskripsi) {
-            alert("Harap isi Nama dan Deskripsi!");
-            return;
+    if (!nama || !deskripsi) {
+        alert("Harap isi Nama dan Deskripsi!");
+        return;
+    }
+
+    let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+    daftarKomunitas.push({
+        nama: nama,
+        deskripsi: deskripsi,
+        anggota: 0,
+        cover: base64Cover,
+        logo: base64Logo,
+        // SIMPAN KE DALAM OBJEK
+        sosmed: {
+            instagram: instagram,
+            whatsapp: whatsapp,
+            grupWa: grupWa
         }
-
-        let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-        daftarKomunitas.push({
-            nama: nama,
-            deskripsi: deskripsi,
-            anggota: 0,
-            cover: base64Cover,
-            logo: base64Logo
-        });
-
-        localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
-        alert("Komunitas berhasil diajukan!");
-        window.location.href = "komunitas.html";
     });
+
+    localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
+    alert("Komunitas berhasil diajukan!");
+    window.location.href = "komunitas.html";
+});
 </script>
 </body>
 </html>
