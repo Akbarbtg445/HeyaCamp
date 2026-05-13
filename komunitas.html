@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="komunitas.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <title>Komunitas</title>
 </head>
 <body>
     <nav class="navbar">
-        <!-- 1. Bagian Logo -->
         <div class="nav-logo">
-            <!-- Ganti src dengan link logo Anda -->
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
-        <!-- 2. Bagian Menu Tengah -->
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
             <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
@@ -32,49 +30,79 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
-   <section class="community-header">
-    <div class="header-content">
-        <div class="tag-regional">
-            <i class="fa-solid fa-earth-asia"></i> Komunitas Regional
+
+    <section class="community-header">
+        <div class="header-content">
+            <div class="tag-regional">
+                <i class="fa-solid fa-earth-asia"></i> Komunitas Regional
+            </div>
+            <div class="title-group">
+                <h1>Gabung <span class="highlight">Komunitas</span></h1>
+                <p>Temukan dan bergabung dengan komunitas camper di daerahmu</p>
+            </div>
         </div>
-        <div class="title-group">
-            <h1>Gabung <span class="highlight">Komunitas</span></h1>
-            <p>Temukan dan bergabung dengan komunitas camper di daerahmu</p>
+        <div class="header-action">
+            <a href="form.komunitas.html" class="btn-create">
+                <i class="fa-solid fa-plus"></i> Buat Komunitas
+            </a>
         </div>
+    </section> 
+
+    <!-- Container untuk daftar komunitas -->
+    <div id="listKomunitasBaru" class="community-grid">
+        <p style="text-align: center; grid-column: 1/-1;">Memuat data komunitas...</p>
     </div>
-    <div class="header-action">
-        <a href="form.komunitas.html" class="btn-create">
-            <i class="fa-solid fa-plus"></i> Buat Komunitas
-        </a>
-    </div>
-</section> <div id="listKomunitasBaru" class="community-grid"></div>
 
 <script>
-    window.onload = function() {
-        const container = document.getElementById('listKomunitasBaru');
-        const dataTersimpan = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
+    // 1. Konfigurasi Supabase
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+     
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        if (dataTersimpan.length > 0) {
-            // Kita tambahkan parameter 'index' pada map
-            container.innerHTML = dataTersimpan.map((item, index) => `
-                <a href="detail-komunitas.html?id=${index}" class="card-link">
-                    <div class="community-card">
-                        <div class="card-cover">
-                            <img src="${item.cover || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500'}" alt="Cover">
-                        </div>
-                        <div class="card-body">
-                            <div class="card-logo">
-                                <img src="${item.logo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama)}" alt="Logo">
+    // 2. Fungsi Utama Ambil Data
+    async function tampilkanKomunitas() {
+        const container = document.getElementById('listKomunitasBaru');
+        
+        try {
+            // Ambil data dari tabel 'Komunitas' (K besar)
+            const { data: daftarKomunitas, error } = await _supabase
+                .from('Komunitas')
+                .select('*')
+                .order('created_at', { ascending: false }); // Biar yang terbaru di atas
+
+            if (error) throw error;
+
+            if (daftarKomunitas && daftarKomunitas.length > 0) {
+                container.innerHTML = daftarKomunitas.map(item => `
+                    <a href="detail-komunitas.html?id=${item.id}" class="card-link">
+                        <div class="community-card">
+                            <div class="card-cover">
+                                <img src="${item.cover || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500'}" alt="Cover">
                             </div>
-                            <h4 class="card-title">${item.nama}</h4>
-                            <p class="card-stats"><i class="fa-solid fa-users"></i> ${item.anggota} anggota</p>
-                            <p class="card-desc">${item.deskripsi}</p>
+                            <div class="card-body">
+                                <div class="card-logo">
+                                    <img src="${item.logo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama)}" alt="Logo">
+                                </div>
+                                <h4 class="card-title">${item.nama}</h4>
+                                <p class="card-stats"><i class="fa-solid fa-users"></i> ${item.anggota || 0} anggota</p>
+                                <p class="card-desc">${item.deskripsi}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            `).join('');
+                    </a>
+                `).join('');
+            } else {
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Belum ada komunitas yang terdaftar.</p>";
+            }
+        } catch (err) {
+            console.error("Gagal ambil data:", err.message);
+            container.innerHTML = `<p style='color: red; grid-column: 1/-1; text-align: center;'>Gagal memuat data: ${err.message}</p>`;
         }
     }
+
+    // 3. Jalankan fungsi saat halaman siap
+    document.addEventListener('DOMContentLoaded', tampilkanKomunitas);
 </script>
 </body>
 </html>
