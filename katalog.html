@@ -4,8 +4,41 @@
     <title>Katalog Alat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="coba.css">
-    <!-- WAJIB: Tambahkan library Supabase di sini -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            background: #f1f5f9;
+            padding: 5px 10px;
+            border-radius: 8px;
+            width: fit-content;
+        }
+        .btn-qty {
+            background: #1e5631;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .qty-value {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+        /* Gaya tambahan untuk deskripsi agar rapi */
+        .card-desc {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin: 5px 0 10px 0;
+            line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -32,12 +65,9 @@
 
     <div class="container">
         <h2>Pilih Alat Outdoor</h2>
-        
-        <!-- Area Katalog -->
         <div class="grid" id="katalogList"></div>
 
-        <!-- Form Data Diri & Konfirmasi -->
-        <div class="card" style="margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="card" style="margin-top: 30px;">
             <h3>Data Penyewa</h3>
             
             <div style="margin-bottom: 15px;">
@@ -60,71 +90,97 @@
                 <textarea id="alamatPenyewa" placeholder="Masukkan alamat lengkap..." style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; height: 80px;"></textarea>
             </div>
             
-            <button id="btnSewa" class="btn" style="background: #1e5631; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; cursor: pointer; font-size: 1.1rem;" onclick="prosesSewaSemua()">Sewa Sekarang (Semua Item)</button>
+            <button id="btnSewa" class="btn" style="background: #1e5631; font-size: 1.1rem;" onclick="prosesSewaSemua()">Sewa Sekarang (Semua Item)</button>
         </div>
     </div>
 
     <script>
-        // 1. Konfigurasi Supabase
         const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
-    
+        
         const { createClient } = supabase;
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // 2. Data Katalog Alat
+        // Menambahkan properti 'desc' pada data alat
         const alatOutdoor = [
-            { id: 1, nama: "Tenda Kapasitas 4", harga: 50000, img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
-            { id: 2, nama: "Carrier 60L", harga: 30000, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=500" },
-            { id: 3, nama: "Matras Camping", harga: 5000, img: "https://images.unsplash.com/photo-1596267365632-933a65db5022?w=500" }
+            { id: 1, nama: "Tenda Baseway Pavilo", harga: 35000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Tenda%20Pavilo.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
+            { id: 2, nama: "Tenda WildShell JayaDipa", harga: 35000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20wild%20shel.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
+            { id: 3, nama: "Tenda", harga: 20000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20single%20layer.jpg", desc: "Tenda Single layer, Kapasitas 4 orang, Frame Alo" },
+            { id: 4, nama: "Cerier Consina Terabi", harga: 20000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/terabi.jpg", desc: "Kapasitas 60Liter, Include Raincover" },
+            { id: 5, nama: "Cerier Antarestar Ranger", harga: 20000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Antarestar1.png", desc: "Kapasitas 65Liter, Include Raincover" },
+            { id: 6, nama: "Cerier CO-TREX TENGGARONG", harga: 20000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Syaratketentuan.png", desc: "Kapasitas 60Liter, include Raincover" },
+            { id: 7, nama: "Irco Polar Series", harga: 10000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/sb.jpg", desc: "Ada yang include bantal ada yang tidak" },
+            { id: 8, nama: "Matras Outdoor", harga: 5000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/matras.jpg", desc: "Warna Hitam / Warna Biru" },
+            { id: 9, nama: "Trecking Pole Naturhike", harga: 5000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/treking%20pole.jpg", desc: "Panjang 100 cm/ Panjang 135cm Warna Biru" },
+            { id: 10, nama: "Coking Set", harga: 10000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/cokingset%201jpg.jpg", desc: "Isi 2 Set Panci,Include Wadah" },
+            { id: 11, nama: "Kompor Portable", harga: 10000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/kompor%20portable.jpg", desc: "Include Wadah" },
+            { id: 12, nama: "Gas Kaleng", harga: 10000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/gas.jpg", desc: "Menyediakan Isi ulang Gas, Jika mau isi ulang gas kaleng bekas kaleng jgn dibuang" },
+            { id: 13, nama: "Kursi Outdoor Speed", harga: 15000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/arival.jpg", desc: "Warna Coklat List Orange Ukuran XXL" },
+            { id: 14, nama: "Kursi Outdoor Speed", harga: 15000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/coklat.jpg", desc: "Warna Coklat Ukuran XXL" },
+            { id: 15, nama: "Meja Outdoor Speed", harga: 10000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/meja%20speed.jpg", desc: "Warna Coklat Ukuran XXL" },
         ];
 
-        // Menampilkan Katalog ke Grid
+        let cart = {};
+
         const katalogList = document.getElementById('katalogList');
         alatOutdoor.forEach(alat => {
+            cart[alat.id] = 0;
             katalogList.innerHTML += `
-                <div class="card" style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px;">
-                    <img src="${alat.img}" alt="${alat.nama}" style="width:100%; border-radius: 8px; height: 150px; object-fit: cover;">
-                    <h3>${alat.nama}</h3>
-                    <p>Harga: Rp ${alat.harga.toLocaleString()}/hari</p>
-                    <label>
-                        <input type="checkbox" class="pilih-alat" value="${alat.id}" data-nama="${alat.nama}" data-harga="${alat.harga}"> Pilih Alat
-                    </label>
+                <div class="card">
+                    <img src="${alat.img}" alt="${alat.nama}" style="width:100%; border-radius: 8px;">
+                    <h3 style="margin-bottom: 0;">${alat.nama}</h3>
+                    <p class="card-desc">${alat.desc}</p> <!-- Deskripsi alat -->
+                    <p style="font-weight: bold; color: #1e5631;">Rp ${alat.harga.toLocaleString()}/hari</p>
+                    <div class="quantity-control">
+                        <button class="btn-qty" onclick="updateQty(${alat.id}, -1)">-</button>
+                        <span class="qty-value" id="qty-${alat.id}">0</span>
+                        <button class="btn-qty" onclick="updateQty(${alat.id}, 1)">+</button>
+                    </div>
                 </div>
             `;
         });
 
-        // 3. Fungsi Sewa Sekarang
+        function updateQty(id, delta) {
+            let newVal = cart[id] + delta;
+            if (newVal >= 0) {
+                cart[id] = newVal;
+                document.getElementById(`qty-${id}`).innerText = newVal;
+            }
+        }
+
         async function prosesSewaSemua() {
             const nama = document.getElementById('namaPenyewa').value;
             const hp = document.getElementById('hpPenyewa').value;
             const tgl = document.getElementById('tglSewa').value;
             const alamat = document.getElementById('alamatPenyewa').value;
-            const btn = document.getElementById('btnSewa');
+            const btnSewa = document.getElementById('btnSewa');
 
-            const checkboxes = document.querySelectorAll('.pilih-alat:checked');
             let itemTerpilih = [];
             let totalHarga = 0;
 
-            checkboxes.forEach(cb => {
-                itemTerpilih.push({
-                    id: cb.value,
-                    nama: cb.getAttribute('data-nama'),
-                    harga: parseInt(cb.getAttribute('data-harga'))
-                });
-                totalHarga += parseInt(cb.getAttribute('data-harga'));
+            alatOutdoor.forEach(alat => {
+                let qty = cart[alat.id];
+                if (qty > 0) {
+                    itemTerpilih.push({
+                        nama: alat.nama,
+                        harga: alat.harga,
+                        jumlah: qty,
+                        subtotal: alat.harga * qty
+                    });
+                    totalHarga += (alat.harga * qty);
+                }
             });
 
             if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
-                alert("Harap lengkapi data diri dan pilih minimal 1 alat!");
+                alert("Harap lengkapi data diri dan tambah minimal 1 alat!");
                 return;
             }
 
-            btn.innerText = "Sedang Memproses...";
-            btn.disabled = true;
+            btnSewa.innerText = "Mengirim Pesanan...";
+            btnSewa.disabled = true;
 
             try {
-                const { data, error } = await _supabase
+                const { error } = await _supabase
                     .from('pesanan')
                     .insert([
                         {
@@ -140,18 +196,17 @@
 
                 if (error) throw error;
 
-                alert(`Pemesanan Berhasil!\nTotal: Rp ${totalHarga.toLocaleString()}\nMohon tunggu konfirmasi admin via WhatsApp.`);
+                alert(`Pemesanan Berhasil!\nTotal: Rp ${totalHarga.toLocaleString()}`);
                 
-                // Arahkan ke WhatsApp Admin
-                const pesanWA = `Halo Admin HeyaCamp, saya ${nama} ingin menyewa:\n${itemTerpilih.map(i => "- " + i.nama).join('\n')}\nUntuk tanggal: ${tgl}\nTotal: Rp ${totalHarga.toLocaleString()}`;
+                const rincianWA = itemTerpilih.map(i => `- ${i.nama} (x${i.jumlah})`).join('\n');
+                const pesanWA = `Halo Admin HeyaCamp, saya ${nama} ingin menyewa:\n${rincianWA}\n\nTanggal: ${tgl}\nTotal: Rp ${totalHarga.toLocaleString()}`;
                 window.open(`https://wa.me/628123456789?text=${encodeURIComponent(pesanWA)}`, '_blank');
 
             } catch (err) {
-                console.error("Error Sewa:", err);
                 alert("Gagal memproses pesanan: " + err.message);
             } finally {
-                btn.innerText = "Sewa Sekarang (Semua Item)";
-                btn.disabled = false;
+                btnSewa.innerText = "Sewa Sekarang (Semua Item)";
+                btnSewa.disabled = false;
             }
         }
     </script>
