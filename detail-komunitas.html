@@ -227,7 +227,8 @@ async function loadPosts() {
         if (error) throw error;
 
         // Tombol Buat Postingan di bagian atas
-        let html = `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
+       // Ubah teksnya menjadi seperti ini:
+let html = `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">Buat Postingan</button>`;
         
         if (posts && posts.length > 0) {
             posts.forEach(p => {
