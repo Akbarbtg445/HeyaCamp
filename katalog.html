@@ -4,15 +4,14 @@
     <title>Katalog Alat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="coba.css">
+    <!-- WAJIB: Tambahkan library Supabase di sini -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
-        <!-- 1. Bagian Logo -->
         <div class="nav-logo">
-            <!-- Ganti src dengan link logo Anda -->
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
-        <!-- 2. Bagian Menu Tengah -->
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
             <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
@@ -38,7 +37,7 @@
         <div class="grid" id="katalogList"></div>
 
         <!-- Form Data Diri & Konfirmasi -->
-        <div class="card" style="margin-top: 30px;">
+        <div class="card" style="margin-top: 30px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <h3>Data Penyewa</h3>
             
             <div style="margin-bottom: 15px;">
@@ -46,13 +45,11 @@
                 <input type="text" id="namaPenyewa" placeholder="Masukkan nama Anda..." style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
             
-            <!-- Tambahan Input No HP -->
             <div style="margin-bottom: 15px;">
                 <label>Nomor HP (WhatsApp)</label>
                 <input type="tel" id="hpPenyewa" placeholder="Contoh: 08123456789" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
             </div>
 
-            <!-- Tambahan Input Tanggal Sewa -->
             <div style="margin-bottom: 15px;">
                 <label>Tanggal Sewa</label>
                 <input type="date" id="tglSewa" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
@@ -63,9 +60,100 @@
                 <textarea id="alamatPenyewa" placeholder="Masukkan alamat lengkap..." style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; height: 80px;"></textarea>
             </div>
             
-            <button class="btn" style="background: #1e5631; font-size: 1.1rem;" onclick="prosesSewaSemua()">Sewa Sekarang (Semua Item)</button>
+            <button id="btnSewa" class="btn" style="background: #1e5631; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; cursor: pointer; font-size: 1.1rem;" onclick="prosesSewaSemua()">Sewa Sekarang (Semua Item)</button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        // 2. Data Katalog Alat
+        const alatOutdoor = [
+            { id: 1, nama: "Tenda Kapasitas 4", harga: 50000, img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
+            { id: 2, nama: "Carrier 60L", harga: 30000, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=500" },
+            { id: 3, nama: "Matras Camping", harga: 5000, img: "https://images.unsplash.com/photo-1596267365632-933a65db5022?w=500" }
+        ];
+
+        // Menampilkan Katalog ke Grid
+        const katalogList = document.getElementById('katalogList');
+        alatOutdoor.forEach(alat => {
+            katalogList.innerHTML += `
+                <div class="card" style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px;">
+                    <img src="${alat.img}" alt="${alat.nama}" style="width:100%; border-radius: 8px; height: 150px; object-fit: cover;">
+                    <h3>${alat.nama}</h3>
+                    <p>Harga: Rp ${alat.harga.toLocaleString()}/hari</p>
+                    <label>
+                        <input type="checkbox" class="pilih-alat" value="${alat.id}" data-nama="${alat.nama}" data-harga="${alat.harga}"> Pilih Alat
+                    </label>
+                </div>
+            `;
+        });
+
+        // 3. Fungsi Sewa Sekarang
+        async function prosesSewaSemua() {
+            const nama = document.getElementById('namaPenyewa').value;
+            const hp = document.getElementById('hpPenyewa').value;
+            const tgl = document.getElementById('tglSewa').value;
+            const alamat = document.getElementById('alamatPenyewa').value;
+            const btn = document.getElementById('btnSewa');
+
+            const checkboxes = document.querySelectorAll('.pilih-alat:checked');
+            let itemTerpilih = [];
+            let totalHarga = 0;
+
+            checkboxes.forEach(cb => {
+                itemTerpilih.push({
+                    id: cb.value,
+                    nama: cb.getAttribute('data-nama'),
+                    harga: parseInt(cb.getAttribute('data-harga'))
+                });
+                totalHarga += parseInt(cb.getAttribute('data-harga'));
+            });
+
+            if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
+                alert("Harap lengkapi data diri dan pilih minimal 1 alat!");
+                return;
+            }
+
+            btn.innerText = "Sedang Memproses...";
+            btn.disabled = true;
+
+            try {
+                const { data, error } = await _supabase
+                    .from('pesanan')
+                    .insert([
+                        {
+                            nama_penyewa: nama,
+                            nomor_hp: hp,
+                            tanggal_sewa: tgl,
+                            alamat: alamat,
+                            item_disewa: itemTerpilih,
+                            total_harga: totalHarga,
+                            status: 'Menunggu Konfirmasi'
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                alert(`Pemesanan Berhasil!\nTotal: Rp ${totalHarga.toLocaleString()}\nMohon tunggu konfirmasi admin via WhatsApp.`);
+                
+                // Arahkan ke WhatsApp Admin
+                const pesanWA = `Halo Admin HeyaCamp, saya ${nama} ingin menyewa:\n${itemTerpilih.map(i => "- " + i.nama).join('\n')}\nUntuk tanggal: ${tgl}\nTotal: Rp ${totalHarga.toLocaleString()}`;
+                window.open(`https://wa.me/628123456789?text=${encodeURIComponent(pesanWA)}`, '_blank');
+
+            } catch (err) {
+                console.error("Error Sewa:", err);
+                alert("Gagal memproses pesanan: " + err.message);
+            } finally {
+                btn.innerText = "Sewa Sekarang (Semua Item)";
+                btn.disabled = false;
+            }
+        }
+    </script>
 </body>
 </html>
