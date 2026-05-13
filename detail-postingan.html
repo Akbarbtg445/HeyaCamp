@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerita Camp - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="detail.css">
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #f8fafc; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .post-container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+        
+        /* Gaya Banner Atas */
+        .post-hero {
+            position: relative;
+            height: 450px;
+            border-radius: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        
+        /* Tombol Mengambang di Banner */
+        .floating-btn {
+            position: absolute;
+            top: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .floating-btn:hover { background: rgba(255, 255, 255, 0.4); }
+        .btn-back { left: 20px; }
+        .btn-share { right: 20px; background: white; color: #1e293b; border: none; }
+        .btn-share:hover { background: #f1f5f9; }
+
+        /* Tag Lokasi & Tanggal */
+        .post-tags { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tag-pill {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Judul */
+        .post-title { margin: 0; font-size: 42px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        /* Grid Konten Bawah */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        /* Kartu Artikel */
+        .article-card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            font-size: 16px;
+            line-height: 1.8;
+            color: #475569;
+            white-space: pre-wrap; /* Agar enter dari form terbaca */
+        }
+
+        /* Kartu Author */
+        .author-card {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+        .author-header { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 20px; }
+        .author-info { display: flex; align-items: center; gap: 15px; }
+        .author-avatar {
+            width: 55px; height: 55px; border-radius: 50%; background: #e2e8f0; overflow: hidden; position: relative;
+        }
+        .author-badge {
+            position: absolute; bottom: -5px; right: -5px; background: #ed8805; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid white; font-weight: bold;
+        }
+        
+        /* Responsive (Mobile) */
+        @media (max-width: 768px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .post-hero { height: 300px; padding: 20px; }
+            .post-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+        </ul>
+    </nav>
+
+    <div class="post-container">
+        <!-- Area Banner Gambar -->
+        <div id="postHero" class="post-hero" style="background-image: linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200');">
+            <!-- Tombol Navigasi -->
+            <button onclick="window.history.back()" class="floating-btn btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+            <button onclick="copyLink()" class="floating-btn btn-share"><i class="fa-solid fa-share-nodes"></i></button>
+
+            <!-- Info Postingan -->
+            <div class="post-tags">
+                <div class="tag-pill"><i class="fa-regular fa-calendar" style="color: #fbbf24;"></i> <span id="viewDate">Memuat...</span></div>
+                <div class="tag-pill"><i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> <span id="viewLocation">Memuat...</span></div>
+            </div>
+            <h1 class="post-title" id="viewTitle">Memuat Postingan...</h1>
+        </div>
+
+        <!-- Area Konten & Sidebar -->
+        <div class="content-grid">
+            <!-- Kolom Cerita (Kiri) -->
+            <div class="article-card" id="viewContent">
+                Memuat cerita...
+            </div>
+
+            <!-- Kolom Author (Kanan) -->
+            <div>
+                <div class="author-card">
+                    <div class="author-header">Dibuat Oleh</div>
+                    <div class="author-info">
+                        <div style="position: relative;">
+                            <div class="author-avatar">
+                                <img id="viewAvatar" src="https://ui-avatars.com/api/?name=User&background=random" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                            <div class="author-badge">1</div>
+                        </div>
+                        <div>
+                            <strong id="viewAuthor" style="font-size: 16px; color: #1e293b;">Memuat...</strong><br>
+                            <span style="color: #ed8805; font-size: 13px; font-weight: 600;">Camper Pemula</span><br>
+                            <span style="color: #94a3b8; font-size: 11px;">1 EXP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // 1. Konfigurasi Supabase
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
+
+    // 2. Ambil ID Postingan dari URL (contoh: detail-postingan.html?id=12)
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    async function loadFullPost() {
+        if (!postId) {
+            document.getElementById('viewTitle').innerText = "Postingan tidak ditemukan";
+            document.getElementById('viewContent').innerText = "Tidak ada ID postingan yang disertakan di URL.";
+            return;
+        }
+
+        try {
+            // Ambil data dari Supabase khusus untuk ID postingan ini
+            const { data: post, error } = await _supabase
+                .from('Postingan')
+                .select('*')
+                .eq('id', postId)
+                .single();
+
+            if (error) throw error;
+
+            if (post) {
+                // Format Tanggal
+                const formattedDate = new Date(post.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+                // Cek Gambar
+                const bannerImg = post.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
+
+                // Masukkan data ke HTML
+                document.getElementById('postHero').style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('${bannerImg}')`;
+                document.getElementById('viewTitle').innerText = post.activity_name;
+                document.getElementById('viewDate').innerText = formattedDate;
+                document.getElementById('viewLocation').innerText = post.location;
+                document.getElementById('viewContent').innerText = post.content;
+                
+                document.getElementById('viewAuthor').innerText = post.username;
+                document.getElementById('viewAvatar').src = `https://ui-avatars.com/api/?name=${post.username}&background=random`;
+            }
+        } catch (err) {
+            console.error("Gagal memuat:", err);
+            document.getElementById('viewContent').innerHTML = `<span style="color:red;">Gagal memuat data: ${err.message}</span>`;
+        }
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link cerita ini berhasil disalin!");
+    }
+
+    // Jalankan saat halaman dibuka
+    window.onload = loadFullPost;
+</script>
+
+</body>
+</html>
