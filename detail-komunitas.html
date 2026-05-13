@@ -73,7 +73,8 @@
                             <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
                             <h3>Belum ada aktivitas</h3>
                             <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
-                            <button class="btn-post" onclick="alert('Fitur postingan akan segera hadir!')">Buat Postingan</button>
+                            <!-- GANTI YANG INI -->
+                            <button class="btn-post" onclick="openPostModal()">Buat Postingan</button>
                         </div>
                     </div>
                 </div>
@@ -125,130 +126,223 @@
     </main>
 
 <script>
-    // 1. Konfigurasi Supabase
-    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
-    const { createClient } = supabase;
-    const _supabase = createClient(supabaseUrl, supabaseKey);
+// 1. Konfigurasi Supabase
+const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+const { createClient } = supabase;
+const _supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 2. Ambil ID dari URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const commId = urlParams.get('id');
+const urlParams = new URLSearchParams(window.location.search);
+const commId = urlParams.get('id');
 
-    async function loadDetail() {
-        if (!commId) return;
+// Fungsi Modal
+function openPostModal() {
+    document.getElementById('modalPost').style.display = 'flex';
+}
+function closePostModal() {
+    document.getElementById('modalPost').style.display = 'none';
+}
 
-        // Ambil data dari tabel 'Komunitas' di Supabase
-        const { data: komunitas, error } = await _supabase
-            .from('Komunitas')
+// 2. Load Detail Komunitas
+async function loadDetail() {
+    if (!commId) {
+        console.error("ID tidak ditemukan di URL");
+        return;
+    }
+
+    const { data: komunitas, error } = await _supabase
+        .from('Komunitas')
+        .select('*')
+        .eq('id', commId)
+        .single(); // Harus pakai single karena kita cuma ambil 1 data
+
+    if (error) {
+        console.error("Error Supabase Detail:", error);
+        return;
+    }
+
+    if (komunitas) {
+        // Update Nama & Deskripsi
+        document.getElementById('commName').innerText = komunitas.nama;
+        document.getElementById('commDesc').innerText = komunitas.deskripsi;
+        document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
+
+        // Update Banner
+        if (komunitas.cover) {
+            document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
+        }
+
+        // Update Logo
+        const logoWrapper = document.getElementById('commLogo');
+        if (komunitas.logo) {
+            logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
+        } else {
+            logoWrapper.innerHTML = `<div class="placeholder" style="font-size:40px; font-weight:bold; color:#ed8805; display:flex; align-items:center; justify-content:center; height:100%;">${komunitas.nama.charAt(0)}</div>`;
+        }
+    }
+}
+
+// 3. Kirim Postingan
+document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.innerText = "Mengirim...";
+    btn.disabled = true;
+
+    const postData = {
+        comm_id: commId,
+        username: document.getElementById('postUser').value,
+        activity_name: document.getElementById('postActivity').value,
+        location: document.getElementById('postLocation').value,
+        event_date: document.getElementById('postDate').value,
+        content: document.getElementById('postContent').value,
+        banner_url: document.getElementById('postBanner').value
+    };
+
+    const { error } = await _supabase.from('Postingan').insert([postData]);
+
+    if (error) {
+        alert("Gagal posting: " + error.message);
+    } else {
+        closePostModal();
+        loadPosts(); 
+        document.getElementById('formPostingan').reset();
+    }
+    btn.innerText = "Posting Sekarang";
+    btn.disabled = false;
+});
+
+// 4. Tampilkan Postingan (DIPERBAIKI)
+async function loadPosts() {
+    const activityContainer = document.getElementById('tabAktivitas');
+    if (!commId) return;
+
+    try {
+        const { data: posts, error } = await _supabase
+            .from('Postingan')
             .select('*')
-            .eq('id', commId)
-            .single();
+            .eq('comm_id', commId)
+            .order('created_at', { ascending: false });
 
-        if (error) {
-            console.error("Error:", error);
-            alert("Komunitas tidak ditemukan!");
-            window.location.href = "komunitas.html";
-            return;
-        }
+        if (error) throw error;
 
-        if (komunitas) {
-            // Tampilkan Nama & Deskripsi
-            document.getElementById('commName').innerText = komunitas.nama;
-            document.getElementById('commDesc').innerText = komunitas.deskripsi;
-            document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
-
-            // Tampilkan Banner/Cover
-            if (komunitas.cover) {
-                document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
-            }
-
-            // Tampilkan Logo
-            const logoWrapper = document.getElementById('commLogo');
-            if (komunitas.logo) {
-                logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
-            } else {
-                logoWrapper.innerHTML = `<div class="placeholder" style="font-size: 40px; font-weight: bold; color: #ed8805; display: flex; align-items: center; justify-content: center; height: 100%;">${komunitas.nama.charAt(0)}</div>`;
-            }
-
-            // Tampilkan Sosial Media
-            if (komunitas.sosmed) {
-                const containerSosmed = document.getElementById('containerSosmed');
-                let htmlSosmed = '';
-
-                if (komunitas.sosmed.instagram) {
-                    htmlSosmed += `
-                        <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
-                                <div>
-                                    <span style="display: block; font-size: 12px; color: #64748b;">Instagram</span>
-                                    <strong style="color: #1e293b;">Buka Profil</strong>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
-                        </a>`;
-                }
-
-                if (komunitas.sosmed.grupWa) {
-                    htmlSosmed += `
-                        <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
-                                <div>
-                                    <span style="display: block; font-size: 12px; color: #64748b;">WhatsApp Group</span>
-                                    <strong style="color: #1e293b;">Gabung Grup</strong>
-                                </div>
-                            </div>
-                            <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
-                        </a>`;
-                }
-
-                containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
-            }
-        }
-    }
-
-    // 3. Logika Hapus Komunitas dari Supabase
-    document.getElementById('deleteCommBtn').addEventListener('click', async function() {
-        const yakin = confirm("Apakah Anda yakin ingin menghapus komunitas ini secara permanen dari database?");
+        // Tombol Buat Postingan di bagian atas
+        let html = `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
         
-        if (yakin && commId) {
-            const { error } = await _supabase
-                .from('Komunitas')
-                .delete()
-                .eq('id', commId);
+        if (posts && posts.length > 0) {
+            posts.forEach(p => {
+                const formattedDate = new Date(p.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+                const bannerImg = p.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
+                
+                html += `
+                    <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
+                        
+                        <!-- Gambar Samping (Kiri) -->
+                        <div style="width: 35%; min-width: 200px; position: relative;">
+                            <img src="${bannerImg}" style="width: 100%; height: 100%; object-fit: cover;" alt="Banner">
+                        </div>
 
-            if (error) {
-                alert("Gagal menghapus: " + error.message);
-            } else {
-                alert("Komunitas berhasil dihapus!");
-                window.location.href = "komunitas.html";
-            }
+                        <!-- Konten (Kanan) -->
+                        <div style="width: 65%; padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <!-- Header: User & Tanggal -->
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <div style="width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; overflow: hidden;">
+                                        <img src="https://ui-avatars.com/api/?name=${p.username}&background=random" style="width:100%;">
+                                    </div>
+                                    <span style="font-weight: 600; font-size: 14px; color: #1e293b;">${p.username}</span>
+                                    <span style="color: #94a3b8; font-size: 14px;">• ${formattedDate}</span>
+                                </div>
+
+                                <!-- Judul Kegiatan -->
+                                <h2 style="margin: 0 0 15px 0; font-size: 26px; font-weight: 800; color: #0f172a;">${p.activity_name}</h2>
+
+                                <!-- Deskripsi Singkat -->
+                                <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                    ${p.content}
+                                </p>
+                            </div>
+
+                            <!-- Footer: Lokasi & Tombol Baca -->
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="background: #f8fafc; padding: 6px 14px; border-radius: 50px; color: #64748b; font-size: 13px; display: flex; align-items: center; gap: 6px; border: 1px solid #f1f5f9;">
+                                    <i class="fa-solid fa-location-dot" style="color: #ed8805;"></i> ${p.location}
+                                </div>
+                                <a href="#" style="text-decoration: none; color: #ed8805; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                                    Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            activityContainer.innerHTML = html;
+        } else {
+            activityContainer.innerHTML = html + `<div style="text-align:center; padding: 40px; color:#94a3b8;"><i class="fa-regular fa-comment-dots" style="font-size: 40px; margin-bottom: 10px;"></i><p>Belum ada aktivitas di sini.</p></div>`;
         }
-    });
+    } catch (err) {
+        console.error("Kesalahan sistem:", err);
+        activityContainer.innerHTML = `<p style='color:red; text-align:center;'>Gagal memuat: ${err.message}</p>`;
+    }
+}
 
-    // Fungsi Pembantu
-    function copyToClipboard() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link komunitas berhasil disalin ke clipboard!");
+// Jalankan saat startup
+window.onload = async () => {
+    console.log("Halaman dimuat, memulai pengambilan data...");
+    
+    // Jalankan load detail komunitas
+    try {
+        await loadDetail();
+    } catch (e) {
+        console.error("Gagal memuat detail komunitas:", e);
     }
 
-    function openTab(evt, tabName) {
-        const tabContent = document.getElementsByClassName("tab-content");
-        for (let i = 0; i < tabContent.length; i++) {
-            tabContent[i].classList.remove("active");
-        }
-        const tabLinks = document.getElementsByClassName("tab-item");
-        for (let i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].classList.remove("active");
-        }
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
+    // Jalankan load daftar postingan
+    try {
+        await loadPosts();
+    } catch (e) {
+        console.error("Gagal memuat postingan:", e);
     }
-
-    // Jalankan load detail saat halaman dibuka
-    window.onload = loadDetail;
+};
 </script>
+<!-- MODAL BUAT POSTINGAN -->
+<div id="modalPost" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
+    <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+        <h2 style="margin-top:0; color:#1e293b;">Bagikan Cerita Camp</h2>
+        <form id="formPostingan">
+            <div style="margin-bottom:15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Dibuat Oleh</label>
+                <input type="text" id="postUser" placeholder="Nama Anda (Contoh: Re: RelF)" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+            </div>
+            <div style="margin-bottom:15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
+                <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+            </div>
+            <!-- Tambahkan ini di bawah input Nama Kegiatan -->
+<div style="margin-bottom:15px;">
+    <label style="display:block; margin-bottom:5px; font-weight:600;">Link Foto Banner (Opsional)</label>
+    <input type="url" id="postBanner" placeholder="Masukkan link foto (GitHub/Google Drive)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
+    <small style="color: #64748b; font-size: 11px;">Gunakan link gambar langsung dari GitHub atau Google Drive yang sudah kita bahas tadi.</small>
+</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Lokasi</label>
+                    <input type="text" id="postLocation" placeholder="Contoh: Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Tanggal</label>
+                    <input type="date" id="postDate" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+            </div>
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Deskripsi / HTM</label>
+                <textarea id="postContent" placeholder="Tulis rincian biaya atau cerita perjalanan..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; height:100px;" required></textarea>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button type="button" onclick="closePostModal()" style="padding:12px 25px; border-radius:10px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
+                <button type="submit" style="padding:12px 25px; border-radius:10px; border:none; background:#ed8805; color:white; font-weight:600; cursor:pointer;">Posting Sekarang</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

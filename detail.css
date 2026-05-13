@@ -463,3 +463,18 @@ body {
     background: #0066ff;
     color: white;
 }
+/* Efek Hover untuk Kartu Postingan */
+.post-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Mengatur ukuran gambar agar konsisten */
+.post-card img {
+    min-height: 250px;
+    object-fit: cover;
+}

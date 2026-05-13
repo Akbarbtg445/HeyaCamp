@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Komunitas - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="detail.css">
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- Area untuk menampilkan Postingan (Tab Aktivitas) -->
+<div id="tabAktivitas" style="padding: 20px; max-width: 800px; margin: auto;">
+    <!-- Tombol dan Postingan akan dimuat di sini oleh JavaScript -->
+    <p>Memuat postingan...</p>
+</div>
+
+<!-- Modal Buat Kegiatan/Postingan -->
+<div id="modalPost" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
+    <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+        <h2 style="margin-top:0; color:#1e293b;">Bagikan Cerita Camp</h2>
+        
+        <form id="formPostingan">
+            <div style="margin-bottom:15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Dibuat Oleh</label>
+                <input type="text" id="postUser" placeholder="Nama Anda (Contoh: Re: RelF)" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
+                <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Lokasi</label>
+                    <input type="text" id="postLocation" placeholder="Contoh: Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Tanggal</label>
+                    <input type="date" id="postDate" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600;">Deskripsi / HTM</label>
+                <textarea id="postContent" placeholder="Tulis rincian biaya atau cerita perjalanan..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; height:100px;" required></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button type="button" onclick="closePostModal()" style="padding:12px 25px; border-radius:10px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
+                <button type="submit" style="padding:12px 25px; border-radius:10px; border:none; background:#1e5631; color:white; font-weight:600; cursor:pointer;">Posting Sekarang</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// 1. KONFIGURASI SUPABASE (Pastikan Key & URL Benar)
+const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+const { createClient } = supabase;
+const _supabase = createClient(supabaseUrl, supabaseKey);
+
+// 2. AMBIL ID KOMUNITAS DARI URL
+const urlParams = new URLSearchParams(window.location.search);
+const commId = urlParams.get('id');
+
+// 3. FUNGSI UNTUK MODAL
+function openPostModal() {
+    document.getElementById('modalPost').style.display = 'flex';
+}
+
+function closePostModal() {
+    document.getElementById('modalPost').style.display = 'none';
+}
+
+// 4. LOGIKA KIRIM POSTINGAN
+document.getElementById('formPostingan').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.innerText = "Mengirim...";
+    btn.disabled = true;
+
+    const postData = {
+        comm_id: commId, // Menghubungkan postingan dengan komunitas ini
+        username: document.getElementById('postUser').value,
+        activity_name: document.getElementById('postActivity').value,
+        location: document.getElementById('postLocation').value,
+        event_date: document.getElementById('postDate').value,
+        content: document.getElementById('postContent').value
+    };
+
+    const { error } = await _supabase
+        .from('Postingan')
+        .insert([postData]);
+
+    if (error) {
+        alert("Gagal posting: " + error.message);
+    } else {
+        closePostModal();
+        loadPosts(); // Refresh tampilan secara otomatis
+        document.getElementById('formPostingan').reset();
+    }
+    btn.innerText = "Posting Sekarang";
+    btn.disabled = false;
+});
+
+// 5. FUNGSI LOAD DATA (MENAMPILKAN POSTINGAN)
+// 5. FUNGSI LOAD DATA (MENAMPILKAN POSTINGAN)
+async function loadPosts() {
+    const activityContainer = document.getElementById('tabAktivitas');
+    
+    // 1. Cek apakah ada ID di URL
+    if (!commId) {
+        activityContainer.innerHTML = "<p style='color:orange; text-align:center;'>Peringatan: Tidak ada ID Komunitas di URL. <br> Silakan buka kembali dari halaman komunitas.</p>";
+        return;
+    }
+
+    try {
+        // 2. Ambil data dari Supabase
+        const { data: posts, error } = await _supabase
+            .from('Postingan')
+            .select('*')
+            .eq('comm_id', commId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // 3. Siapkan Tombol Tambah Cerita
+        let html = `<button class="btn-post" style="margin-bottom:20px; width:100%; background:#1e5631; color:white; padding:15px; border-radius:10px; border:none; cursor:pointer; font-weight:bold;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
+        
+        // 4. Jika ada postingan, susun kartu postingannya
+        if (posts && posts.length > 0) {
+            posts.forEach(p => {
+                const formattedDate = new Date(p.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+                
+                html += `
+                    <div class="post-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 25px; border: 1px solid #e2e8f0; text-align: left;">
+                        <!-- Header Kartu -->
+                        <div style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800'); background-size: cover; background-position: center; height: 180px; padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; color: white;">
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <span style="background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(5px);"><i class="fa-regular fa-calendar"></i> ${formattedDate}</span>
+                                <span style="background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 50px; font-size: 11px; backdrop-filter: blur(5px);"><i class="fa-solid fa-location-dot"></i> ${p.location}</span>
+                            </div>
+                            <h2 style="margin: 0; font-size: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">${p.activity_name}</h2>
+                        </div>
+
+                        <!-- Isi Kartu -->
+                        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; padding: 20px;">
+                            <div style="color: #475569; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${p.content}</div>
+                            
+                            <div style="border-left: 1px solid #f1f5f9; padding-left: 20px;">
+                                <h4 style="margin: 0 0 15px 0; color: #1e293b; font-size: 14px;">Dibuat Oleh</h4>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 45px; height: 45px; border-radius: 50%; background: #1e5631; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white;">${p.username.charAt(0).toUpperCase()}</div>
+                                    <div>
+                                        <strong style="display: block; font-size: 14px; color: #1e293b;">${p.username}</strong>
+                                        <small style="color: #ed8805; font-weight: 600;">Member HeyaCamp</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        } else {
+            // Jika belum ada data
+            html += `<p style="text-align:center; color:#64748b; margin-top:20px;">Belum ada cerita di sini. Yuk jadi yang pertama berbagi!</p>`;
+        }
+
+        // 5. Masukkan semua HTML ke dalam container
+        activityContainer.innerHTML = html;
+
+    } catch (err) {
+        // Tampilkan pesan jika ada error teknis (misal: tabel belum dibuat)
+        console.error("Kesalahan sistem:", err);
+        activityContainer.innerHTML = `<p style='color:red; text-align:center;'>Gagal memuat postingan: <br> ${err.message}</p>`;
+    }
+}
+
+// JANGAN LUPA: Tambahkan ini agar fungsi langsung berjalan saat web dibuka
+window.onload = loadPosts;
+</script>
+
+</body>
+</html>
