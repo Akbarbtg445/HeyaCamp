@@ -9,6 +9,8 @@
     
     <!-- Memanggil file CSS eksternal -->
     <link rel="stylesheet" href="f.komunitas.css">
+    <!-- Letakkan ini di dalam <head> -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -38,7 +40,10 @@
     </nav>
     <div class="form-container">
     <header class="form-header">
-        <button class="btn-back"><i class="fa-solid fa-arrow-left"></i></button>
+        <!-- Cari kode ini -->
+<button class="btn-back" onclick="window.location.href='komunitas.html'">
+    <i class="fa-solid fa-arrow-left"></i>
+</button>
         <div class="header-text">
             <h1><i class="fa-solid fa-earth-asia"></i> Buat Komunitas Region</h1>
             <p><i class="fa-solid fa-users"></i> Ajukan pembuatan region baru untuk komunitasmu</p>
@@ -123,24 +128,35 @@
    
 </main>
 </div>
+<!-- Bagian Head dan Body tetap sama seperti milikmu -->
+
 <script>
+    // --- 1. KONFIGURASI SUPABASE ---
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    
+    // Gunakan pengecekan ini agar tidak error saat inisialisasi
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
+
     let base64Cover = "";
     let base64Logo = "";
 
-    // Fungsi Konversi
+    // Fungsi Konversi Gambar ke Base64
     function encodeImageFileAsURL(element, callback) {
+        if (!element.files[0]) return;
         var file = element.files[0];
         var reader = new FileReader();
         reader.onloadend = function() { callback(reader.result); }
         reader.readAsDataURL(file);
     }
 
-    // Input Events untuk Preview Teks
+    // Preview Nama Real-time
     document.getElementById('namaRegion').addEventListener('input', function() {
         document.getElementById('previewNama').innerText = this.value || "Nama Region";
     });
 
-    // Logika Upload
+    // Logika Upload Gambar
     document.getElementById('dropAreaCover').addEventListener('click', () => document.getElementById('inputCover').click());
     document.getElementById('inputCover').addEventListener('change', function() {
         encodeImageFileAsURL(this, function(base64) {
@@ -160,39 +176,56 @@
         });
     });
 
-    // Simpan Data
-    document.getElementById('submitBtn').addEventListener('click', function() {
-    const nama = document.getElementById('namaRegion').value;
-    const deskripsi = document.getElementById('deskripsiRegion').value;
-    // AMBIL DATA BARU
-    const instagram = document.getElementById('igKomunitas').value;
-    const whatsapp = document.getElementById('waAdmin').value;
-    const grupWa = document.getElementById('linkGroup').value;
+    // --- 2. SIMPAN DATA KE DATABASE ONLINE ---
+    document.getElementById('submitBtn').addEventListener('click', async function() {
+        const nama = document.getElementById('namaRegion').value;
+        const deskripsi = document.getElementById('deskripsiRegion').value;
+        const instagram = document.getElementById('igKomunitas').value;
+        const whatsapp = document.getElementById('waAdmin').value;
+        const grupWa = document.getElementById('linkGroup').value;
 
-    if (!nama || !deskripsi) {
-        alert("Harap isi Nama dan Deskripsi!");
-        return;
-    }
+        if (!nama || !deskripsi) {
+            alert("Harap isi Nama dan Deskripsi!");
+            return;
+        }
 
-    let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-    daftarKomunitas.push({
-        nama: nama,
-        deskripsi: deskripsi,
-        anggota: 0,
-        cover: base64Cover,
-        logo: base64Logo,
-        // SIMPAN KE DALAM OBJEK
-        sosmed: {
-            instagram: instagram,
-            whatsapp: whatsapp,
-            grupWa: grupWa
+        // Tampilkan loading
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "Sedang Mengirim...";
+        btn.disabled = true;
+
+        try {
+            // Simpan ke Supabase (Online)
+            const { data, error } = await _supabase
+                .from('Komunitas') 
+                .insert([
+                    { 
+                        nama: nama, 
+                        deskripsi: deskripsi, 
+                        anggota: 0,
+                        cover: base64Cover,
+                        logo: base64Logo,
+                        sosmed: {
+                            instagram: instagram,
+                            whatsapp: whatsapp,
+                            grupWa: grupWa
+                        }
+                    }
+                ]);
+
+            if (error) throw error;
+
+            alert("Selamat! Komunitas Berhasil Tersimpan Secara Online.");
+            window.location.href = "komunitas.html";
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Gagal mengirim data: " + error.message);
+        } finally {
+            btn.innerText = "Ajukan Region Baru";
+            btn.disabled = false;
         }
     });
-
-    localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
-    alert("Komunitas berhasil diajukan!");
-    window.location.href = "komunitas.html";
-});
 </script>
 </body>
 </html>
