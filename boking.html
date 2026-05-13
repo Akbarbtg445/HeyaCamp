@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data Booking</title>
+    <title>Data Booking - Monitoring</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="stylesheet" href="coba.css">
+    <!-- WAJIB: Tambahkan library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Gaya tambahan untuk status */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e2e8f0;
+        }
+        .status-konfirmasi { background: #fef3c7; color: #92400e; }
+        .status-selesai { background: #dcfce7; color: #166534; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background-color: #f8fafc; }
+        
+        .btn-hapus {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <!-- 1. Bagian Logo -->
         <div class="nav-logo">
-            <!-- Ganti src dengan link logo Anda -->
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
-        <!-- 2. Bagian Menu Tengah -->
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
             <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
@@ -31,23 +54,108 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
+
     <div class="container">
         <div class="card">
-            <h2>Monitoring Sewa Real-time</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Penyewa</th>
-                        <th>Alat</th>
-                        <th>Tanggal</th> <!-- Ini adalah kolom tanggal yang baru ditambahkan -->
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="bookingTable"></tbody>
-            </table>
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> Monitoring Sewa Real-time</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Penyewa</th>
+                            <th>Alat & Jumlah</th>
+                            <th>Tanggal Sewa</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingTable">
+                        <!-- Data akan muncul di sini -->
+                        <tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        // 2. Fungsi Ambil Data Pesanan
+        async function muatDataBooking() {
+            const tbody = document.getElementById('bookingTable');
+            
+            try {
+                const { data: Pesanan, error } = await _supabase
+                    .from('pesanan')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (Pesanan.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = ''; // Bersihkan loading
+
+                pesanan.forEach(item => {
+                    // Format tampilan alat (Contoh: Tenda x2, Matras x1)
+                    const rincianAlat = item.item_disewa.map(alat => 
+                        `${alat.nama} (x${alat.jumlah})`
+                    ).join('<br>');
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <strong>${item.nama_penyewa}</strong><br>
+                            <small style="color: #64748b;">${item.nomor_hp}</small>
+                        </td>
+                        <td>${rincianAlat}</td>
+                        <td>${item.tanggal_sewa}</td>
+                        <td>
+                            <span class="status-badge ${item.status === 'Selesai' ? 'status-selesai' : 'status-konfirmasi'}">
+                                ${item.status || 'Menunggu'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data.</td></tr>';
+            }
+        }
+
+        // 3. Fungsi Hapus Pesanan
+        async function hapusPesanan(id) {
+            if (confirm("Hapus data pesanan ini?")) {
+                const { error } = await _supabase
+                    .from('Pesanan')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) {
+                    alert("Gagal menghapus data");
+                } else {
+                    muatDataBooking(); // Refresh tabel
+                }
+            }
+        }
+
+        // Jalankan saat halaman dibuka
+        window.onload = muatDataBooking;
+    </script>
 </body>
 </html>
