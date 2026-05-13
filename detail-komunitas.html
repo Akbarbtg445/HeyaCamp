@@ -73,7 +73,6 @@
                             <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
                             <h3>Belum ada aktivitas</h3>
                             <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
-                            <!-- GANTI YANG INI -->
                             <button class="btn-post" onclick="openPostModal()">Buat Postingan</button>
                         </div>
                     </div>
@@ -125,6 +124,48 @@
         </div>
     </main>
 
+    <!-- 1. MODAL HARUS DI SINI (SEBELUM SCRIPT) -->
+    <!-- MODAL BUAT POSTINGAN -->
+    <div id="modalPost" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
+        <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+            <h2 style="margin-top:0; color:#1e293b;">Bagikan Cerita Camp</h2>
+            <form id="formPostingan">
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Dibuat Oleh</label>
+                    <input type="text" id="postUser" placeholder="Nama Anda (Contoh: Re: RelF)" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
+                    <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Link Foto Banner (Opsional)</label>
+                    <input type="url" id="postBanner" placeholder="Masukkan link foto (GitHub/Google Drive)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
+                    <small style="color: #64748b; font-size: 11px;">Gunakan link gambar langsung dari GitHub atau Google Drive yang sudah kita bahas tadi.</small>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:600;">Lokasi</label>
+                        <input type="text" id="postLocation" placeholder="Contoh: Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:5px; font-weight:600;">Tanggal</label>
+                        <input type="date" id="postDate" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
+                    </div>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Deskripsi / HTM</label>
+                    <textarea id="postContent" placeholder="Tulis rincian biaya atau cerita perjalanan..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; height:100px;" required></textarea>
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                    <button type="button" onclick="closePostModal()" style="padding:12px 25px; border-radius:10px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
+                    <button type="submit" style="padding:12px 25px; border-radius:10px; border:none; background:#ed8805; color:white; font-weight:600; cursor:pointer;">Posting Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. SCRIPT DI PALING BAWAH -->
 <script>
 // 1. Konfigurasi Supabase
 const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
@@ -154,7 +195,7 @@ async function loadDetail() {
         .from('Komunitas')
         .select('*')
         .eq('id', commId)
-        .single(); // Harus pakai single karena kita cuma ambil 1 data
+        .single();
 
     if (error) {
         console.error("Error Supabase Detail:", error);
@@ -162,17 +203,14 @@ async function loadDetail() {
     }
 
     if (komunitas) {
-        // Update Nama & Deskripsi
         document.getElementById('commName').innerText = komunitas.nama;
         document.getElementById('commDesc').innerText = komunitas.deskripsi;
         document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
 
-        // Update Banner
         if (komunitas.cover) {
             document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
         }
 
-        // Update Logo
         const logoWrapper = document.getElementById('commLogo');
         if (komunitas.logo) {
             logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
@@ -182,7 +220,7 @@ async function loadDetail() {
     }
 }
 
-// 3. Kirim Postingan
+// 3. Kirim Postingan (Sekarang akan berhasil karena form-nya sudah dibaca)
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -212,8 +250,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
     btn.disabled = false;
 });
 
-// 4. Tampilkan Postingan (DIPERBAIKI)
-// 4. Tampilkan Postingan (DENGAN OPSI 2 - EMPTY STATE ASLI)
+// 4. Tampilkan Postingan
 async function loadPosts() {
     const activityContainer = document.getElementById('tabAktivitas');
     if (!commId) return;
@@ -230,7 +267,6 @@ async function loadPosts() {
         let html = '';
         
         if (posts && posts.length > 0) {
-            // JIKA ADA POSTINGAN: Tampilkan tombol panjang di atas
             html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
             
             posts.forEach(p => {
@@ -239,16 +275,11 @@ async function loadPosts() {
                 
                 html += `
                     <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
-                        
-                        <!-- Gambar Samping (Kiri) -->
                         <div style="width: 35%; min-width: 200px; position: relative;">
                             <img src="${bannerImg}" style="width: 100%; height: 100%; object-fit: cover;" alt="Banner">
                         </div>
-
-                        <!-- Konten (Kanan) -->
                         <div style="width: 65%; padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <!-- Header: User & Tanggal -->
                                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                                     <div style="width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; overflow: hidden;">
                                         <img src="https://ui-avatars.com/api/?name=${p.username}&background=random" style="width:100%;">
@@ -256,17 +287,11 @@ async function loadPosts() {
                                     <span style="font-weight: 600; font-size: 14px; color: #1e293b;">${p.username}</span>
                                     <span style="color: #94a3b8; font-size: 14px;">• ${formattedDate}</span>
                                 </div>
-
-                                <!-- Judul Kegiatan -->
                                 <h2 style="margin: 0 0 15px 0; font-size: 26px; font-weight: 800; color: #0f172a;">${p.activity_name}</h2>
-
-                                <!-- Deskripsi Singkat -->
                                 <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                                     ${p.content}
                                 </p>
                             </div>
-
-                            <!-- Footer: Lokasi & Tombol Baca -->
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="background: #f8fafc; padding: 6px 14px; border-radius: 50px; color: #64748b; font-size: 13px; display: flex; align-items: center; gap: 6px; border: 1px solid #f1f5f9;">
                                     <i class="fa-solid fa-location-dot" style="color: #ed8805;"></i> ${p.location}
@@ -280,7 +305,6 @@ async function loadPosts() {
             });
             activityContainer.innerHTML = html;
         } else {
-            // JIKA KOSONG: Kembalikan ke desain asli dari HTML & CSS kamu
             activityContainer.innerHTML = `
                 <div class="activity-card">
                     <div class="empty-state">
@@ -297,18 +321,33 @@ async function loadPosts() {
         activityContainer.innerHTML = `<p style='color:red; text-align:center;'>Gagal memuat: ${err.message}</p>`;
     }
 }
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link komunitas berhasil disalin ke clipboard!");
+}
+
+function openTab(evt, tabName) {
+    const tabContent = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContent.length; i++) {
+        tabContent[i].classList.remove("active");
+    }
+    const tabLinks = document.getElementsByClassName("tab-item");
+    for (let i = 0; i < tabLinks.length; i++) {
+        tabLinks[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    evt.currentTarget.classList.add("active");
+}
+
 // Jalankan saat startup
 window.onload = async () => {
     console.log("Halaman dimuat, memulai pengambilan data...");
-    
-    // Jalankan load detail komunitas
     try {
         await loadDetail();
     } catch (e) {
         console.error("Gagal memuat detail komunitas:", e);
     }
-
-    // Jalankan load daftar postingan
     try {
         await loadPosts();
     } catch (e) {
@@ -316,45 +355,5 @@ window.onload = async () => {
     }
 };
 </script>
-<!-- MODAL BUAT POSTINGAN -->
-<div id="modalPost" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
-    <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
-        <h2 style="margin-top:0; color:#1e293b;">Bagikan Cerita Camp</h2>
-        <form id="formPostingan">
-            <div style="margin-bottom:15px;">
-                <label style="display:block; margin-bottom:5px; font-weight:600;">Dibuat Oleh</label>
-                <input type="text" id="postUser" placeholder="Nama Anda (Contoh: Re: RelF)" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
-            </div>
-            <div style="margin-bottom:15px;">
-                <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
-                <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
-            </div>
-            <!-- Tambahkan ini di bawah input Nama Kegiatan -->
-<div style="margin-bottom:15px;">
-    <label style="display:block; margin-bottom:5px; font-weight:600;">Link Foto Banner (Opsional)</label>
-    <input type="url" id="postBanner" placeholder="Masukkan link foto (GitHub/Google Drive)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
-    <small style="color: #64748b; font-size: 11px;">Gunakan link gambar langsung dari GitHub atau Google Drive yang sudah kita bahas tadi.</small>
-</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
-                <div>
-                    <label style="display:block; margin-bottom:5px; font-weight:600;">Lokasi</label>
-                    <input type="text" id="postLocation" placeholder="Contoh: Watu Mabur" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
-                </div>
-                <div>
-                    <label style="display:block; margin-bottom:5px; font-weight:600;">Tanggal</label>
-                    <input type="date" id="postDate" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
-                </div>
-            </div>
-            <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:5px; font-weight:600;">Deskripsi / HTM</label>
-                <textarea id="postContent" placeholder="Tulis rincian biaya atau cerita perjalanan..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; height:100px;" required></textarea>
-            </div>
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button type="button" onclick="closePostModal()" style="padding:12px 25px; border-radius:10px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
-                <button type="submit" style="padding:12px 25px; border-radius:10px; border:none; background:#ed8805; color:white; font-weight:600; cursor:pointer;">Posting Sekarang</button>
-            </div>
-        </form>
-    </div>
-</div>
 </body>
 </html>
