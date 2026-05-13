@@ -86,57 +86,63 @@
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
         // 2. Fungsi Ambil Data Pesanan
-        async function muatDataBooking() {
-            const tbody = document.getElementById('bookingTable');
-            
-            try {
-                const { data: Pesanan, error } = await _supabase
-                    .from('Pesanan')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+        // 2. Fungsi Ambil Data Pesanan
+async function muatDataBooking() {
+    const tbody = document.getElementById('bookingTable');
+    
+    try {
+        // Ambil data dari tabel 'Pesanan'
+        const { data: Pesanan, error } = await _supabase
+            .from('Pesanan')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-                if (error) throw error;
+        if (error) throw error;
 
-                if (Pesanan.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = ''; // Bersihkan loading
-
-                pesanan.forEach(item => {
-                    // Format tampilan alat (Contoh: Tenda x2, Matras x1)
-                    const rincianAlat = item.item_disewa.map(alat => 
-                        `${alat.nama} (x${alat.jumlah})`
-                    ).join('<br>');
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <strong>${item.nama_penyewa}</strong><br>
-                            <small style="color: #64748b;">${item.nomor_hp}</small>
-                        </td>
-                        <td>${rincianAlat}</td>
-                        <td>${item.tanggal_sewa}</td>
-                        <td>
-                            <span class="status-badge ${item.status === 'Selesai' ? 'status-selesai' : 'status-konfirmasi'}">
-                                ${item.status || 'Menunggu'}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-            } catch (err) {
-                console.error(err);
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data.</td></tr>';
-            }
+        // Jika data kosong
+        if (!Pesanan || Pesanan.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
+            return;
         }
+
+        tbody.innerHTML = ''; // Bersihkan tulisan "Memuat data..."
+
+        // PERBAIKAN: Gunakan variabel 'Pesanan' (P besar) agar sesuai dengan hasil select di atas
+        Pesanan.forEach(item => {
+            // Cek apakah item_disewa ada, jika tidak buat array kosong agar tidak error
+            const items = item.item_disewa || [];
+            
+            const rincianAlat = items.map(alat => 
+                `${alat.nama} (x${alat.jumlah})`
+            ).join('<br>');
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <strong>${item.nama_penyewa}</strong><br>
+                    <small style="color: #64748b;">${item.nomor_hp}</small>
+                </td>
+                <td>${rincianAlat}</td>
+                <td>${item.tanggal_sewa}</td>
+                <td>
+                    <span class="status-badge ${item.status === 'Selesai' ? 'status-selesai' : 'status-konfirmasi'}">
+                        ${item.status || 'Menunggu'}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+    } catch (err) {
+        console.error("Detail Error:", err);
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data: ' + err.message + '</td></tr>';
+    }
+}
 
         // 3. Fungsi Hapus Pesanan
         async function hapusPesanan(id) {
