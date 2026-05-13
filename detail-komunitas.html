@@ -213,6 +213,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
 });
 
 // 4. Tampilkan Postingan (DIPERBAIKI)
+// 4. Tampilkan Postingan (DENGAN OPSI 2 - EMPTY STATE ASLI)
 async function loadPosts() {
     const activityContainer = document.getElementById('tabAktivitas');
     if (!commId) return;
@@ -226,29 +227,12 @@ async function loadPosts() {
 
         if (error) throw error;
 
-       // Kosongkan let html di awal
         let html = '';
         
         if (posts && posts.length > 0) {
-            // Jika ADA postingan, tampilkan tombol panjang di atas
-            html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">Buat Postingan</button>`;
+            // JIKA ADA POSTINGAN: Tampilkan tombol panjang di atas
+            html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
             
-            posts.forEach(p => {
-               // ... (kode susunan kartu postingan kamu tetap sama) ...
-            });
-            activityContainer.innerHTML = html;
-        } else {
-            // Jika KOSONG, kembalikan ke desain asli HTML kamu
-            activityContainer.innerHTML = `
-                <div class="empty-state" style="text-align: center; padding: 40px;">
-                    <div class="icon-circle" style="font-size: 40px; color: #94a3b8; margin-bottom: 15px;"><i class="fa-regular fa-comment-dots"></i></div>
-                    <h3 style="color: #1e293b; margin-bottom: 10px;">Belum ada aktivitas</h3>
-                    <p style="color: #64748b; margin-bottom: 20px;">Jadilah member pertama yang membagikan cerita seru di region ini!</p>
-                    <button class="btn-post" style="background:#ed8805; color:white; padding:12px 25px; border-radius:10px; border:none; cursor:pointer; font-weight:bold;" onclick="openPostModal()">Buat Postingan</button>
-                </div>
-            `;
-        }
-        if (posts && posts.length > 0) {
             posts.forEach(p => {
                 const formattedDate = new Date(p.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
                 const bannerImg = p.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
@@ -296,14 +280,23 @@ async function loadPosts() {
             });
             activityContainer.innerHTML = html;
         } else {
-            activityContainer.innerHTML = html + `<div style="text-align:center; padding: 40px; color:#94a3b8;"><i class="fa-regular fa-comment-dots" style="font-size: 40px; margin-bottom: 10px;"></i><p>Belum ada aktivitas di sini.</p></div>`;
+            // JIKA KOSONG: Kembalikan ke desain asli dari HTML & CSS kamu
+            activityContainer.innerHTML = `
+                <div class="activity-card">
+                    <div class="empty-state">
+                        <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
+                        <h3>Belum ada aktivitas</h3>
+                        <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
+                        <button class="btn-post" onclick="openPostModal()">Buat Postingan</button>
+                    </div>
+                </div>
+            `;
         }
     } catch (err) {
         console.error("Kesalahan sistem:", err);
         activityContainer.innerHTML = `<p style='color:red; text-align:center;'>Gagal memuat: ${err.message}</p>`;
     }
 }
-
 // Jalankan saat startup
 window.onload = async () => {
     console.log("Halaman dimuat, memulai pengambilan data...");
