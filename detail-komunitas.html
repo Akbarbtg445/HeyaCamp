@@ -6,15 +6,14 @@
     <title>Detail Komunitas - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="detail.css">
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
-        <!-- 1. Bagian Logo -->
         <div class="nav-logo">
-            <!-- Ganti src dengan link logo Anda -->
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
-        <!-- 2. Bagian Menu Tengah -->
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
             <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
@@ -32,226 +31,224 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
+
     <header class="hero-section" id="heroBg">
         <div class="hero-overlay"></div>
-       <div class="hero-content">
-    <div class="profile-header">
-        <div class="profile-logo-wrapper" id="commLogo">
-            <!-- Logo Disini -->
+        <div class="hero-content">
+            <div class="profile-header">
+                <div class="profile-logo-wrapper" id="commLogo">
+                    <!-- Logo Disini -->
+                </div>
+                <div class="profile-info">
+                    <h1 id="commName">Memuat...</h1>
+                    <!-- Meta Info Disini -->
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-leave" onclick="window.location.href='komunitas.html'">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                </button>
+                <button class="btn-delete" id="deleteCommBtn" style="background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; cursor: pointer;">
+                    <i class="fa-solid fa-trash-can"></i> Hapus
+                </button>
+            </div>
         </div>
-        <div class="profile-info">
-            <h1 id="commName">Nama Komunitas</h1>
-            <!-- Meta Info Disini -->
-        </div>
-    </div>
-    <button class="btn-leave" onclick="window.location.href='komunitas.html'">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
-    </button>
-    <button class="btn-delete" id="deleteCommBtn" style="background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; cursor: pointer;">
-        <i class="fa-solid fa-trash-can"></i> Hapus
-    </button>
-</div>
     </header>
 
     <main class="container">
         <div class="content-grid">
             <section class="feed-section">
-    <!-- Menambahkan ID pada button agar bisa diklik -->
-    <nav class="tab-menu">
-        <button class="tab-item active" onclick="openTab(event, 'tabAktivitas')">
-            <i class="fa-regular fa-comment-dots"></i> Aktivitas Terbaru
-        </button>
-        <button class="tab-item" onclick="openTab(event, 'tabEvent')">
-            <i class="fa-regular fa-calendar-check"></i> Event (0)
-        </button>
-    </nav>
+                <nav class="tab-menu">
+                    <button class="tab-item active" onclick="openTab(event, 'tabAktivitas')">
+                        <i class="fa-regular fa-comment-dots"></i> Aktivitas Terbaru
+                    </button>
+                    <button class="tab-item" onclick="openTab(event, 'tabEvent')">
+                        <i class="fa-regular fa-calendar-check"></i> Event (0)
+                    </button>
+                </nav>
 
-    <!-- Konten Tab Aktivitas -->
-    <div id="tabAktivitas" class="tab-content active">
-        <div class="activity-card">
-            <div class="empty-state">
-                <div class="icon-circle">
-                    <i class="fa-regular fa-comment-dots"></i>
+                <div id="tabAktivitas" class="tab-content active">
+                    <div class="activity-card">
+                        <div class="empty-state">
+                            <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
+                            <h3>Belum ada aktivitas</h3>
+                            <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
+                            <button class="btn-post" onclick="alert('Fitur postingan akan segera hadir!')">Buat Postingan</button>
+                        </div>
+                    </div>
                 </div>
-                <h3>Belum ada aktivitas</h3>
-                <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
-                <button class="btn-post" onclick="alert('Fitur postingan akan segera hadir!')">
-                    Buat Postingan
-                </button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Konten Tab Event (Sesuai gambar image_9dd720.png) -->
-    <div id="tabEvent" class="tab-content">
-        <div class="activity-card">
-            <div class="empty-state">
-                <div class="icon-circle">
-                    <i class="fa-regular fa-calendar"></i>
+                <div id="tabEvent" class="tab-content">
+                    <div class="activity-card">
+                        <div class="empty-state">
+                            <div class="icon-circle"><i class="fa-regular fa-calendar"></i></div>
+                            <h3>Belum ada event</h3>
+                            <p>Region ini belum memiliki event mendatang.</p>
+                        </div>
+                    </div>
                 </div>
-                <h3>Belum ada event</h3>
-                <p>Region ini belum memiliki event mendatang.</p>
-            </div>
-        </div>
-    </div>
-</section>
+            </section>
 
-         <aside class="sidebar">
-    <div class="about-card share-card">
-        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
-            <div style="width: 40px; height: 40px; background: #e0eeff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0066ff;">
-                <i class="fa-solid fa-share-nodes"></i>
-            </div>
-            <div>
-                <h3 style="margin: 0; font-size: 16px;">Bagikan Komunitas</h3>
-                <p style="margin: 0; font-size: 13px; color: #64748b;">Undang temanmu bergabung!</p>
-            </div>
-        </div>
-        <button class="btn-share-link" onclick="copyToClipboard()">
-            Salin Link Region
-        </button>
-    </div>
+            <aside class="sidebar">
+                <div class="about-card share-card">
+                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 40px; height: 40px; background: #e0eeff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0066ff;">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; font-size: 16px;">Bagikan Komunitas</h3>
+                            <p style="margin: 0; font-size: 13px; color: #64748b;">Undang temanmu bergabung!</p>
+                        </div>
+                    </div>
+                    <button class="btn-share-link" onclick="copyToClipboard()">Salin Link Region</button>
+                </div>
 
-    <div class="about-card">
-        <div class="card-header">
-            <h3>Tentang Komunitas</h3>
-            <span class="badge" id="sideBadge">0 Anggota</span>
-        </div>
-        <p id="commDesc" class="description">Deskripsi...</p>
-        <div class="members-section">
-            <h4>ANGGOTA TERBARU</h4>
-            <div class="avatar-group">
-                <div class="avatar-placeholder">U1</div>
-                <div class="avatar-placeholder">U2</div>
-                <div class="avatar-more">+9</div>
-            </div>
-        </div>
-    </div>
+                <div class="about-card">
+                    <div class="card-header">
+                        <h3>Tentang Komunitas</h3>
+                        <span class="badge" id="sideBadge">0 Anggota</span>
+                    </div>
+                    <p id="commDesc" class="description">Deskripsi...</p>
+                </div>
 
-    <div class="about-card" style="padding: 0; overflow: hidden; border: 1px solid #e2e8f0;">
-        <div style="background: #f0fff4; padding: 15px 20px; display: flex; align-items: center; gap: 10px; color: #2d6a4f;">
-            <i class="fa-regular fa-comment"></i>
-            <h3 style="margin: 0; font-size: 16px;">Sosial Media & Kontak</h3>
-        </div>
-        <div id="containerSosmed" style="padding: 20px; background: white;">
-            </div>
-    </div>
-</aside>
+                <div class="about-card" style="padding: 0; overflow: hidden; border: 1px solid #e2e8f0;">
+                    <div style="background: #f0fff4; padding: 15px 20px; display: flex; align-items: center; gap: 10px; color: #2d6a4f;">
+                        <i class="fa-regular fa-comment"></i>
+                        <h3 style="margin: 0; font-size: 16px;">Sosial Media & Kontak</h3>
+                    </div>
+                    <div id="containerSosmed" style="padding: 20px; background: white;">
+                        <!-- Tombol Sosmed Muncul Disini -->
+                    </div>
+                </div>
+            </aside>
         </div>
     </main>
 
 <script>
-    // 1. Ambil data komunitas berdasarkan ID dari URL
+    // 1. Konfigurasi Supabase
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
+
+    // 2. Ambil ID dari URL
     const urlParams = new URLSearchParams(window.location.search);
     const commId = urlParams.get('id');
-    const dataTersimpan = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-    const komunitas = dataTersimpan[commId];
 
-    if (komunitas) {
-        // Tambahkan ini di bawah pengecekan 'if (komunitas)'
-if (komunitas && komunitas.sosmed) {
-    const containerSosmed = document.getElementById('containerSosmed');
-    let htmlSosmed = '';
+    async function loadDetail() {
+        if (!commId) return;
 
-    // Tampilkan Instagram jika ada
-    if (komunitas.sosmed.instagram) {
-        htmlSosmed += `
-            <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
-                    <div>
-                        <span style="display: block; font-size: 12px; color: #64748b;">Instagram</span>
-                        <strong style="color: #1e293b;">@${komunitas.sosmed.instagram.split('/').pop()}</strong>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
-            </a>
-        `;
-    }
+        // Ambil data dari tabel 'Komunitas' di Supabase
+        const { data: komunitas, error } = await _supabase
+            .from('Komunitas')
+            .select('*')
+            .eq('id', commId)
+            .single();
 
-    // Tampilkan Grup WA jika ada
-    if (komunitas.sosmed.grupWa) {
-        htmlSosmed += `
-            <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
-                    <div>
-                        <span style="display: block; font-size: 12px; color: #64748b;">WhatsApp Group</span>
-                        <strong style="color: #1e293b;">Gabung Grup</strong>
-                    </div>
-                </div>
-                <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
-            </a>
-        `;
-    }
-
-    containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
-}
-
-// Fungsi Salin Link
-function copyToClipboard() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link komunitas berhasil disalin ke clipboard!");
-}
-        // Tampilkan Nama & Deskripsi
-        document.getElementById('commName').innerText = komunitas.nama;
-        document.getElementById('commDesc').innerText = komunitas.deskripsi;
-
-        // --- TAMBAHKAN INI AGAR JUMLAH ANGGOTA DINAMIS ---
-        const memberCount = komunitas.anggota || 0;
-        document.querySelector('.badge').innerText = `${memberCount} Anggota`;
-        // ------------------------------------------------
-
-        // Tampilkan Gambar Banner/Cover
-        const heroBg = document.getElementById('heroBg');
-        if (komunitas.cover) {
-            heroBg.style.backgroundImage = `url(${komunitas.cover})`;
-        }
-
-        // Tampilkan Logo
-        const logoWrapper = document.getElementById('commLogo');
-        if (komunitas.logo) {
-            logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
-        } else {
-            logoWrapper.innerHTML = `<div class="placeholder" style="font-size: 40px; font-weight: bold; color: #ed8805; display: flex; align-items: center; justify-content: center; height: 100%;">${komunitas.nama.charAt(0)}</div>`;
-        }
-        
-    }
-
-    // 2. Logika Tombol Hapus (Diletakkan di luar IF komunitas agar tetap bisa diakses)
-    document.getElementById('deleteCommBtn').addEventListener('click', function() {
-        const yakin = confirm("Apakah Anda yakin ingin menghapus komunitas ini?");
-        
-        if (yakin && commId !== null) {
-            let daftarKomunitas = JSON.parse(localStorage.getItem('heyaCommunities')) || [];
-            
-            // Hapus data dari array
-            daftarKomunitas.splice(commId, 1);
-            
-            // Simpan kembali ke localStorage
-            localStorage.setItem('heyaCommunities', JSON.stringify(daftarKomunitas));
-            
-            alert("Komunitas telah berhasil dihapus.");
+        if (error) {
+            console.error("Error:", error);
+            alert("Komunitas tidak ditemukan!");
             window.location.href = "komunitas.html";
+            return;
         }
-    })
+
+        if (komunitas) {
+            // Tampilkan Nama & Deskripsi
+            document.getElementById('commName').innerText = komunitas.nama;
+            document.getElementById('commDesc').innerText = komunitas.deskripsi;
+            document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
+
+            // Tampilkan Banner/Cover
+            if (komunitas.cover) {
+                document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
+            }
+
+            // Tampilkan Logo
+            const logoWrapper = document.getElementById('commLogo');
+            if (komunitas.logo) {
+                logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
+            } else {
+                logoWrapper.innerHTML = `<div class="placeholder" style="font-size: 40px; font-weight: bold; color: #ed8805; display: flex; align-items: center; justify-content: center; height: 100%;">${komunitas.nama.charAt(0)}</div>`;
+            }
+
+            // Tampilkan Sosial Media
+            if (komunitas.sosmed) {
+                const containerSosmed = document.getElementById('containerSosmed');
+                let htmlSosmed = '';
+
+                if (komunitas.sosmed.instagram) {
+                    htmlSosmed += `
+                        <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
+                                <div>
+                                    <span style="display: block; font-size: 12px; color: #64748b;">Instagram</span>
+                                    <strong style="color: #1e293b;">Buka Profil</strong>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+                        </a>`;
+                }
+
+                if (komunitas.sosmed.grupWa) {
+                    htmlSosmed += `
+                        <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
+                                <div>
+                                    <span style="display: block; font-size: 12px; color: #64748b;">WhatsApp Group</span>
+                                    <strong style="color: #1e293b;">Gabung Grup</strong>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+                        </a>`;
+                }
+
+                containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
+            }
+        }
+    }
+
+    // 3. Logika Hapus Komunitas dari Supabase
+    document.getElementById('deleteCommBtn').addEventListener('click', async function() {
+        const yakin = confirm("Apakah Anda yakin ingin menghapus komunitas ini secara permanen dari database?");
+        
+        if (yakin && commId) {
+            const { error } = await _supabase
+                .from('Komunitas')
+                .delete()
+                .eq('id', commId);
+
+            if (error) {
+                alert("Gagal menghapus: " + error.message);
+            } else {
+                alert("Komunitas berhasil dihapus!");
+                window.location.href = "komunitas.html";
+            }
+        }
+    });
+
+    // Fungsi Pembantu
+    function copyToClipboard() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link komunitas berhasil disalin ke clipboard!");
+    }
+
     function openTab(evt, tabName) {
-    // 1. Ambil semua elemen dengan class "tab-content" dan sembunyikan
-    const tabContent = document.getElementsByClassName("tab-content");
-    for (let i = 0; i < tabContent.length; i++) {
-        tabContent[i].classList.remove("active");
+        const tabContent = document.getElementsByClassName("tab-content");
+        for (let i = 0; i < tabContent.length; i++) {
+            tabContent[i].classList.remove("active");
+        }
+        const tabLinks = document.getElementsByClassName("tab-item");
+        for (let i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].classList.remove("active");
+        }
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
     }
 
-    // 2. Ambil semua elemen dengan class "tab-item" dan hilangkan class "active"
-    const tabLinks = document.getElementsByClassName("tab-item");
-    for (let i = 0; i < tabLinks.length; i++) {
-        tabLinks[i].classList.remove("active");
-    }
-
-    // 3. Tampilkan tab yang dipilih dan tambahkan class "active" pada button yang diklik
-    document.getElementById(tabName).classList.add("active");
-    evt.currentTarget.classList.add("active");
-};
+    // Jalankan load detail saat halaman dibuka
+    window.onload = loadDetail;
 </script>
 </body>
 </html>
