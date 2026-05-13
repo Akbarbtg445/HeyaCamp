@@ -226,10 +226,28 @@ async function loadPosts() {
 
         if (error) throw error;
 
-        // Tombol Buat Postingan di bagian atas
-       // Ubah teksnya menjadi seperti ini:
-let html = `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">Buat Postingan</button>`;
+       // Kosongkan let html di awal
+        let html = '';
         
+        if (posts && posts.length > 0) {
+            // Jika ADA postingan, tampilkan tombol panjang di atas
+            html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">Buat Postingan</button>`;
+            
+            posts.forEach(p => {
+               // ... (kode susunan kartu postingan kamu tetap sama) ...
+            });
+            activityContainer.innerHTML = html;
+        } else {
+            // Jika KOSONG, kembalikan ke desain asli HTML kamu
+            activityContainer.innerHTML = `
+                <div class="empty-state" style="text-align: center; padding: 40px;">
+                    <div class="icon-circle" style="font-size: 40px; color: #94a3b8; margin-bottom: 15px;"><i class="fa-regular fa-comment-dots"></i></div>
+                    <h3 style="color: #1e293b; margin-bottom: 10px;">Belum ada aktivitas</h3>
+                    <p style="color: #64748b; margin-bottom: 20px;">Jadilah member pertama yang membagikan cerita seru di region ini!</p>
+                    <button class="btn-post" style="background:#ed8805; color:white; padding:12px 25px; border-radius:10px; border:none; cursor:pointer; font-weight:bold;" onclick="openPostModal()">Buat Postingan</button>
+                </div>
+            `;
+        }
         if (posts && posts.length > 0) {
             posts.forEach(p => {
                 const formattedDate = new Date(p.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
