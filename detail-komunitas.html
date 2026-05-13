@@ -185,6 +185,7 @@ function closePostModal() {
 }
 
 // 2. Load Detail Komunitas
+// 2. Load Detail Komunitas
 async function loadDetail() {
     if (!commId) {
         console.error("ID tidak ditemukan di URL");
@@ -217,6 +218,43 @@ async function loadDetail() {
         } else {
             logoWrapper.innerHTML = `<div class="placeholder" style="font-size:40px; font-weight:bold; color:#ed8805; display:flex; align-items:center; justify-content:center; height:100%;">${komunitas.nama.charAt(0)}</div>`;
         }
+
+        // --- BAGIAN INI YANG TADI HILANG (TAMPILKAN SOSMED) ---
+        if (komunitas.sosmed) {
+            const containerSosmed = document.getElementById('containerSosmed');
+            let htmlSosmed = '';
+
+            if (komunitas.sosmed.instagram) {
+                htmlSosmed += `
+                    <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
+                            <div>
+                                <span style="display: block; font-size: 12px; color: #64748b;">Instagram</span>
+                                <strong style="color: #1e293b;">Buka Profil</strong>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+                    </a>`;
+            }
+
+            if (komunitas.sosmed.grupWa) {
+                htmlSosmed += `
+                    <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
+                            <div>
+                                <span style="display: block; font-size: 12px; color: #64748b;">WhatsApp Group</span>
+                                <strong style="color: #1e293b;">Gabung Grup</strong>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="color: #94a3b8; font-size: 14px;"></i>
+                    </a>`;
+            }
+
+            containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
+        }
+        // --- AKHIR BAGIAN SOSMED ---
     }
 }
 
