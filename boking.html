@@ -91,7 +91,7 @@
             
             try {
                 const { data: Pesanan, error } = await _supabase
-                    .from('pesanan')
+                    .from('Pesanan')
                     .select('*')
                     .order('created_at', { ascending: false });
 
