@@ -51,31 +51,39 @@
 
         <!-- Area Konten & Sidebar -->
         <div class="content-grid">
-            <!-- Kolom Cerita (Kiri) -->
-            <div class="article-card">
-                <!-- Teks Cerita -->
-                <div class="article-text" id="viewContent">
-                    Memuat cerita...
-                </div>
-                
-                <!-- Bodi Baru: Tombol Interaksi Bawah -->
-                <div class="post-actions">
-                    <button id="btnLike" class="action-btn" onclick="addLike()">
-                        <i id="likeIcon" class="fa-regular fa-heart"></i> <span id="likeCount">0</span>
-                    </button>
-                    <button class="action-btn" onclick="scrollToKomentar()"><i class="fa-regular fa-comment"></i> Komentar</button>
-                    
-                    <button class="action-btn" onclick="openGalleryModal()"><i class="fa-regular fa-image"></i> Tambah Foto</button>
-
-                    <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
-                </div>
-            </div>
-            <div class="article-card" id="gallerySection" style="margin-top: 25px; display: none;">
-                <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 24px; color: #0f172a;">Galeri Foto (<span id="galleryCount">0</span>)</h3>
-                <div id="galleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+            
+            <!-- ============================== -->
+            <!-- KOLOM KIRI (CERITA, TOMBOL, GALERI, KOMENTAR) -->
+            <!-- ============================== -->
+            <div>
+                <div class="article-card">
+                    <!-- Teks Cerita -->
+                    <div class="article-text" id="viewContent">
+                        Memuat cerita...
                     </div>
-            </div>
-            <!-- Pembatas / Garis -->
+                    
+                    <!-- Tombol Interaksi Bawah -->
+                    <div class="post-actions">
+                        <button id="btnLike" class="action-btn" onclick="addLike()">
+                            <i id="likeIcon" class="fa-regular fa-heart"></i> <span id="likeCount">0</span>
+                        </button>
+                        <button class="action-btn" onclick="scrollToKomentar()"><i class="fa-regular fa-comment"></i> Komentar</button>
+                        <button class="action-btn" onclick="openGalleryModal()"><i class="fa-regular fa-image"></i> Tambah Foto</button>
+                        <!-- Tombol share ditaruh di paling kanan -->
+                        <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
+                    </div>
+
+                    <!-- AREA GALERI FOTO (SEKARANG TEPAT DI BAWAH TOMBOL ACTION) -->
+                    <div id="gallerySection" style="margin-top: 35px; display: none;">
+                        <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; color: #0f172a;">Galeri Foto (<span id="galleryCount">0</span>)</h3>
+                        <!-- Grid untuk menyusun foto menyamping -->
+                        <div id="galleryGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
+                            <!-- Foto akan dimuat di sini oleh JavaScript -->
+                        </div>
+                    </div>
+                </div> <!-- Akhir dari article-card -->
+
+                <!-- Pembatas / Garis -->
                 <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 30px 0;">
 
                 <!-- Bagian Komentar -->
@@ -94,8 +102,11 @@
                         <p style="color: #94a3b8; text-align: center; font-size: 14px;">Memuat komentar...</p>
                     </div>
                 </div>
+            </div>
 
-            <!-- Kolom Author & List (Kanan) -->
+            <!-- ============================== -->
+            <!-- KOLOM KANAN (AUTHOR & AKTIVITAS LAIN) -->
+            <!-- ============================== -->
             <div>
                 <!-- Kartu Author -->
                 <div class="sidebar-card">
@@ -126,8 +137,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+            
+        </div> <!-- Akhir Content Grid -->
     </div>
+
+    <!-- MODAL TAMBAH FOTO GALERI -->
     <div id="modalGallery" class="modal" style="display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
         <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:450px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
             <h2 style="margin-top:0; color:#1e293b;">Tambah Foto ke Galeri</h2>
@@ -163,7 +177,6 @@
         }
 
         try {
-            // Ambil data postingan UTAMA
             const { data: post, error } = await _supabase
                 .from('Postingan')
                 .select('*')
@@ -173,7 +186,6 @@
             if (error) throw error;
 
             if (post) {
-                // Terapkan data ke HTML
                 const formattedDate = new Date(post.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
                 const bannerImg = post.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
 
@@ -183,15 +195,13 @@
                 document.getElementById('viewLocation').innerText = post.location;
                 document.getElementById('viewContent').innerText = post.content;
                 document.getElementById('viewAuthor').innerText = post.username;
-                // Tampilkan jumlah like saat halaman dimuat
+                
                 window.currentLikes = post.likes_count || 0;
                 document.getElementById('likeCount').innerText = window.currentLikes;
 
-                // Panggil fungsi untuk mengambil aktivitas lainnya
+                // Panggil fungsi-fungsi pelengkap
                 loadOtherActivities(post.comm_id, post.id);
-                // Panggil fungsi komentar
                 loadComments(post.id);
-                // Panggil fungsi galeri
                 loadGallery(post.id);
             }
         } catch (err) {
@@ -200,11 +210,10 @@
         }
     }
 
-    // Fungsi Baru: Mengambil postingan lain dari komunitas yang sama
+    // Mengambil postingan lain
     async function loadOtherActivities(commId, currentPostId) {
         const container = document.getElementById('otherActivities');
         try {
-            // Ambil maksimal 3 postingan lain dari komuitas ini (Kecuali yang sedang dibaca)
             const { data: others, error } = await _supabase
                 .from('Postingan')
                 .select('*')
@@ -243,7 +252,8 @@
             container.innerHTML = '<p style="color: red; font-size: 13px;">Gagal memuat data.</p>';
         }
     }
-    // Fungsi untuk mengambil komentar dari Supabase
+
+    // Mengambil komentar
     async function loadComments(currentPostId) {
         const container = document.getElementById('commentsList');
         try {
@@ -255,7 +265,6 @@
 
             if (error) throw error;
 
-            // Update angka jumlah komentar
             document.getElementById('commentCount').innerText = comments ? comments.length : 0;
 
             if (comments && comments.length > 0) {
@@ -287,7 +296,7 @@
         }
     }
 
-    // Fungsi untuk mengirim komentar baru
+    // Mengirim komentar
     document.getElementById('formKomentar')?.addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
@@ -305,29 +314,27 @@
         if (error) {
             alert("Gagal mengirim komentar: " + error.message);
         } else {
-            document.getElementById('formKomentar').reset(); // Kosongkan form
-            loadComments(postId); // Refresh daftar komentar secara otomatis
+            document.getElementById('formKomentar').reset();
+            loadComments(postId);
         }
         
         btn.innerText = "Kirim Komentar";
         btn.disabled = false;
     });
-    // Fungsi untuk menambah Like
-    let hasLiked = false; // Mencegah user spam klik like berkali-kali
-    
+
+    // Menambah Like
+    let hasLiked = false;
     async function addLike() {
-        if (!postId || hasLiked) return; // Kalau sudah like, jangan lakukan apa-apa
+        if (!postId || hasLiked) return;
         
         hasLiked = true;
         window.currentLikes += 1;
         
-        // 1. Update tampilan UI langsung (biar terasa responsif)
         document.getElementById('likeCount').innerText = window.currentLikes;
         document.getElementById('likeIcon').classList.remove('fa-regular');
-        document.getElementById('likeIcon').classList.add('fa-solid'); // Hati jadi penuh
-        document.getElementById('likeIcon').style.color = '#ef4444'; // Hati jadi merah
+        document.getElementById('likeIcon').classList.add('fa-solid'); 
+        document.getElementById('likeIcon').style.color = '#ef4444'; 
         
-        // 2. Simpan angka barunya ke Supabase
         const { error } = await _supabase
             .from('Postingan')
             .update({ likes_count: window.currentLikes })
@@ -336,7 +343,6 @@
         if (error) {
             console.error("Gagal menambah like:", error);
             alert("Gagal menyukai postingan!");
-            // Kalau gagal nyimpan, kembalikan tampilannya seperti semula
             window.currentLikes -= 1;
             document.getElementById('likeCount').innerText = window.currentLikes;
             document.getElementById('likeIcon').classList.add('fa-regular');
@@ -345,16 +351,20 @@
             hasLiked = false;
         }
     }
-    // Fungsi untuk otomatis scroll ke bagian komentar
+
     function scrollToKomentar() {
         const commentSection = document.querySelector('.comments-section');
         if (commentSection) {
-            // Scroll halus (smooth) menuju form komentar
             commentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Fokus otomatis ke kotak input nama agar user bisa langsung mengetik
             document.getElementById('commentUser').focus();
         }
     }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link cerita ini berhasil disalin!");
+    }
+
     // --- FUNGSI GALERI FOTO ---
     function openGalleryModal() {
         document.getElementById('modalGallery').style.display = 'flex';
@@ -363,7 +373,6 @@
         document.getElementById('modalGallery').style.display = 'none';
     }
 
-    // Mengirim link foto ke Supabase
     document.getElementById('formGallery')?.addEventListener('submit', async function(e) {
         e.preventDefault();
         const btn = e.target.querySelector('button[type="submit"]');
@@ -379,13 +388,12 @@
         } else {
             document.getElementById('formGallery').reset();
             closeGalleryModal();
-            loadGallery(postId); // Langsung refresh galeri
+            loadGallery(postId);
         }
         btn.innerText = "Upload Foto";
         btn.disabled = false;
     });
 
-    // Menampilkan galeri foto di halaman
     async function loadGallery(currentPostId) {
         const section = document.getElementById('gallerySection');
         const grid = document.getElementById('galleryGrid');
@@ -400,7 +408,7 @@
             if (error) throw error;
 
             if (photos && photos.length > 0) {
-                section.style.display = 'block'; // Memunculkan kotak galeri
+                section.style.display = 'block'; 
                 document.getElementById('galleryCount').innerText = photos.length;
                 
                 let html = '';
@@ -413,16 +421,11 @@
                 });
                 grid.innerHTML = html;
             } else {
-                section.style.display = 'none'; // Sembunyikan kalau tidak ada foto
+                section.style.display = 'none'; 
             }
         } catch (err) {
             console.error("Gagal memuat galeri:", err);
         }
-    }
-
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link cerita ini berhasil disalin!");
     }
 
     // Jalankan saat halaman dibuka
