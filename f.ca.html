@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Camp Area - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <link rel="stylesheet" href="f.ca.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
+            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li>
+                <a href="ca.html">
+                    <i class="fa-solid fa-tent"></i> 
+                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
+                </a>
+            </li>
+            <li><a href="#"><i class="fa-regular fa-calendar"></i> Acara</a></li>
+            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <!-- Tombol Kembali -->
+        <button class="btn-back" onclick="window.history.back()">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+        </button>
+
+        <div class="form-card">
+            <h2 class="form-title">Tambah Camp Area</h2>
+
+            <form id="formAddCamp">
+                
+                <!-- Foto Cover -->
+                <div class="form-group">
+                    <label class="form-label">Foto Camp Area</label>
+                    <div class="photo-upload-box" id="coverBox" onclick="askForImageUrl()">
+                        <div class="photo-icon-circle">
+                            <i class="fa-regular fa-image"></i>
+                        </div>
+                        <span style="font-size: 14px; font-weight: 600;">Tambah Foto</span>
+                    </div>
+                    <span class="photo-note">* Minimal 1 foto (cover)</span>
+                    <!-- Input URL tersembunyi -->
+                    <input type="hidden" id="inputCoverUrl" required>
+                </div>
+
+                <!-- Nama Area -->
+                <div class="form-group">
+                    <label class="form-label">Nama Area</label>
+                    <input type="text" class="form-control" placeholder="Contoh: Ranca Upas Camping Ground" required>
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="form-group">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea class="form-control" rows="5" placeholder="Ceritakan tentang suasana, pemandangan, dan hal menarik lainnya..." required></textarea>
+                </div>
+
+                <!-- Lokasi & Harga -->
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-location-dot" style="color:#ea580c;"></i> Lokasi</label>
+                        <input type="text" class="form-control" placeholder="Nama Kota/Kabupaten" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fa-solid fa-dollar-sign" style="color:#22c55e;"></i> Harga per Malam</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 50000" required>
+                    </div>
+                </div>
+
+                <!-- Region -->
+                <div class="form-group">
+                    <label class="form-label">Region/Daerah (Opsional)</label>
+                    <select class="form-control" style="cursor: pointer; appearance: none;">
+                        <option value="" disabled selected>Pilih Daerah</option>
+                        <option value="Jawa Barat">Jawa Barat</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Luar Pulau">Luar Pulau Jawa</option>
+                    </select>
+                </div>
+
+                <!-- Fasilitas Tersedia -->
+                <div class="form-group">
+                    <label class="form-label">Fasilitas Tersedia</label>
+                    <div class="facilities-container">
+                        
+                        <label>
+                            <input type="checkbox" class="facility-checkbox" value="Wifi">
+                            <span class="facility-label"><i class="fa-solid fa-wifi"></i> Wifi</span>
+                        </label>
+
+                        <label>
+                            <input type="checkbox" class="facility-checkbox" value="Parkir">
+                            <span class="facility-label"><i class="fa-solid fa-car"></i> Parkir</span>
+                        </label>
+
+                        <label>
+                            <input type="checkbox" class="facility-checkbox" value="Kantin">
+                            <span class="facility-label"><i class="fa-solid fa-mug-hot"></i> Kantin</span>
+                        </label>
+
+                        <label>
+                            <input type="checkbox" class="facility-checkbox" value="Sewa Tenda">
+                            <span class="facility-label"><i class="fa-solid fa-tent"></i> Sewa Tenda</span>
+                        </label>
+
+                        <label>
+                            <input type="checkbox" class="facility-checkbox" value="Pusat Info">
+                            <span class="facility-label"><i class="fa-solid fa-circle-info"></i> Pusat Info</span>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Tombol Bawah -->
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="window.history.back()">Batal</button>
+                    <button type="submit" class="btn-save">Simpan Camp Area</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi sederhana untuk meminta Link Foto (karena kita belum pakai sistem upload file sungguhan)
+        function askForImageUrl() {
+            let url = prompt("Masukkan Link Foto (Google Drive/GitHub/Giphy):", "");
+            if (url) {
+                document.getElementById('inputCoverUrl').value = url;
+                // Ubah kotak putus-putus menjadi preview gambar
+                let box = document.getElementById('coverBox');
+                box.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
+                box.style.border = "none";
+            }
+        }
+
+        // Animasi submit form (Nantinya dihubungkan ke Supabase)
+        document.getElementById('formAddCamp').addEventListener('submit', function(e) {
+            e.preventDefault(); // Mencegah reload halaman
+            
+            // Cek apakah foto cover sudah diisi
+            if(!document.getElementById('inputCoverUrl').value) {
+                alert("Harap masukkan foto cover terlebih dahulu dengan mengklik kotak foto!");
+                return;
+            }
+
+            let btn = document.querySelector('.btn-save');
+            btn.innerText = "Menyimpan...";
+            
+            // Simulasi loading 1 detik
+            setTimeout(() => {
+                alert("Camp Area Berhasil Disimpan! (Ini baru tampilan visual ya)");
+                window.location.href = "camp-area.html"; // Kembali ke halaman utama
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

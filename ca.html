@@ -1,13 +1,19 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heya Camp</title>
-    
+    <title>Area Camping - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="ca.css">
 </head>
 <body>
 
@@ -33,26 +39,34 @@
         </ul>
     </nav>
 
-    <section class="header-heya">
-        <h1 class="logo-text">
-            <span class="heya">Heya</span><span class="camp">Camp</span>
-        </h1>
-        <h2 class="subtitle">Indonesia</h2>
-        <div class="tags">
-            <span>#camping</span> <span>#alam</span> <span>#santai</span>
-            <span>#JawaTengah</span> <span>#Bandar</span> <span>#Batang</span>
+    <main class="container">
+        <div class="header-section">
+            <div class="header-title">
+                <h1>Area <span>Camping</span></h1>
+                <p>Jelajahi berbagai area camping dengan fasilitas lengkap</p>
+            </div>
+            <button class="btn-add-camp" onclick="window.location.href='f.ca.html'">Tambah Camp Area</button>
         </div>
-    </section>
 
-    <section class="gallery-section">
-        <div class="carousel-track">
-            <div class="gallery-card"><img src="IMG-20221231-WA0072.jpg" alt="Camp 1"></div>
-            <div class="gallery-card"><img src="WhatsApp Image 2026-05-05 at 20.09.42.jpeg" alt="Camp 2"></div>
-            <div class="gallery-card"><img src="a.jpeg" alt="Camp 3"></div>
-            <div class="gallery-card"><img src="ilul.jpeg" alt="Camp 4"></div>
-            <div class="gallery-card"><img src="hendra.jpeg" alt="Camp 5"></div>
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Cari lokasi camping...">
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="filter-box">
+                <i class="fa-solid fa-filter"></i> Semua Daerah
+            </div>
         </div>
-    </section>
 
+        <div id="campGrid">
+            </div>
+
+    </main>
+
+</body>
+</html>
 </body>
 </html>

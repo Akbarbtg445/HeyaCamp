@@ -1,0 +1,197 @@
+ /* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
+ /* Warna Background Khusus Halaman Ini */
+        body {
+            background-color: #fefaf6; 
+            background-image: none; 
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- HEADER SECTION --- */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .header-title h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 0 0 10px 0;
+        }
+        .header-title h1 span {
+            color: #ed8805;
+        }
+        .header-title p {
+            font-size: 16px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .btn-add-camp {
+            background-color: #ea580c; 
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(234, 88, 12, 0.2);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .btn-add-camp:hover {
+            transform: translateY(-2px);
+            background-color: #c2410c;
+        }
+
+        /* --- SEARCH BAR SECTION --- */
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 40px;
+        }
+        
+        .search-box {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .search-box i {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+        .search-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-family: inherit;
+            color: #333;
+            padding: 10px 0;
+        }
+        .search-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        .divider {
+            width: 1px;
+            height: 30px;
+            background-color: #e2e8f0;
+            margin: 0 20px;
+        }
+
+        .filter-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        .filter-box i {
+            color: #94a3b8;
+        }
+
+        /* Responsif untuk HP */
+        @media (max-width: 768px) {
+            .header-section { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .search-container { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
+            .divider { width: 100%; height: 1px; margin: 5px 0; }
+        }
