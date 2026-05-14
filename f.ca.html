@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Camp Area - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
- <link rel="stylesheet" href="f.ca.css">
+    <link rel="stylesheet" href="f.ca.css">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
             <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
             <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
             <li>
-                <a href="ca.html">
+                <a href="ca.html" style="color: #ed8805;">
                     <i class="fa-solid fa-tent"></i> 
                     <span class="text-stack"><span>Camp</span><span>Area</span></span>
                 </a>
@@ -30,6 +30,7 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
+
     <div class="container">
         <!-- Tombol Kembali -->
         <button class="btn-back" onclick="window.history.back()">
@@ -41,18 +42,15 @@
 
             <form id="formAddCamp">
                 
-                <!-- Foto Cover -->
+                <!-- 3 Kolom Link Foto -->
                 <div class="form-group">
-                    <label class="form-label">Foto Camp Area</label>
-                    <div class="photo-upload-box" id="coverBox" onclick="askForImageUrl()">
-                        <div class="photo-icon-circle">
-                            <i class="fa-regular fa-image"></i>
-                        </div>
-                        <span style="font-size: 14px; font-weight: 600;">Tambah Foto</span>
+                    <label class="form-label"><i class="fa-regular fa-image" style="color:#ea580c;"></i> Foto Camp Area (Gunakan Link)</label>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                        <input type="url" id="photo1" class="form-control" placeholder="1. Link Foto Cover (Wajib Diisi)" required>
+                        <input type="url" id="photo2" class="form-control" placeholder="2. Link Foto Tambahan (Opsional)">
+                        <input type="url" id="photo3" class="form-control" placeholder="3. Link Foto Tambahan (Opsional)">
                     </div>
-                    <span class="photo-note">* Minimal 1 foto (cover)</span>
-                    <!-- Input URL tersembunyi -->
-                    <input type="hidden" id="inputCoverUrl" required>
+                    <span style="color: #ef4444; font-size: 13px; margin-top: 8px; display: block;">* Minimal isi 1 link foto untuk cover. Gunakan link dari Google Drive, ImgBB, atau Pinterest.</span>
                 </div>
 
                 <!-- Nama Area -->
@@ -135,35 +133,18 @@
     </div>
 
     <script>
-        // Fungsi sederhana untuk meminta Link Foto (karena kita belum pakai sistem upload file sungguhan)
-        function askForImageUrl() {
-            let url = prompt("Masukkan Link Foto (Google Drive/GitHub/Giphy):", "");
-            if (url) {
-                document.getElementById('inputCoverUrl').value = url;
-                // Ubah kotak putus-putus menjadi preview gambar
-                let box = document.getElementById('coverBox');
-                box.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`;
-                box.style.border = "none";
-            }
-        }
-
         // Animasi submit form (Nantinya dihubungkan ke Supabase)
         document.getElementById('formAddCamp').addEventListener('submit', function(e) {
             e.preventDefault(); // Mencegah reload halaman
             
-            // Cek apakah foto cover sudah diisi
-            if(!document.getElementById('inputCoverUrl').value) {
-                alert("Harap masukkan foto cover terlebih dahulu dengan mengklik kotak foto!");
-                return;
-            }
-
             let btn = document.querySelector('.btn-save');
             btn.innerText = "Menyimpan...";
+            btn.disabled = true; // Matikan tombol agar tidak di-klik 2 kali
             
             // Simulasi loading 1 detik
             setTimeout(() => {
                 alert("Camp Area Berhasil Disimpan! (Ini baru tampilan visual ya)");
-                window.location.href = "camp-area.html"; // Kembali ke halaman utama
+                window.location.href = "ca.html"; // Kembali ke halaman utama (Sesuai dengan nama file di navarmu)
             }, 1000);
         });
     </script>
