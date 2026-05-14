@@ -63,7 +63,7 @@
                     <button id="btnLike" class="action-btn" onclick="addLike()">
                     <i id="likeIcon" class="fa-regular fa-heart"></i> <span id="likeCount">0</span>
                     </button>
-                    <button class="action-btn"><i class="fa-regular fa-comment"></i> Komentar</button>
+                    <button class="action-btn" onclick="scrollToKomentar()"><i class="fa-regular fa-comment"></i> Komentar</button>
                     <!-- Tombol share ditaruh di paling kanan -->
                     <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
                 </div>
@@ -319,6 +319,16 @@
             document.getElementById('likeIcon').classList.remove('fa-solid');
             document.getElementById('likeIcon').style.color = '';
             hasLiked = false;
+        }
+    }
+    // Fungsi untuk otomatis scroll ke bagian komentar
+    function scrollToKomentar() {
+        const commentSection = document.querySelector('.comments-section');
+        if (commentSection) {
+            // Scroll halus (smooth) menuju form komentar
+            commentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Fokus otomatis ke kotak input nama agar user bisa langsung mengetik
+            document.getElementById('commentUser').focus();
         }
     }
 
