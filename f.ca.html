@@ -6,6 +6,8 @@
     <title>Tambah Camp Area - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="f.ca.css">
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -56,31 +58,31 @@
                 <!-- Nama Area -->
                 <div class="form-group">
                     <label class="form-label">Nama Area</label>
-                    <input type="text" class="form-control" placeholder="Contoh: Ranca Upas Camping Ground" required>
+                    <input type="text" id="campName" class="form-control" placeholder="Contoh: Ranca Upas Camping Ground" required>
                 </div>
 
                 <!-- Deskripsi -->
                 <div class="form-group">
                     <label class="form-label">Deskripsi</label>
-                    <textarea class="form-control" rows="5" placeholder="Ceritakan tentang suasana, pemandangan, dan hal menarik lainnya..." required></textarea>
+                    <textarea id="campDesc" class="form-control" rows="5" placeholder="Ceritakan tentang suasana, pemandangan, dan hal menarik lainnya..." required></textarea>
                 </div>
 
                 <!-- Lokasi & Harga -->
                 <div class="grid-2">
                     <div class="form-group">
                         <label class="form-label"><i class="fa-solid fa-location-dot" style="color:#ea580c;"></i> Lokasi</label>
-                        <input type="text" class="form-control" placeholder="Nama Kota/Kabupaten" required>
+                        <input type="text" id="campLocation" class="form-control" placeholder="Nama Kota/Kabupaten" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label"><i class="fa-solid fa-dollar-sign" style="color:#22c55e;"></i> Harga per Malam</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 50000" required>
+                        <input type="number" id="campPrice" class="form-control" placeholder="Contoh: 50000" required>
                     </div>
                 </div>
 
                 <!-- Region -->
                 <div class="form-group">
                     <label class="form-label">Region/Daerah (Opsional)</label>
-                    <select class="form-control" style="cursor: pointer; appearance: none;">
+                    <select id="campRegion" class="form-control" style="cursor: pointer; appearance: none;">
                         <option value="" disabled selected>Pilih Daerah</option>
                         <option value="Jawa Barat">Jawa Barat</option>
                         <option value="Jawa Tengah">Jawa Tengah</option>
@@ -93,32 +95,11 @@
                 <div class="form-group">
                     <label class="form-label">Fasilitas Tersedia</label>
                     <div class="facilities-container">
-                        
-                        <label>
-                            <input type="checkbox" class="facility-checkbox" value="Wifi">
-                            <span class="facility-label"><i class="fa-solid fa-wifi"></i> Wifi</span>
-                        </label>
-
-                        <label>
-                            <input type="checkbox" class="facility-checkbox" value="Parkir">
-                            <span class="facility-label"><i class="fa-solid fa-car"></i> Parkir</span>
-                        </label>
-
-                        <label>
-                            <input type="checkbox" class="facility-checkbox" value="Kantin">
-                            <span class="facility-label"><i class="fa-solid fa-mug-hot"></i> Kantin</span>
-                        </label>
-
-                        <label>
-                            <input type="checkbox" class="facility-checkbox" value="Sewa Tenda">
-                            <span class="facility-label"><i class="fa-solid fa-tent"></i> Sewa Tenda</span>
-                        </label>
-
-                        <label>
-                            <input type="checkbox" class="facility-checkbox" value="Pusat Info">
-                            <span class="facility-label"><i class="fa-solid fa-circle-info"></i> Pusat Info</span>
-                        </label>
-
+                        <label><input type="checkbox" class="facility-checkbox" value="Wifi"><span class="facility-label"><i class="fa-solid fa-wifi"></i> Wifi</span></label>
+                        <label><input type="checkbox" class="facility-checkbox" value="Parkir"><span class="facility-label"><i class="fa-solid fa-car"></i> Parkir</span></label>
+                        <label><input type="checkbox" class="facility-checkbox" value="Kantin"><span class="facility-label"><i class="fa-solid fa-mug-hot"></i> Kantin</span></label>
+                        <label><input type="checkbox" class="facility-checkbox" value="Sewa Tenda"><span class="facility-label"><i class="fa-solid fa-tent"></i> Sewa Tenda</span></label>
+                        <label><input type="checkbox" class="facility-checkbox" value="Pusat Info"><span class="facility-label"><i class="fa-solid fa-circle-info"></i> Pusat Info</span></label>
                     </div>
                 </div>
 
@@ -133,19 +114,61 @@
     </div>
 
     <script>
-        // Animasi submit form (Nantinya dihubungkan ke Supabase)
-        document.getElementById('formAddCamp').addEventListener('submit', function(e) {
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        // 2. Fungsi Kirim Data
+        document.getElementById('formAddCamp').addEventListener('submit', async function(e) {
             e.preventDefault(); // Mencegah reload halaman
             
             let btn = document.querySelector('.btn-save');
-            btn.innerText = "Menyimpan...";
-            btn.disabled = true; // Matikan tombol agar tidak di-klik 2 kali
+            btn.innerText = "Menyimpan ke Database...";
+            btn.disabled = true; 
             
-            // Simulasi loading 1 detik
-            setTimeout(() => {
-                alert("Camp Area Berhasil Disimpan! (Ini baru tampilan visual ya)");
-                window.location.href = "ca.html"; // Kembali ke halaman utama (Sesuai dengan nama file di navarmu)
-            }, 1000);
+            // Ambil semua data dari inputan
+            const photo1 = document.getElementById('photo1').value;
+            const photo2 = document.getElementById('photo2').value;
+            const photo3 = document.getElementById('photo3').value;
+            const name = document.getElementById('campName').value;
+            const desc = document.getElementById('campDesc').value;
+            const location = document.getElementById('campLocation').value;
+            const price = document.getElementById('campPrice').value;
+            const region = document.getElementById('campRegion').value;
+            
+            // Mengambil semua fasilitas yang dicentang dan menggabungkannya
+            const selectedFacilities = [];
+            document.querySelectorAll('.facility-checkbox:checked').forEach(checkbox => {
+                selectedFacilities.push(checkbox.value);
+            });
+            const facilitiesText = selectedFacilities.join(', '); // Contoh hasil: "Wifi, Parkir, Kantin"
+
+            // Mengirim data ke tabel 'CampArea' di Supabase
+            const { error } = await _supabase.from('CampArea').insert([
+                {
+                    name: name,
+                    description: desc,
+                    location: location,
+                    price: parseInt(price), // Ubah ke format angka
+                    region: region,
+                    facilities: facilitiesText,
+                    photo1: photo1,
+                    photo2: photo2,
+                    photo3: photo3
+                }
+            ]);
+
+            // Mengecek apakah berhasil atau gagal
+            if (error) {
+                alert("Gagal menyimpan data: " + error.message);
+                btn.innerText = "Simpan Camp Area";
+                btn.disabled = false;
+            } else {
+                alert("Berhasil! Camp Area sudah masuk ke Database Supabase.");
+                window.location.href = "ca.html"; // Kembali ke halaman utama
+            }
         });
     </script>
 </body>
