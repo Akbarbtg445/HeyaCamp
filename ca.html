@@ -48,17 +48,24 @@
             </a>
         </div>
 
-        <!-- Search Bar -->
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
-                <input type="text" placeholder="Cari lokasi camping...">
-            </div>
-            <div class="divider"></div>
-            <div class="filter-box">
-                <i class="fa-solid fa-filter" style="color:#94a3b8;"></i> Semua Daerah
-            </div>
-        </div>
+        <!-- Search Bar & Filter -->
+<div class="search-container">
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
+        <input type="text" id="searchInput" placeholder="Cari lokasi camping..." oninput="filterCamps()">
+    </div>
+    <div class="divider"></div>
+    <div class="filter-box">
+        <i class="fa-solid fa-filter" style="color:#94a3b8;"></i>
+        <select id="regionFilter" onchange="filterCamps()" style="border: none; outline: none; font-weight: 600; color: #0f172a; cursor: pointer; font-family: inherit; background: transparent;">
+            <option value="Semua">Semua Daerah</option>
+            <option value="Jawa Barat">Jawa Barat</option>
+            <option value="Jawa Tengah">Jawa Tengah</option>
+            <option value="Jawa Timur">Jawa Timur</option>
+            <option value="Luar Pulau">Luar Pulau</option>
+        </select>
+    </div>
+</div>
 
         <!-- GRID LOKASI CAMPING -->
         <div id="campGrid" class="camp-grid">
@@ -68,99 +75,96 @@
     </main>
 
     <script>
-        // 1. Konfigurasi Supabase
-        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
-        const { createClient } = supabase;
-        const _supabase = createClient(supabaseUrl, supabaseKey);
+     let allCamps = []; // Simpan semua data di sini
 
-        // Map Icon Fasilitas
-        const iconMap = {
-            'Wifi': '<i class="fa-solid fa-wifi"></i>',
-            'Parkir': '<i class="fa-solid fa-car"></i>',
-            'Kantin': '<i class="fa-solid fa-mug-hot"></i>',
-            'Sewa Tenda': '<i class="fa-solid fa-tent"></i>',
-            'Pusat Info': '<i class="fa-solid fa-circle-info"></i>'
-        };
+// 1. Konfigurasi Supabase
+const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+const { createClient } = supabase;
+const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // 2. Fungsi Mengambil Data dari Supabase
-        async function loadCampAreas() {
-            const grid = document.getElementById('campGrid');
-            
-            try {
-                // Ambil data terbaru dari tabel CampArea
-                const { data: camps, error } = await _supabase
-                    .from('CampArea')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+const iconMap = {
+    'Wifi': '<i class="fa-solid fa-wifi"></i>',
+    'Parkir': '<i class="fa-solid fa-car"></i>',
+    'Kantin': '<i class="fa-solid fa-mug-hot"></i>',
+    'Sewa Tenda': '<i class="fa-solid fa-tent"></i>',
+    'Pusat Info': '<i class="fa-solid fa-circle-info"></i>'
+};
 
-                if (error) throw error;
+async function loadCampAreas() {
+    try {
+        const { data: camps, error } = await _supabase
+            .from('CampArea')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-                if (camps && camps.length > 0) {
-                    let html = '';
-                    camps.forEach(camp => {
-                        // Format Harga (Contoh: 50000 -> Rp 50.000)
-                        const priceFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(camp.price);
-                        
-                        // Ekstrak Fasilitas
-                        let facilitiesHtml = '';
-                        if (camp.facilities) {
-                            const facArray = camp.facilities.split(', ');
-                            const maxIcons = 3; // Maksimal tampilkan 3 ikon
-                            
-                            for (let i = 0; i < facArray.length; i++) {
-                                if (i < maxIcons) {
-                                    const iconStr = iconMap[facArray[i]] || '<i class="fa-solid fa-check"></i>';
-                                    facilitiesHtml += `<div class="fac-icon" title="${facArray[i]}">${iconStr}</div>`;
-                                }
-                            }
-                            // Jika fasilitas lebih dari 3, tambahkan ikon "+angka"
-                            if (facArray.length > maxIcons) {
-                                facilitiesHtml += `<div class="fac-icon" style="color: #1e293b;">+${facArray.length - maxIcons}</div>`;
-                            }
-                        }
+        if (error) throw error;
+        allCamps = camps; // Masukkan ke variabel global
+        renderCamps(allCamps); // Tampilkan semua
+    } catch (err) {
+        console.error("Gagal memuat data:", err);
+        document.getElementById('campGrid').innerHTML = '<p style="color: #ef4444; text-align: center;">Gagal memuat data.</p>';
+    }
+}
 
-                    
-                        // Susun HTML Kartu
-                        html += `
-                            <a href="detail-ca.html?id=${camp.id}" class="camp-card">
-                                <div class="card-img-wrapper">
-                                    <img src="${camp.photo1}" class="card-img" alt="Cover Camp">
-                                    
-                                    <!-- Tag Harga -->
-                                    <div class="price-tag">${priceFormatted}</div>
-                                    
-                                    <!-- Tag Lokasi -->
-                                    <div class="location-tag">
-                                        <i class="fa-solid fa-location-dot"></i>
-                                        <span>${camp.location}</span>
-                                    </div>
+// Fungsi untuk memfilter data berdasarkan Search Input dan Dropdown Region
+function filterCamps() {
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const regionValue = document.getElementById('regionFilter').value;
 
-                                    <!-- Tag Fasilitas (Pills Bulat) -->
-                                    <div class="fac-container">
-                                        ${facilitiesHtml}
-                                    </div>
-                                </div>
-                                <div class="card-content">
-                                    <h3 class="card-title">${camp.name}</h3>
-                                </div>
-                            </a>
-                        `;
-                    });
-                    grid.innerHTML = html;
-                } else {
-                    grid.innerHTML = '<p style="color: #94a3b8; grid-column: 1 / -1; text-align: center; padding: 50px 0;">Belum ada data Camp Area. Yuk tambahkan!</p>';
-                }
+    const filtered = allCamps.filter(camp => {
+        const matchSearch = camp.name.toLowerCase().includes(searchText);
+        const matchRegion = (regionValue === "Semua") || (camp.region === regionValue);
+        return matchSearch && matchRegion;
+    });
 
-            } catch (err) {
-                console.error("Gagal memuat data:", err);
-                grid.innerHTML = '<p style="color: #ef4444; grid-column: 1 / -1; text-align: center;">Gagal memuat data dari server.</p>';
+    renderCamps(filtered);
+}
+
+// Fungsi untuk mencetak kartu ke HTML
+function renderCamps(data) {
+    const grid = document.getElementById('campGrid');
+    if (data.length === 0) {
+        grid.innerHTML = '<p style="color: #94a3b8; grid-column: 1 / -1; text-align: center; padding: 50px 0;">Tidak ada lokasi yang cocok.</p>';
+        return;
+    }
+
+    let html = '';
+    data.forEach(camp => {
+        const priceFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(camp.price);
+        
+        let facilitiesHtml = '';
+        if (camp.facilities) {
+            const facArray = camp.facilities.split(', ');
+            facArray.slice(0, 3).forEach(fac => {
+                const iconStr = iconMap[fac] || '<i class="fa-solid fa-check"></i>';
+                facilitiesHtml += `<div class="fac-icon" title="${fac}">${iconStr}</div>`;
+            });
+            if (facArray.length > 3) {
+                facilitiesHtml += `<div class="fac-icon" style="color: #1e293b;">+${facArray.length - 3}</div>`;
             }
         }
 
-        // Panggil fungsi saat halaman selesai dimuat
-        window.onload = loadCampAreas;
+        html += `
+            <a href="detail-ca.html?id=${camp.id}" class="camp-card">
+                <div class="card-img-wrapper">
+                    <img src="${camp.photo1}" class="card-img" alt="Cover Camp">
+                    <div class="price-tag">${priceFormatted}</div>
+                    <div class="location-tag">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>${camp.location}</span>
+                    </div>
+                    <div class="fac-container">${facilitiesHtml}</div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">${camp.name}</h3>
+                </div>
+            </a>`;
+    });
+    grid.innerHTML = html;
+}
 
+window.onload = loadCampAreas;
     </script>
 </body>
 </html>
