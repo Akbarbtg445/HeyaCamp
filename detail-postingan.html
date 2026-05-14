@@ -60,7 +60,9 @@
                 
                 <!-- Bodi Baru: Tombol Interaksi Bawah -->
                 <div class="post-actions">
-                    <button class="action-btn"><i class="fa-regular fa-heart"></i> 1</button>
+                    <button id="btnLike" class="action-btn" onclick="addLike()">
+                    <i id="likeIcon" class="fa-regular fa-heart"></i> <span id="likeCount">0</span>
+                    </button>
                     <button class="action-btn"><i class="fa-regular fa-comment"></i> Komentar</button>
                     <!-- Tombol share ditaruh di paling kanan -->
                     <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
@@ -159,6 +161,9 @@
                 document.getElementById('viewLocation').innerText = post.location;
                 document.getElementById('viewContent').innerText = post.content;
                 document.getElementById('viewAuthor').innerText = post.username;
+                // Tampilkan jumlah like saat halaman dimuat
+                window.currentLikes = post.likes_count || 0;
+                document.getElementById('likeCount').innerText = window.currentLikes;
 
                 // Panggil fungsi untuk mengambil aktivitas lainnya
                 loadOtherActivities(post.comm_id, post.id);
@@ -283,6 +288,39 @@
         btn.innerText = "Kirim Komentar";
         btn.disabled = false;
     });
+    // Fungsi untuk menambah Like
+    let hasLiked = false; // Mencegah user spam klik like berkali-kali
+    
+    async function addLike() {
+        if (!postId || hasLiked) return; // Kalau sudah like, jangan lakukan apa-apa
+        
+        hasLiked = true;
+        window.currentLikes += 1;
+        
+        // 1. Update tampilan UI langsung (biar terasa responsif)
+        document.getElementById('likeCount').innerText = window.currentLikes;
+        document.getElementById('likeIcon').classList.remove('fa-regular');
+        document.getElementById('likeIcon').classList.add('fa-solid'); // Hati jadi penuh
+        document.getElementById('likeIcon').style.color = '#ef4444'; // Hati jadi merah
+        
+        // 2. Simpan angka barunya ke Supabase
+        const { error } = await _supabase
+            .from('Postingan')
+            .update({ likes_count: window.currentLikes })
+            .eq('id', postId);
+            
+        if (error) {
+            console.error("Gagal menambah like:", error);
+            alert("Gagal menyukai postingan!");
+            // Kalau gagal nyimpan, kembalikan tampilannya seperti semula
+            window.currentLikes -= 1;
+            document.getElementById('likeCount').innerText = window.currentLikes;
+            document.getElementById('likeIcon').classList.add('fa-regular');
+            document.getElementById('likeIcon').classList.remove('fa-solid');
+            document.getElementById('likeIcon').style.color = '';
+            hasLiked = false;
+        }
+    }
 
     function copyLink() {
         navigator.clipboard.writeText(window.location.href);
