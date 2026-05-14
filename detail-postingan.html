@@ -19,18 +19,7 @@
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
             <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
-            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
-            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
-            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
             <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-tent"></i> 
-                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
-                </a>
-            </li>
-            <li><a href="#"><i class="fa-regular fa-calendar"></i> Acara</a></li>
-            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
 
@@ -52,14 +41,26 @@
         <!-- Area Konten & Sidebar -->
         <div class="content-grid">
             <!-- Kolom Cerita (Kiri) -->
-            <div class="article-card" id="viewContent">
-                Memuat cerita...
+            <div class="article-card">
+                <!-- Teks Cerita -->
+                <div class="article-text" id="viewContent">
+                    Memuat cerita...
+                </div>
+                
+                <!-- Bodi Baru: Tombol Interaksi Bawah -->
+                <div class="post-actions">
+                    <button class="action-btn"><i class="fa-regular fa-heart"></i> 1</button>
+                    <button class="action-btn"><i class="fa-regular fa-comment"></i> Komentar</button>
+                    <!-- Tombol share ditaruh di paling kanan -->
+                    <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
+                </div>
             </div>
 
-            <!-- Kolom Author (Kanan) -->
+            <!-- Kolom Author & List (Kanan) -->
             <div>
-                <div class="author-card">
-                    <div class="author-header">Dibuat Oleh</div>
+                <!-- Kartu Author -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header">Dibuat Oleh</div>
                     <div class="author-info">
                         <div style="position: relative;">
                             <div class="author-avatar">
@@ -74,6 +75,17 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Kartu Aktivitas Lainnya -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header" style="border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
+                        <i class="fa-solid fa-location-dot" style="color: #ed8805;"></i> Aktivitas Lainnya
+                    </div>
+                    <!-- Wadah untuk menampung list postingan -->
+                    <div id="otherActivities">
+                        <p style="color: #94a3b8; font-size: 13px; text-align: center;">Memuat aktivitas...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -85,7 +97,7 @@
     const { createClient } = supabase;
     const _supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 2. Ambil ID Postingan dari URL (contoh: detail-postingan.html?id=12)
+    // 2. Ambil ID Postingan dari URL
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
 
@@ -97,7 +109,7 @@
         }
 
         try {
-            // Ambil data dari Supabase khusus untuk ID postingan ini
+            // Ambil data postingan UTAMA
             const { data: post, error } = await _supabase
                 .from('Postingan')
                 .select('*')
@@ -107,24 +119,67 @@
             if (error) throw error;
 
             if (post) {
-                // Format Tanggal
+                // Terapkan data ke HTML
                 const formattedDate = new Date(post.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-                // Cek Gambar
                 const bannerImg = post.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
 
-                // Masukkan data ke HTML
                 document.getElementById('postHero').style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('${bannerImg}')`;
                 document.getElementById('viewTitle').innerText = post.activity_name;
                 document.getElementById('viewDate').innerText = formattedDate;
                 document.getElementById('viewLocation').innerText = post.location;
                 document.getElementById('viewContent').innerText = post.content;
-                
                 document.getElementById('viewAuthor').innerText = post.username;
-                document.getElementById('viewAvatar').src = `https://res.cloudinary.com/dgks398q1/image/upload/v1769689294/prod/avatars/q7ymlahj5qeetfhi5px4.jpg`;
+
+                // Panggil fungsi untuk mengambil aktivitas lainnya
+                loadOtherActivities(post.comm_id, post.id);
             }
         } catch (err) {
             console.error("Gagal memuat:", err);
             document.getElementById('viewContent').innerHTML = `<span style="color:red;">Gagal memuat data: ${err.message}</span>`;
+        }
+    }
+
+    // Fungsi Baru: Mengambil postingan lain dari komunitas yang sama
+    async function loadOtherActivities(commId, currentPostId) {
+        const container = document.getElementById('otherActivities');
+        try {
+            // Ambil maksimal 3 postingan lain dari komuitas ini (Kecuali yang sedang dibaca)
+            const { data: others, error } = await _supabase
+                .from('Postingan')
+                .select('*')
+                .eq('comm_id', commId)
+                .neq('id', currentPostId)
+                .order('created_at', { ascending: false })
+                .limit(3);
+
+            if (error) throw error;
+
+            if (others && others.length > 0) {
+                let html = '';
+                others.forEach(item => {
+                    const dateStr = new Date(item.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+                    const imgThumb = item.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=300';
+                    
+                    html += `
+                        <a href="detail-postingan.html?id=${item.id}" class="activity-item">
+                            <img src="${imgThumb}" class="activity-thumb">
+                            <div class="activity-details">
+                                <h4>${item.activity_name}</h4>
+                                <div class="activity-meta">
+                                    <span><i class="fa-regular fa-calendar"></i> ${dateStr}</span>
+                                    <span><i class="fa-solid fa-location-dot" style="color:#ed8805;"></i> ${item.location}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<p style="color: #94a3b8; font-size: 13px; text-align: center;">Belum ada aktivitas lain di region ini.</p>';
+            }
+        } catch (err) {
+            console.error("Gagal memuat aktivitas lain:", err);
+            container.innerHTML = '<p style="color: red; font-size: 13px;">Gagal memuat data.</p>';
         }
     }
 
