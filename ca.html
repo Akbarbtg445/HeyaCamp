@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area Camping - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="ca.css">
+    <link rel="stylesheet" href="ca.css"> <!-- Pakai CSS Navbar milikmu -->
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
 </head>
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-logo">
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
@@ -29,7 +25,7 @@
             <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
             <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
             <li>
-                <a href="ca.html">
+                <a href="ca.html" style="color: #ed8805;">
                     <i class="fa-solid fa-tent"></i> 
                     <span class="text-stack"><span>Camp</span><span>Area</span></span>
                 </a>
@@ -40,33 +36,130 @@
     </nav>
 
     <main class="container">
+        <!-- Header -->
         <div class="header-section">
             <div class="header-title">
                 <h1>Area <span>Camping</span></h1>
                 <p>Jelajahi berbagai area camping dengan fasilitas lengkap</p>
             </div>
-            <button class="btn-add-camp" onclick="window.location.href='f.ca.html'">Tambah Camp Area</button>
+            <!-- Tombol ini diarahkan ke form yang baru kita buat -->
+            <a href="tambah-camp-area.html" class="btn-add-camp">
+                <i class="fa-solid fa-plus"></i> Tambah Camp Area
+            </a>
         </div>
 
+        <!-- Search Bar -->
         <div class="search-container">
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
                 <input type="text" placeholder="Cari lokasi camping...">
             </div>
-            
             <div class="divider"></div>
-            
             <div class="filter-box">
-                <i class="fa-solid fa-filter"></i> Semua Daerah
+                <i class="fa-solid fa-filter" style="color:#94a3b8;"></i> Semua Daerah
             </div>
         </div>
 
-        <div id="campGrid">
-            </div>
+        <!-- GRID LOKASI CAMPING -->
+        <div id="campGrid" class="camp-grid">
+            <p style="color: #94a3b8; grid-column: 1 / -1; text-align: center;">Memuat data dari database...</p>
+        </div>
 
     </main>
 
-</body>
-</html>
+    <script>
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Map Icon Fasilitas
+        const iconMap = {
+            'Wifi': '<i class="fa-solid fa-wifi"></i>',
+            'Parkir': '<i class="fa-solid fa-car"></i>',
+            'Kantin': '<i class="fa-solid fa-mug-hot"></i>',
+            'Sewa Tenda': '<i class="fa-solid fa-tent"></i>',
+            'Pusat Info': '<i class="fa-solid fa-circle-info"></i>'
+        };
+
+        // 2. Fungsi Mengambil Data dari Supabase
+        async function loadCampAreas() {
+            const grid = document.getElementById('campGrid');
+            
+            try {
+                // Ambil data terbaru dari tabel CampArea
+                const { data: camps, error } = await _supabase
+                    .from('CampArea')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (camps && camps.length > 0) {
+                    let html = '';
+                    camps.forEach(camp => {
+                        // Format Harga (Contoh: 50000 -> Rp 50.000)
+                        const priceFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(camp.price);
+                        
+                        // Ekstrak Fasilitas
+                        let facilitiesHtml = '';
+                        if (camp.facilities) {
+                            const facArray = camp.facilities.split(', ');
+                            const maxIcons = 3; // Maksimal tampilkan 3 ikon
+                            
+                            for (let i = 0; i < facArray.length; i++) {
+                                if (i < maxIcons) {
+                                    const iconStr = iconMap[facArray[i]] || '<i class="fa-solid fa-check"></i>';
+                                    facilitiesHtml += `<div class="fac-icon" title="${facArray[i]}">${iconStr}</div>`;
+                                }
+                            }
+                            // Jika fasilitas lebih dari 3, tambahkan ikon "+angka"
+                            if (facArray.length > maxIcons) {
+                                facilitiesHtml += `<div class="fac-icon" style="color: #1e293b;">+${facArray.length - maxIcons}</div>`;
+                            }
+                        }
+
+                        // Susun HTML Kartu
+                        html += `
+                            <a href="#" class="camp-card">
+                                <div class="card-img-wrapper">
+                                    <img src="${camp.photo1}" class="card-img" alt="Cover Camp">
+                                    
+                                    <!-- Tag Harga -->
+                                    <div class="price-tag">${priceFormatted}</div>
+                                    
+                                    <!-- Tag Lokasi -->
+                                    <div class="location-tag">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                        <span>${camp.location}</span>
+                                    </div>
+
+                                    <!-- Tag Fasilitas (Pills Bulat) -->
+                                    <div class="fac-container">
+                                        ${facilitiesHtml}
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-title">${camp.name}</h3>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    grid.innerHTML = html;
+                } else {
+                    grid.innerHTML = '<p style="color: #94a3b8; grid-column: 1 / -1; text-align: center; padding: 50px 0;">Belum ada data Camp Area. Yuk tambahkan!</p>';
+                }
+
+            } catch (err) {
+                console.error("Gagal memuat data:", err);
+                grid.innerHTML = '<p style="color: #ef4444; grid-column: 1 / -1; text-align: center;">Gagal memuat data dari server.</p>';
+            }
+        }
+
+        // Panggil fungsi saat halaman selesai dimuat
+        window.onload = loadCampAreas;
+
+    </script>
 </body>
 </html>
