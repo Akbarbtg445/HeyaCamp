@@ -66,6 +66,25 @@
                     <button class="action-btn btn-share-action" onclick="copyLink()"><i class="fa-solid fa-share-nodes"></i> Bagikan</button>
                 </div>
             </div>
+            <!-- Pembatas / Garis -->
+                <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 30px 0;">
+
+                <!-- Bagian Komentar -->
+                <div class="comments-section">
+                    <h3 style="margin-bottom: 20px; font-size: 20px; color: #0f172a;">Komentar (<span id="commentCount">0</span>)</h3>
+                    
+                    <!-- Form Input Komentar -->
+                    <form id="formKomentar" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px;">
+                        <input type="text" id="commentUser" placeholder="Nama kamu (misal: Aozora)..." style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-family: inherit;" required>
+                        <textarea id="commentText" placeholder="Tulis komentar seru tentang camp ini..." style="padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; height: 80px; font-family: inherit;" required></textarea>
+                        <button type="submit" style="align-self: flex-end; background: #ed8805; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s;">Kirim Komentar</button>
+                    </form>
+
+                    <!-- Daftar Komentar -->
+                    <div id="commentsList" style="display: flex; flex-direction: column; gap: 20px;">
+                        <p style="color: #94a3b8; text-align: center; font-size: 14px;">Memuat komentar...</p>
+                    </div>
+                </div>
 
             <!-- Kolom Author & List (Kanan) -->
             <div>
@@ -143,6 +162,8 @@
 
                 // Panggil fungsi untuk mengambil aktivitas lainnya
                 loadOtherActivities(post.comm_id, post.id);
+                // Panggil fungsi komentar
+                loadComments(post.id);
             }
         } catch (err) {
             console.error("Gagal memuat:", err);
@@ -193,6 +214,75 @@
             container.innerHTML = '<p style="color: red; font-size: 13px;">Gagal memuat data.</p>';
         }
     }
+    // Fungsi untuk mengambil komentar dari Supabase
+    async function loadComments(currentPostId) {
+        const container = document.getElementById('commentsList');
+        try {
+            const { data: comments, error } = await _supabase
+                .from('Komentar')
+                .select('*')
+                .eq('post_id', currentPostId)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            // Update angka jumlah komentar
+            document.getElementById('commentCount').innerText = comments ? comments.length : 0;
+
+            if (comments && comments.length > 0) {
+                let html = '';
+                comments.forEach(c => {
+                    const dateStr = new Date(c.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+                    html += `
+                        <div style="display: flex; gap: 15px; border-bottom: 1px solid #f8fafc; padding-bottom: 15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; overflow: hidden; flex-shrink: 0;">
+                                <img src="https://ui-avatars.com/api/?name=${c.username}&background=random" style="width: 100%;">
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                                    <strong style="color: #1e293b; font-size: 15px;">${c.username}</strong>
+                                    <span style="color: #94a3b8; font-size: 12px;">${dateStr}</span>
+                                </div>
+                                <p style="margin: 0; color: #475569; font-size: 14px; line-height: 1.5;">${c.content}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<p style="color: #94a3b8; text-align: center; font-size: 14px;">Belum ada komentar. Jadilah yang pertama!</p>';
+            }
+        } catch (err) {
+            console.error("Gagal memuat komentar:", err);
+            container.innerHTML = '<p style="color: red; font-size: 13px;">Gagal memuat komentar.</p>';
+        }
+    }
+
+    // Fungsi untuk mengirim komentar baru
+    document.getElementById('formKomentar')?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
+
+        const commentData = {
+            post_id: postId,
+            username: document.getElementById('commentUser').value,
+            content: document.getElementById('commentText').value
+        };
+
+        const { error } = await _supabase.from('Komentar').insert([commentData]);
+
+        if (error) {
+            alert("Gagal mengirim komentar: " + error.message);
+        } else {
+            document.getElementById('formKomentar').reset(); // Kosongkan form
+            loadComments(postId); // Refresh daftar komentar secara otomatis
+        }
+        
+        btn.innerText = "Kirim Komentar";
+        btn.disabled = false;
+    });
 
     function copyLink() {
         navigator.clipboard.writeText(window.location.href);
