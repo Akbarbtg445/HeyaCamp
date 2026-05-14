@@ -1,14 +1,12 @@
- /* =========================================
-   1. GLOBAL & BACKGROUND POLA TITIK
-   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
+/* =========================================
+   1. GLOBAL & BACKGROUND
+   ========================================= */
 body {
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
-    /* Efek Pola Titik (Dotted Background) */
-    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
-    background-size: 25px 25px;
+    background-color: #f8fafc; /* Warna krem polos khusus halaman ini */
+    background-image: none;
     color: #333;
     margin: 0;
     padding: 20px; 
@@ -19,7 +17,7 @@ h2 {
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR CUSTOM (PILL-SHAPE)
    ========================================= */
 .navbar {
     display: flex;
@@ -30,12 +28,10 @@ h2 {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 0 auto 20px;
 }
 
 .nav-logo img {
@@ -64,7 +60,7 @@ h2 {
 }
 
 .nav-links li a:hover {
-    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+    color: #ed8805;
 }
 
 .nav-links li a i {
@@ -78,120 +74,106 @@ h2 {
     font-size: 14px;
     text-align: center;
 }
- /* Warna Background Khusus Halaman Ini */
-        body {
-            background-color: #fefaf6; 
-            background-image: none; 
-        }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+/* =========================================
+   3. HEADER & CONTAINER CAMP AREA
+   ========================================= */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
 
-        /* --- HEADER SECTION --- */
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .header-title h1 {
-            font-size: 36px;
-            font-weight: 900;
-            color: #0f172a;
-            margin: 0 0 10px 0;
-        }
-        .header-title h1 span {
-            color: #ed8805;
-        }
-        .header-title p {
-            font-size: 16px;
-            color: #64748b;
-            margin: 0;
-        }
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
 
-        .btn-add-camp {
-            background-color: #ea580c; 
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 6px rgba(234, 88, 12, 0.2);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .btn-add-camp:hover {
-            transform: translateY(-2px);
-            background-color: #c2410c;
-        }
+.header-title h1 { font-size: 36px; font-weight: 900; color: #0f172a; margin: 0 0 5px 0; }
+.header-title h1 span { color: #ed8805; }
+.header-title p { font-size: 16px; color: #64748b; margin: 0; }
 
-        /* --- SEARCH BAR SECTION --- */
-        .search-container {
-            background: white;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            padding: 10px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            border: 1px solid #f1f5f9;
-            margin-bottom: 40px;
-        }
-        
-        .search-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .search-box i {
-            color: #94a3b8;
-            font-size: 18px;
-        }
-        .search-box input {
-            width: 100%;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            font-family: inherit;
-            color: #333;
-            padding: 10px 0;
-        }
-        .search-box input::placeholder {
-            color: #94a3b8;
-        }
+.btn-add-camp {
+    background-color: #ea580c; 
+    color: white; 
+    border: none; 
+    padding: 12px 24px; 
+    border-radius: 50px; 
+    font-size: 15px; 
+    font-weight: 700; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    transition: 0.2s; 
+    text-decoration: none;
+}
+.btn-add-camp:hover { background-color: #c2410c; transform: translateY(-2px); }
 
-        .divider {
-            width: 1px;
-            height: 30px;
-            background-color: #e2e8f0;
-            margin: 0 20px;
-        }
+/* =========================================
+   4. SEARCH BAR SECTION
+   ========================================= */
+.search-container {
+    background: white; 
+    border-radius: 15px; 
+    display: flex; 
+    align-items: center; 
+    padding: 10px 20px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+    margin-bottom: 40px;
+}
+.search-box { flex: 1; display: flex; align-items: center; gap: 15px; }
+.search-box input { width: 100%; border: none; outline: none; font-size: 16px; color: #333; padding: 10px 0; font-family: inherit; }
+.search-box input::placeholder { color: #94a3b8; }
+.divider { width: 1px; height: 30px; background-color: #e2e8f0; margin: 0 20px; }
+.filter-box { display: flex; align-items: center; gap: 10px; color: #0f172a; font-weight: 600; cursor: pointer; }
 
-        .filter-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #0f172a;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-        .filter-box i {
-            color: #94a3b8;
-        }
+/* =========================================
+   5. GRID & KARTU CAMP
+   ========================================= */
+.camp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
 
-        /* Responsif untuk HP */
-        @media (max-width: 768px) {
-            .header-section { flex-direction: column; align-items: flex-start; gap: 20px; }
-            .search-container { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
-            .divider { width: 100%; height: 1px; margin: 5px 0; }
-        }
+.camp-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+.camp-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+.card-img-wrapper { position: relative; height: 220px; width: 100%; }
+.card-img { width: 100%; height: 100%; object-fit: cover; }
+
+.price-tag {
+    position: absolute; top: 15px; right: 15px; background-color: #22c55e; color: white; padding: 6px 14px; border-radius: 50px; font-size: 14px; font-weight: 800; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.location-tag {
+    position: absolute; bottom: 15px; left: 15px; background-color: rgba(0, 0, 0, 0.65); color: white; padding: 6px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.fac-container { position: absolute; bottom: 15px; right: 15px; display: flex; gap: 6px; }
+.fac-icon { width: 28px; height: 28px; background-color: white; color: #ea580c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+.card-content { padding: 20px; }
+.card-title { margin: 0; font-size: 18px; font-weight: 800; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* =========================================
+   6. RESPONSIVE MOBILE
+   ========================================= */
+@media (max-width: 768px) {
+    .header-section { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .search-container { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
+    .divider { width: 100%; height: 1px; margin: 5px 0; }
+}
