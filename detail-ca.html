@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Camp Area - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="detail.ca.css"> 
+    
+    <!-- Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li>
+                <a href="ca.html" style="color: #ed8805;">
+                    <i class="fa-solid fa-tent"></i> 
+                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="post-container">
+        
+        <!-- Area Banner Gambar Melengkung (Gambar 1) -->
+        <div id="heroBanner" class="hero-card" style="background-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%), url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200');">
+            <!-- Navigasi Atas -->
+            <div class="hero-nav">
+                <button onclick="window.location.href='ca.html'" class="circle-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="copyLink()" class="circle-btn"><i class="fa-solid fa-share-nodes"></i></button>
+            </div>
+
+            <!-- Konten Bawah -->
+            <div class="hero-content">
+                <div class="hero-tags">
+                    <span class="tag-price" id="heroPrice">Rp 0</span>
+                    <span class="tag-location"><i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> <span id="heroLocation">Memuat Lokasi...</span></span>
+                </div>
+                <h1 id="viewTitle">Memuat Data Camp...</h1>
+            </div>
+        </div>
+
+        <!-- Area Konten Grid -->
+        <!-- Area Konten Grid -->
+<div class="content-grid">
+    
+    <!-- KOLOM KIRI -->
+    <div>
+        <!-- Kartu Deskripsi -->
+        <div class="info-card">
+            <h3 class="card-heading">Deskripsi</h3>
+            <div class="desc-text" id="viewDesc" style="white-space: pre-line;">
+                Memuat deskripsi...
+            </div>
+            
+            <h3 class="card-heading" style="margin-top: 40px;">Fasilitas</h3>
+            <div class="fac-pill-container" id="viewFacilities">
+                <p style="color:#94a3b8; font-size:14px; margin:0;">Memuat fasilitas...</p>
+            </div>
+        </div>
+        
+        <!-- Galeri Foto -->
+        <div class="info-card" id="galleryContainer" style="display: none;">
+            <h3 class="card-heading">Galeri Foto (<span id="galCount">0</span>)</h3>
+            <div class="gallery-grid" id="viewGallery"></div>
+        </div>
+    </div>
+
+    <!-- KOLOM KANAN (URUTAN DIPERBAIKI) -->
+    <div>
+
+        <!-- 2. Kartu Harga (Tepat di bawah Dibuat Oleh) -->
+        <div class="info-card">
+            <h3 class="card-heading" style="font-size: 16px; margin-bottom: 15px;">Harga</h3>
+            <div class="price-box">
+                <span class="price-sub">per malam</span>
+                <h2 class="price-main" id="sidePrice">Rp 20.000</h2>
+            </div>
+        </div>
+
+        <!-- 3. Kartu Lokasi (Di paling bawah) -->
+        <div class="info-card">
+            <h3 class="card-heading" style="font-size: 16px; margin-bottom: 15px;"><i class="fa-solid fa-location-dot" style="color:#ef4444;"></i> Lokasi</h3>
+            <p id="mapLocationName" style="color: #64748b; margin-top: 0; margin-bottom: 15px; font-size: 14px; font-weight: 600;">Memuat nama lokasi...</p>
+            
+            <div class="map-wrapper">
+                <iframe id="gmap" src="" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            
+            <button class="btn-orange" onclick="openMapBtn()" style="margin-top: 15px;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Maps
+            </button>
+        </div>
+    </div>
+    
+</div>
+    </div>
+
+<script>
+    // 1. Konfigurasi Supabase
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Map Icon Fasilitas
+    const iconMap = {
+        'Wifi': '<i class="fa-solid fa-wifi"></i>',
+        'Parkir': '<i class="fa-solid fa-car"></i>',
+        'Kantin': '<i class="fa-solid fa-mug-hot"></i>',
+        'Sewa Tenda': '<i class="fa-solid fa-tent"></i>',
+        'Pusat Info': '<i class="fa-solid fa-circle-info"></i>'
+    };
+
+    // 2. Ambil ID dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const campId = urlParams.get('id');
+    let mapQuery = ""; // Untuk tombol buka maps
+
+    async function loadCampDetail() {
+        if (!campId) {
+            document.getElementById('viewTitle').innerText = "Data tidak ditemukan";
+            document.getElementById('viewDesc').innerText = "Tidak ada ID lokasi yang disertakan di URL.";
+            return;
+        }
+
+        try {
+            const { data: camp, error } = await _supabase
+                .from('CampArea')
+                .select('*')
+                .eq('id', campId)
+                .single();
+
+            if (error) throw error;
+
+            if (camp) {
+                // Terapkan Gambar Banner & Teks
+                document.getElementById('heroBanner').style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%), url('${camp.photo1}')`;
+                document.getElementById('viewTitle').innerText = camp.name;
+                document.getElementById('heroLocation').innerText = camp.location;
+                document.getElementById('viewDesc').innerText = camp.description;
+                document.getElementById('mapLocationName').innerText = camp.name + ", " + camp.location;
+
+                // Set Iframe Google Maps Otomatis tanpa API Key
+                mapQuery = camp.name + " " + camp.location;
+                document.getElementById('gmap').src = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+
+                // Format Harga
+                const priceFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(camp.price);
+                document.getElementById('heroPrice').innerText = priceFormatted;
+                document.getElementById('sidePrice').innerText = priceFormatted;
+
+                // Terapkan Fasilitas (Bentuk Pills)
+                if (camp.facilities) {
+                    const facArray = camp.facilities.split(', ');
+                    let facHtml = '';
+                    facArray.forEach(fac => {
+                        const iconStr = iconMap[fac] || '<i class="fa-solid fa-check"></i>';
+                        facHtml += `<div class="fac-pill">${iconStr} <span>${fac}</span></div>`;
+                    });
+                    document.getElementById('viewFacilities').innerHTML = facHtml;
+                } else {
+                    document.getElementById('viewFacilities').innerHTML = '<p style="color:#94a3b8;">Belum ada info fasilitas.</p>';
+                }
+
+                // Terapkan Galeri Foto (Termasuk Cover)
+                let photos = [camp.photo1]; // Selalu masukkan cover
+                if(camp.photo2) photos.push(camp.photo2);
+                if(camp.photo3) photos.push(camp.photo3);
+                
+                if(photos.length > 0) {
+                    document.getElementById('galleryContainer').style.display = 'block';
+                    document.getElementById('galCount').innerText = photos.length;
+                    
+                    let galleryHtml = '';
+                    photos.forEach((imgSrc, index) => {
+                        // Jika gambar pertama, beri label "Cover" oranye
+                        const badgeHtml = (index === 0) ? `<div class="gal-badge">Cover</div>` : '';
+                        galleryHtml += `
+                            <div class="gal-item" onclick="window.open('${imgSrc}')">
+                                ${badgeHtml}
+                                <img src="${imgSrc}" alt="Galeri">
+                            </div>
+                        `;
+                    });
+                    document.getElementById('viewGallery').innerHTML = galleryHtml;
+                }
+            }
+        } catch (err) {
+            console.error("Gagal memuat:", err);
+            document.getElementById('viewDesc').innerHTML = `<span style="color:red;">Gagal memuat data: ${err.message}</span>`;
+        }
+    }
+
+    function openMapBtn() {
+        if(mapQuery) {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`, '_blank');
+        }
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link detail lokasi ini berhasil disalin!");
+    }
+
+    // Jalankan saat halaman dibuka
+    window.onload = loadCampDetail;
+</script>
+
+</body>
+</html>
