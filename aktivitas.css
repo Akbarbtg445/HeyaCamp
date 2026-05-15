@@ -1,0 +1,267 @@
+/* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
+/* =========================================
+   GAYA KHUSUS HALAMAN KOMUNITAS
+   ========================================= */
+
+body {
+    background-color: #fefaf6;
+    margin: 0;
+    padding: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header Komunitas */
+.header-komunitas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.header-komunitas h1 {
+    font-size: 36px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0 0 5px 0;
+}
+
+.header-komunitas h1 span {
+    color: #ea580c; /* Oranye HeyaCamp */
+}
+
+.header-komunitas p {
+    color: #64748b;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Tombol Buat Aktivitas */
+.btn-create {
+    background: #ea580c;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.3);
+    transition: 0.2s;
+    border: none;
+    cursor: pointer;
+}
+.btn-create:hover {
+    background: #c2410c;
+    transform: translateY(-2px);
+}
+
+/* Search & Filter Bar */
+.search-container {
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    border: 1px solid #f1f5f9;
+    margin-bottom: 40px;
+}
+
+.search-box { flex: 1; display: flex; align-items: center; gap: 15px; }
+.search-box input {
+    width: 100%; border: none; outline: none; font-size: 15px; padding: 10px 0; font-family: inherit; color: #333;
+}
+.search-box input::placeholder { color: #94a3b8; }
+
+.divider { width: 1px; height: 30px; background-color: #e2e8f0; margin: 0 20px; }
+
+.filter-box { display: flex; align-items: center; gap: 10px; }
+.filter-select {
+    border: none; outline: none; font-weight: 600; color: #1e293b; background: transparent; cursor: pointer; font-family: inherit; font-size: 15px;
+}
+
+/* Grid Kartu Aktivitas */
+.activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+.activity-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    border: 1px solid #f1f5f9;
+    transition: 0.3s;
+    text-decoration: none;
+    display: block;
+}
+.activity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* Gambar & Tag */
+.card-img-wrapper {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-tags {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.tag-community {
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+}
+
+.tag-location {
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(4px);
+}
+
+/* Konten Teks */
+.card-content {
+    padding: 20px;
+}
+.card-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.card-date {
+    font-size: 13px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+/* Responsif Mobile */
+@media (max-width: 768px) {
+    .header-komunitas { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .search-container { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
+    .divider { width: 100%; height: 1px; margin: 5px 0; }
+    .filter-box { justify-content: space-between; }
+}

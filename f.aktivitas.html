@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Aktivitas Baru - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="f. aktivitas.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="container">
+        <a href="komunitas.html" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Kembali
+        </a>
+
+        <div class="form-card">
+            <div class="form-header">
+                <h2>Buat Aktivitas Baru</h2>
+                <p>Bagikan cerita petualanganmu dengan komunitas</p>
+            </div>
+
+            <form id="formAktivitas">
+                <div class="form-label">Tautan Foto (Minimal 1 untuk Sampul)</div>
+                <div class="photo-links-container">
+                    <div class="link-row">
+                        <span class="badge-cover">Sampul</span>
+                        <input type="url" id="photo1" class="form-control" placeholder="Paste link foto utama" required>
+                    </div>
+                    <div class="link-row">
+                        <div class="badge-empty"></div>
+                        <input type="url" id="photo2" class="form-control" placeholder="Link foto tambahan 1 (Opsional)">
+                    </div>
+                    <div class="link-row">
+                        <div class="badge-empty"></div>
+                        <input type="url" id="photo3" class="form-control" placeholder="Link foto tambahan 2 (Opsional)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Judul Aktivitas</label>
+                    <input type="text" id="title" class="form-control" placeholder="Contoh: Camping Santai di Ranu Kumbolo" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+    <label class="form-label">Pilih Komunitas</label>
+    <select id="communitySelect" class="form-control" required>
+        <option value="" disabled selected>Memuat komunitas...</option>
+    </select>
+</div>
+                    <div class="form-group">
+                        <label class="form-label">Tanggal</label>
+                        <input type="date" id="date" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Lokasi</label>
+                        <input type="text" id="location" class="form-control" placeholder="Gunung / Kota / Tempat" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select id="category" class="form-control">
+                            <option>Camping</option>
+                            <option>Hiking</option>
+                            <option>Glamping</option>
+                            <option>Touring</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Cerita Singkat</label>
+                    <textarea id="description" class="form-control" rows="4" placeholder="Ceritakan sedikit tentang kegiatan ini..."></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">Posting ke Komunitas</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Memproses...";
+            btn.disabled = true;
+
+            const payload = {
+                title: document.getElementById('title').value,
+                community_name: document.getElementById('community').value,
+                activity_date: document.getElementById('date').value,
+                location: document.getElementById('location').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                photo_url: document.getElementById('photo1').value,
+                photo_extra1: document.getElementById('photo2').value,
+                photo_extra2: document.getElementById('photo3').value
+            };
+
+            const { error } = await _supabase.from('Aktivitas').insert([payload]);
+
+            if (error) {
+                alert("Gagal: " + error.message);
+                btn.innerText = "Posting ke Komunitas";
+                btn.disabled = false;
+            } else {
+                alert("Berhasil diposting!");
+                window.location.href = 'komunitas.html';
+            }
+        });
+        // 1. Fungsi untuk memuat daftar komunitas ke dalam dropdown
+async function fetchCommunities() {
+    const select = document.getElementById('communitySelect');
+    
+    try {
+        // Ambil data dari tabel yang menyimpan daftar komunitas kamu
+        // Contoh: tabel bernama 'Komunitas' dengan kolom 'name'
+        const { data: communities, error } = await _supabase
+            .from('Aktivitas') // Ganti dengan nama tabel komunitasmu jika berbeda
+            .select('community_name')
+            .not('community_name', 'is', null);
+
+        if (error) throw error;
+
+        // Hilangkan duplikat nama komunitas
+        const uniqueCommunities = [...new Set(communities.map(item => item.community_name))];
+
+        let html = '<option value="" disabled selected>Pilih Komunitas</option>';
+        uniqueCommunities.forEach(name => {
+            html += `<option value="${name}">${name}</option>`;
+        });
+        
+        select.innerHTML = html;
+    } catch (err) {
+        console.error("Gagal memuat komunitas:", err);
+        select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
+    }
+}
+
+// 2. Sesuaikan pengambilan data saat submit form
+document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    
+    const payload = {
+        title: document.getElementById('title').value,
+        // Ambil nama komunitas dari select dropdown
+        community_name: document.getElementById('communitySelect').value, 
+        activity_date: document.getElementById('date').value,
+        location: document.getElementById('location').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value, // Pastikan id textarea sesuai
+        photo_url: document.getElementById('photo1').value
+    };
+
+    const { error } = await _supabase.from('Aktivitas').insert([payload]);
+    // ... sisa kode alert dan redirect
+});
+
+// Panggil fungsi saat halaman dimuat
+window.onload = fetchCommunities;
+    </script>
+</body>
+</html>

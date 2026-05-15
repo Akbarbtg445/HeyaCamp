@@ -261,3 +261,101 @@ th { background: #2d6a4f; color: white; }
     background: #ed8805;
     color: white;
 }
+@media (max-width: 768px) {
+    .agenda-title { font-size: 32px; }
+    .agenda-grid { grid-template-columns: 1fr; }
+    .agenda-card { padding: 30px; }
+}
+
+/* --- SECTION AGENDA (BERSIH & MINIMALIS) --- */
+.agenda-section {
+    padding: 80px 20px;
+    text-align: center;
+    max-width: 1000px; /* Lebar maksimal agar rapi di tengah */
+    margin: 0 auto;
+}
+
+.agenda-title {
+    font-size: 42px;
+    font-weight: 900;
+    color: #1e293b;
+    margin-bottom: 50px;
+    line-height: 1.2;
+}
+
+.agenda-title span {
+    color: #ed8805;
+    display: block; /* Membuat teks turun ke bawah */
+}
+
+.agenda-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* KUNCI: Membuat tag <a> berperilaku seperti kartu dan tidak berwarna biru */
+.agenda-card {
+    display: block; 
+    text-decoration: none !important; /* Hilangkan garis bawah link */
+    color: inherit; /* Cegah teks berubah biru */
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: left;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.agenda-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: #ed8805; /* Border berubah oranye saat disorot */
+}
+
+.agenda-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+.icon-orange { color: #ed8805; }
+.icon-blue { color: #3b82f6; }
+
+.agenda-card h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.agenda-card p {
+    font-size: 15px;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Teks tambahan saat di-hover (Opsional tapi keren) */
+.explore-text {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ed8805;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+.agenda-card:hover .explore-text {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Responsif untuk HP */
+@media (max-width: 768px) {
+    .agenda-title { font-size: 32px; }
+    .agenda-grid { grid-template-columns: 1fr; }
+    .agenda-card { padding: 30px; }
+}
