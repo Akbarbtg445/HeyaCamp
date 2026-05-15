@@ -256,7 +256,39 @@ async function loadDetail() {
         }
         // --- AKHIR BAGIAN SOSMED ---
     }
+    
 }
+// Fungsi untuk Menghapus Komunitas
+document.getElementById('deleteCommBtn')?.addEventListener('click', async () => {
+    // 1. Konfirmasi ke pengguna
+    const confirmDelete = confirm("Apakah Anda yakin ingin menghapus komunitas ini? Semua postingan terkait mungkin tidak akan terhapus secara otomatis kecuali diatur di database.");
+    
+    if (!confirmDelete) return;
+
+    const btn = document.getElementById('deleteCommBtn');
+    btn.innerText = "Menghapus...";
+    btn.disabled = true;
+
+    try {
+        // 2. Jalankan perintah DELETE di Supabase
+        const { error } = await _supabase
+            .from('Komunitas')
+            .delete()
+            .eq('id', commId); // commId diambil dari URL parameter yang sudah ada di kode kamu
+
+        if (error) throw error;
+
+        // 3. Jika berhasil, arahkan kembali ke halaman daftar komunitas
+        alert("Komunitas berhasil dihapus.");
+        window.location.href = 'komunitas.html';
+
+    } catch (err) {
+        console.error("Gagal menghapus:", err.message);
+        alert("Gagal menghapus komunitas: " + err.message);
+        btn.innerHTML = '<i class="fa-solid fa-trash-can"></i> Hapus';
+        btn.disabled = false;
+    }
+});
 
 // 3. Kirim Postingan (Sekarang akan berhasil karena form-nya sudah dibaca)
 // GANTI FUNGSI INI
