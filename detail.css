@@ -285,3 +285,36 @@ body {
     max-width: 250px;
     line-height: 1.5;
 }
+/* =========================================
+   PERBAIKAN TOMBOL "BUAT POSTINGAN"
+   ========================================= */
+.empty-state .btn-post {
+    /* GAYA UTAMA */
+    display: inline-block;
+    padding: 14px 30px;
+    background-color: #ed8805; /* Warna oranye HeyaCamp */
+    color: white;
+    font-weight: 800; /* Tebal agar menonjol */
+    font-size: 16px;
+    border: none;
+    border-radius: 50px; /* Bentuk pil/kapsul modern */
+    cursor: pointer;
+    text-decoration: none; /* Jika tombolnya pakai tag <a> */
+    box-shadow: 0 5px 15px rgba(237, 136, 5, 0.2); /* Shadow tipis oranye */
+    transition: all 0.3s ease; /* Efek transisi halus */
+    margin-top: 15px; /* Jarak dari teks deskripsi */
+    font-family: 'Nunito', sans-serif;
+}
+
+/* EFEK HOVER (SAAT DITUNJUK) */
+.empty-state .btn-post:hover {
+    background-color: #d67a04; /* Oranye sedikit lebih gelap */
+    transform: translateY(-2px); /* Tombol sedikit terangkat */
+    box-shadow: 0 8px 20px rgba(237, 136, 5, 0.3); /* Shadow lebih tebal */
+}
+
+/* EFEK ACTIVE (SAAT DIKLIK) */
+.empty-state .btn-post:active {
+    transform: translateY(1px); /* Tombol sedikit tertekan down */
+    box-shadow: 0 3px 10px rgba(237, 136, 5, 0.2); /* Shadow mengecil */
+}
