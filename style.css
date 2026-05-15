@@ -359,3 +359,60 @@ th { background: #2d6a4f; color: white; }
     .agenda-grid { grid-template-columns: 1fr; }
     .agenda-card { padding: 30px; }
 }
+@media (max-width: 768px) {
+    /* 1. Sembunyikan Navbar Atas yang lama */
+    .navbar {
+        display: none; 
+    }
+
+    /* 2. Buat Navbar Baru di Bawah (Fixed Bottom) */
+    .mobile-nav {
+        display: flex !important; /* Pastikan muncul di HP */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 20px 20px 0 0;
+        padding-bottom: 5px;
+    }
+
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #94a3b8;
+        font-size: 10px;
+        gap: 4px;
+    }
+
+    .mobile-nav-item i {
+        font-size: 20px;
+    }
+
+    .mobile-nav-item.active {
+        color: #ed8805;
+    }
+
+    /* 3. Beri jarak di bawah body agar konten tidak tertutup navbar baru */
+    body {
+        padding-bottom: 80px;
+    }
+}
+
+/* Sembunyikan Mobile Nav di Desktop */
+.mobile-nav {
+    display: none;
+}
+@media (max-width: 480px) {
+    .post-container h1 {
+        font-size: 28px !important;
+    }
+}
