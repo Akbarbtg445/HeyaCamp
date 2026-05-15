@@ -259,29 +259,36 @@ async function loadDetail() {
 }
 
 // 3. Kirim Postingan (Sekarang akan berhasil karena form-nya sudah dibaca)
+// GANTI FUNGSI INI
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
     btn.innerText = "Mengirim...";
     btn.disabled = true;
 
+    // Ambil nama komunitas yang sedang aktif dari elemen HTML
+    const currentCommName = document.getElementById('commName').innerText;
+
+    // Sesuaikan data dengan kolom di tabel 'Aktivitas'
     const postData = {
-        comm_id: commId,
-        username: document.getElementById('postUser').value,
-        activity_name: document.getElementById('postActivity').value,
-        location: document.getElementById('postLocation').value,
-        event_date: document.getElementById('postDate').value,
-        content: document.getElementById('postContent').value,
-        banner_url: document.getElementById('postBanner').value
+        title: document.getElementById('postActivity').value,      // Judul kegiatan
+        community_name: currentCommName,                           // Nama komunitas otomatis
+        activity_date: document.getElementById('postDate').value,  // Tanggal
+        location: document.getElementById('postLocation').value,   // Lokasi
+        category: "Camping",                                       // Kategori default
+        description: document.getElementById('postContent').value, // Isi cerita
+        photo_url: document.getElementById('postBanner').value || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800'
     };
 
-    const { error } = await _supabase.from('Postingan').insert([postData]);
+    // SIMPAN KE TABEL 'Aktivitas'
+    const { error } = await _supabase.from('Aktivitas').insert([postData]);
 
     if (error) {
         alert("Gagal posting: " + error.message);
     } else {
+        alert("Berhasil! Ceritamu sekarang muncul di halaman Aktivitas.");
         closePostModal();
-        loadPosts(); 
+        loadPosts(); // Refresh tampilan tab aktivitas di halaman ini
         document.getElementById('formPostingan').reset();
     }
     btn.innerText = "Posting Sekarang";
@@ -291,72 +298,48 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
 // 4. Tampilkan Postingan
 async function loadPosts() {
     const activityContainer = document.getElementById('tabAktivitas');
-    if (!commId) return;
+    const currentCommName = document.getElementById('commName').innerText;
+    
+    if (!currentCommName || currentCommName === "Memuat...") return;
 
     try {
         const { data: posts, error } = await _supabase
-            .from('Postingan')
+            .from('Aktivitas') // UBAH DARI 'Postingan' KE 'Aktivitas'
             .select('*')
-            .eq('comm_id', commId)
+            .eq('community_name', currentCommName) // Filter agar hanya muncul postingan komunitas ini
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
         let html = '';
-        
         if (posts && posts.length > 0) {
+            // Tombol buat postingan tetap ada di atas
             html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
             
             posts.forEach(p => {
-                const formattedDate = new Date(p.event_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-                const bannerImg = p.banner_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
+                const formattedDate = new Date(p.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
                 
                 html += `
                     <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
-                        <div style="width: 35%; min-width: 200px; position: relative;">
-                            <img src="${bannerImg}" style="width: 100%; height: 100%; object-fit: cover;" alt="Banner">
+                        <div style="width: 35%; min-width: 200px;">
+                            <img src="${p.photo_url}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <div style="width: 65%; padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
-                            <div>
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                                    <div style="width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; overflow: hidden;">
-                                        <img src="https://ui-avatars.com/api/?name=${p.username}&background=random" style="width:100%;">
-                                    </div>
-                                    <span style="font-weight: 600; font-size: 14px; color: #1e293b;">${p.username}</span>
-                                    <span style="color: #94a3b8; font-size: 14px;">• ${formattedDate}</span>
-                                </div>
-                                <h2 style="margin: 0 0 15px 0; font-size: 26px; font-weight: 800; color: #0f172a;">${p.activity_name}</h2>
-                                <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                                    ${p.content}
-                                </p>
-                            </div>
+                        <div style="width: 65%; padding: 25px;">
+                            <h2 style="margin: 0 0 10px 0; font-size: 22px; color: #0f172a;">${p.title}</h2>
+                            <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">${p.description}</p>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="background: #f8fafc; padding: 6px 14px; border-radius: 50px; color: #64748b; font-size: 13px; display: flex; align-items: center; gap: 6px; border: 1px solid #f1f5f9;">
-                                    <i class="fa-solid fa-location-dot" style="color: #ed8805;"></i> ${p.location}
-                                </div>
-                                <a href="detail-postingan.html?id=${p.id}" style="text-decoration: none; color: #ed8805; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-                                 Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i>
-                                </a>
+                                <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-location-dot"></i> ${p.location}</span>
+                                <span style="font-size: 12px; color: #94a3b8;">${formattedDate}</span>
                             </div>
                         </div>
                     </div>`;
             });
             activityContainer.innerHTML = html;
         } else {
-            activityContainer.innerHTML = `
-                <div class="activity-card">
-                    <div class="empty-state">
-                        <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
-                        <h3>Belum ada aktivitas</h3>
-                        <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
-                        <button class="btn-post" onclick="openPostModal()">Buat Postingan</button>
-                    </div>
-                </div>
-            `;
+            // Tampilan jika kosong (sama seperti kode lamamu)
         }
     } catch (err) {
-        console.error("Kesalahan sistem:", err);
-        activityContainer.innerHTML = `<p style='color:red; text-align:center;'>Gagal memuat: ${err.message}</p>`;
+        console.error("Gagal load:", err);
     }
 }
 
