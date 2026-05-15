@@ -1,0 +1,183 @@
+/* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
+/* Gaya Utama Halaman Detail */
+body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8fafc;
+}
+
+.hero-detail {
+    position: relative;
+    height: 500px;
+    border-radius: 0 0 40px 40px; /* Melengkung di bawah saja */
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+}
+
+.hero-nav {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+}
+
+.btn-circle {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-circle:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+.hero-content-text {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+    color: white;
+    z-index: 5;
+}
+
+.badge-info-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.badge-info {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    backdrop-filter: blur(5px);
+}
+
+.detail-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.description-container {
+    max-width: 900px;
+    margin: -30px auto 50px;
+    background: white;
+    padding: 50px;
+    border-radius: 30px;
+    position: relative;
+    z-index: 20;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.description-text {
+    line-height: 1.8;
+    color: #475569;
+    font-size: 18px;
+    white-space: pre-wrap; /* Agar baris baru/enter dari textarea terbaca */
+}
