@@ -11,9 +11,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
+<nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
+            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li>
+                <a href="ca.html">
+                    <i class="fa-solid fa-tent"></i> 
+                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
+                </a>
+            </li>
+            <li><a href="ak.html"><i class="fa-regular fa-calendar"></i> Acara</a></li>
+            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
+        </ul>
+    </nav>
     <div class="container">
-        <a href="komunitas.html" class="btn-back">
+        <a href="aktivitas.html" class="btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
 
@@ -23,13 +43,21 @@
             </div>
 
             <form id="formAktivitas">
-                <div class="form-label">Foto Aktivitas</div>
+                <div class="form-label">Tautan Foto (Minimal 1 untuk Sampul)</div>
                 <div class="photo-links-container">
                     <div class="link-row">
-                        <span class="badge-cover">Cover</span>
-                        <input type="url" id="photo1" class="form-control" placeholder="Paste link foto utama (Pinterest/ImgBB)" required>
+                        <span class="badge-cover">Sampul</span>
+                        <input type="url" id="photo1" class="form-control" placeholder="Paste link foto utama (Cover)" required>
                     </div>
-                    <p style="color: #ef4444; font-size: 12px; margin-top: 5px;">* Minimal 1 foto (cover)</p>
+                    <div class="link-row">
+                        <div class="badge-empty"></div>
+                        <input type="url" id="photo2" class="form-control" placeholder="Link foto tambahan 1 (Opsional)">
+                    </div>
+                    <div class="link-row">
+                        <div class="badge-empty"></div>
+                        <input type="url" id="photo3" class="form-control" placeholder="Link foto tambahan 2 (Opsional)">
+                    </div>
+                    <p style="color: #ef4444; font-size: 12px; margin-top: 5px;">* Foto sampul wajib diisi.</p>
                 </div>
 
                 <div class="form-group">
@@ -57,7 +85,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Pilih Komunitas (Region)</label>
+                    <label class="form-label">Pilih Komunitas</label>
                     <select id="communitySelect" class="form-control" required>
                         <option value="" disabled selected>Memuat komunitas...</option>
                     </select>
@@ -83,7 +111,7 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 1. Memuat daftar komunitas dari tabel 'Komunitas'
+        // 1. Memuat daftar komunitas
         async function fetchCommunities() {
             const select = document.getElementById('communitySelect');
             try {
@@ -122,7 +150,9 @@
                 location: document.getElementById('location').value,
                 category: document.getElementById('category').value,
                 description: document.getElementById('description').value,
-                photo_url: document.getElementById('photo1').value
+                photo_url: document.getElementById('photo1').value, 
+                photo_extra1: document.getElementById('photo2').value || null, 
+                photo_extra2: document.getElementById('photo3').value || null
             };
 
             const { error } = await _supabase.from('Aktivitas').insert([payload]);
