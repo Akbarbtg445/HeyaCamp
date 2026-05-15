@@ -110,44 +110,70 @@ body {
 .sidebar { display: flex; flex-direction: column; gap: 20px; }
 .about-card { background: white; border-radius: 24px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: sticky; top: 100px; }
 
+/* Tombol Keluar & Hapus */
+.btn-leave { background: #ef4444; color: var(--white); border: none; padding: 12px 28px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+.btn-delete { background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+
 /* =========================================
    5. RESPONSIVE DESIGN (HP)
    ========================================= */
 @media (max-width: 768px) {
-    /* Navbar Desktop Hilang */
     .navbar { display: none !important; }
 
-    /* Hero HP */
-    .hero-section { height: auto; min-height: 250px; padding-bottom: 60px; }
-    .hero-content { flex-direction: column; align-items: center; text-align: center; padding: 0 20px; }
+    .hero-section { height: auto; min-height: 300px; padding-bottom: 70px; }
+    
+    .hero-content { 
+        flex-direction: column !important; 
+        align-items: center !important; 
+        text-align: center; 
+        padding: 0 20px;
+        gap: 15px;
+    }
     
     .profile-header {
         flex-direction: column;
         align-items: center;
         transform: translateY(40px);
-        gap: 15px;
+        gap: 10px;
     }
 
-    .profile-logo-wrapper { width: 120px; height: 120px; border-radius: 20px; border-width: 3px; }
-    .profile-info h1 { font-size: 28px; }
+    .profile-logo-wrapper { width: 110px; height: 110px; border-radius: 20px; border-width: 3px; }
     
-    /* Layout Container HP */
+    .profile-info { padding-bottom: 0; }
+    .profile-info h1 { font-size: 26px !important; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+    
+    /* Perbaikan Tombol agar sejajar rapi */
+    .hero-content > div:last-child {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100%;
+        gap: 10px !important;
+        margin-top: 10px;
+    }
+
+    .btn-leave, .btn-delete {
+        padding: 10px 15px !important;
+        font-size: 13px !important;
+        flex: 1;
+        max-width: 150px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
     .container { margin: 80px auto 20px; padding: 0 15px; }
     .content-grid { grid-template-columns: 1fr; gap: 20px; }
 
-    /* Post Card HP (Baris ke Kolom) */
     .post-card { flex-direction: column !important; }
-    .post-card > div:first-child { width: 100% !important; min-width: 100% !important; height: 200px !important; }
+    .post-card > div:first-child { width: 100% !important; min-width: 100% !important; height: 180px !important; }
     .post-card > div:last-child { width: 100% !important; padding: 15px !important; }
-    .post-card h2 { font-size: 18px !important; }
 
-    /* Tab Menu HP Scrollable */
     .tab-menu { overflow-x: auto; white-space: nowrap; padding: 5px; }
-    .tab-item { padding: 10px 20px; font-size: 13px; }
+    .tab-item { padding: 10px 15px; font-size: 13px; }
 
-    /* Sidebar HP (Sticky Dimatikan) */
     .about-card { position: static !important; }
-    .sidebar { order: 2; } /* Sidebar muncul setelah postingan */
+    .sidebar { order: 2; }
 
     /* Munculkan Navbar Bawah */
     .mobile-nav {
@@ -172,7 +198,6 @@ body {
 .mobile-nav-item.active { color: #ed8805; }
 .mobile-nav-item i { font-size: 20px; }
 
-/* Tambahan CSS Postingan */
 .tab-content { display: none; animation: fadeIn 0.3s ease; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
