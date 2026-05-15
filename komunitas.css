@@ -16,12 +16,15 @@ body {
 /* =========================================
    2. NAVBAR DESKTOP (PILL-SHAPE)
    ========================================= */
+/* =========================================
+   2. NAVBAR DESKTOP
+   ========================================= */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    padding: 10px 25px;
+    padding: 0 25px; /* Kurangi padding atas bawah agar tidak terlalu gemuk */
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
@@ -29,12 +32,25 @@ body {
     top: 20px;
     z-index: 1000;
     margin: 0 auto 20px;
+    height: 70px; /* Kunci tinggi navbar */
+}
+
+/* TAMBAHKAN INI: Kunci ukuran logo agar tidak RAKSASA */
+.nav-logo {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo img {
+    height: 45px; /* Kunci tinggi logo */
+    width: auto;  /* Biar lebarnya menyesuaikan otomatis */
+    object-fit: contain;
 }
 
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 25px;
+    gap: 20px; /* Perkecil jarak antar menu sedikit agar muat */
     margin: 0;
     padding: 0;
 }
@@ -43,13 +59,12 @@ body {
     text-decoration: none;
     color: #4a5568;
     font-weight: 700;
+    font-size: 14px; /* Kecilkan sedikit font desktop agar elegan */
+    white-space: nowrap; /* Mencegah teks menu turun ke bawah (wrap) */
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: color 0.3s ease;
 }
-
-.nav-links li a:hover { color: #ed8805; }
 
 /* =========================================
    3. HEADER SECTION
