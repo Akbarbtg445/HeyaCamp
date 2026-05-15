@@ -7,13 +7,14 @@ body {
     font-family: 'Nunito', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8fafc;
+    background-color: #ffffff;
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
+    color: #1e293b;
 }
 
 /* =========================================
-   2. NAVBAR DESKTOP
+   2. NAVBAR DESKTOP (Sembunyikan di Mobile nanti)
    ========================================= */
 .navbar {
     display: flex;
@@ -32,111 +33,89 @@ body {
 }
 
 .nav-logo img { height: 45px; width: auto; object-fit: contain; }
-.nav-links { display: flex; list-style: none; gap: 20px; padding: 0; }
+.nav-links { display: flex; list-style: none; gap: 20px; padding: 0; margin: 0; }
 .nav-links li a { text-decoration: none; color: #4a5568; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
 
 /* =========================================
-   3. HERO POSTINGAN (DESKTOP)
+   3. POST HERO & LAYOUT
    ========================================= */
-.hero-detail {
+.post-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.post-hero {
     position: relative;
     height: 500px;
-    border-radius: 0 0 40px 40px;
-    overflow: hidden;
+    border-radius: 30px;
     background-size: cover;
     background-position: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 40px;
+    color: white;
+    overflow: hidden;
+    margin-bottom: 30px;
 }
 
-.hero-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
 }
 
-.hero-nav {
-    position: absolute;
-    top: 30px; left: 30px; right: 30px;
-    display: flex; justify-content: space-between; z-index: 10;
-}
-
-.btn-circle {
-    width: 45px; height: 45px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: white; text-decoration: none; cursor: pointer; transition: 0.3s;
-}
-
-.hero-content-text {
-    position: absolute;
-    bottom: 50px; left: 50px; right: 50px;
-    color: white; z-index: 5;
-}
-
-.detail-title { font-size: 48px; font-weight: 800; margin: 0; line-height: 1.2; }
-
-/* =========================================
-   4. KONTEN DESKRIPSI (DESKTOP)
-   ========================================= */
-.description-container {
-    max-width: 900px;
-    margin: -30px auto 50px;
+.article-card {
     background: white;
-    padding: 50px;
-    border-radius: 30px;
-    position: relative;
-    z-index: 20;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
-.description-text { line-height: 1.8; color: #475569; font-size: 18px; white-space: pre-wrap; }
-
 /* =========================================
-   5. RESPONSIVE MOBILE (HP)
+   4. RESPONSIVE MOBILE (FIX TOTAL)
    ========================================= */
-@media (max-width: 768px) {
-    .navbar { display: none !important; }
-
-    /* Banner Foto (Penuhi Layar) */
-    .hero-detail {
-        height: 300px !important;
-        border-radius: 0 !important;
+@media screen and (max-width: 768px) {
+    /* 1. Paksa Sembunyikan SEMUA Nav Desktop & Links Tambahan */
+    .navbar, 
+    .nav-links, 
+    nav, 
+    [class*="nav"] { 
+        display: none !important; 
     }
 
-    .hero-content-text {
-        left: 20px; right: 20px; bottom: 40px;
+    /* 2. Beri Ruang di Atas agar tidak mepet status bar HP */
+    body {
+        padding: 10px;
+        padding-top: 20px !important;
+        padding-bottom: 100px !important;
     }
 
-    .detail-title {
-        font-size: 1.8rem !important;
+    /* 3. Hero Postingan di HP */
+    .post-hero {
+        height: 350px !important;
+        padding: 20px !important;
+        border-radius: 20px !important;
+        margin-top: 0 !important;
     }
 
-    /* Konten Teks */
-    .description-container {
-        padding: 30px 20px !important;
-        border-radius: 30px 30px 0 0 !important;
-        margin: -30px 0 0 0 !important;
-        width: auto !important;
+    .post-title {
+        font-size: 1.5rem !important;
     }
 
-    .description-text {
-        font-size: 16px !important;
+    /* 4. Grid Jadi Satu Kolom */
+    .content-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
     }
 
-    /* Meta Info Badge */
-    .badge-info-container {
-        flex-wrap: wrap;
-        gap: 8px;
+    /* 5. Sidebar Pindah Bawah */
+    .content-grid > div:last-child {
+        order: 2;
     }
 
-    .badge-info {
-        font-size: 11px !important;
-        padding: 6px 12px !important;
-    }
-
-    /* Navigasi Bawah */
+    /* 6. Navigasi Bawah (Mobile Nav) */
     .mobile-nav {
         display: flex !important;
         position: fixed;
@@ -146,18 +125,27 @@ body {
         justify-content: space-around;
         align-items: center;
         box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-        z-index: 9999;
+        z-index: 10000;
         border-radius: 20px 20px 0 0;
     }
-
-    body { padding-bottom: 90px !important; }
 }
 
-/* Sembunyikan Nav Bawah di Desktop */
+/* Utilitas Mobile Nav */
 .mobile-nav { display: none; }
-.mobile-nav-item {
-    display: flex; flex-direction: column; align-items: center;
-    text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px;
-}
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
 .mobile-nav-item.active { color: #ed8805; }
 .mobile-nav-item i { font-size: 20px; }
+
+/* Tombol melayang di dalam foto */
+.floating-btn {
+    position: absolute;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(5px);
+    color: white;
+    z-index: 20;
+}
+.btn-back { top: 15px; left: 15px; }
+.btn-share { top: 15px; right: 15px; }
