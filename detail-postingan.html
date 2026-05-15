@@ -168,16 +168,13 @@
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
 
+    // 2. Fungsi Utama Load Postingan
     async function loadFullPost() {
-        if (!postId) {
-            document.getElementById('viewTitle').innerText = "Postingan tidak ditemukan";
-            return;
-        }
+        if (!postId) return;
 
         try {
-            // PERBAIKAN: Ambil dari tabel 'Aktivitas'
             const { data: post, error } = await _supabase
-                .from('Aktivitas')
+                .from('Aktivitas') // Mengambil dari tabel Aktivitas
                 .select('*')
                 .eq('id', postId)
                 .single();
@@ -185,7 +182,6 @@
             if (error) throw error;
 
             if (post) {
-                // SESUAIKAN DENGAN NAMA KOLOM DI TABEL 'Aktivitas'
                 const formattedDate = new Date(post.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
                 const bannerImg = post.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
 
@@ -194,13 +190,12 @@
                 document.getElementById('viewDate').innerText = formattedDate;
                 document.getElementById('viewLocation').innerText = post.location;
                 document.getElementById('viewContent').innerText = post.description;
-                document.getElementById('viewAuthor').innerText = post.community_name; // Menggunakan nama komunitas sebagai author
+                document.getElementById('viewAuthor').innerText = post.community_name;
                 
-                // Jika kamu belum punya kolom likes_count di tabel Aktivitas, gunakan 0 dulu
                 window.currentLikes = post.likes_count || 0;
                 document.getElementById('likeCount').innerText = window.currentLikes;
 
-                // Load data pelengkap
+                // Memanggil fungsi-fungsi yang tadi error
                 loadOtherActivities(post.community_name, post.id);
                 loadComments(post.id);
                 loadGallery(post.id);
@@ -211,7 +206,70 @@
         }
     }
 
-    // Perbaikan fungsi loadOtherActivities agar mencari berdasarkan community_name
+    // 3. FUNGSI KOMENTAR (Yang Tadi Hilang)
+    async function loadComments(currentPostId) {
+        const container = document.getElementById('commentsList');
+        try {
+            const { data: comments, error } = await _supabase
+                .from('Komentar')
+                .select('*')
+                .eq('post_id', currentPostId)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            document.getElementById('commentCount').innerText = comments ? comments.length : 0;
+
+            if (comments && comments.length > 0) {
+                let html = '';
+                comments.forEach(c => {
+                    const dateStr = new Date(c.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+                    html += `
+                        <div style="display: flex; gap: 15px; border-bottom: 1px solid #f8fafc; padding-bottom: 15px; margin-bottom:15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; overflow: hidden; flex-shrink: 0;">
+                                <img src="https://ui-avatars.com/api/?name=${c.username}&background=random" style="width: 100%;">
+                            </div>
+                            <div>
+                                <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+                                    <strong style="color: #1e293b; font-size: 15px;">${c.username}</strong>
+                                    <span style="color: #94a3b8; font-size: 12px;">${dateStr}</span>
+                                </div>
+                                <p style="margin: 0; color: #475569; font-size: 14px; line-height: 1.5;">${c.content}</p>
+                            </div>
+                        </div>`;
+                });
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<p style="color: #94a3b8; text-align: center; font-size: 14px;">Belum ada komentar.</p>';
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    // 4. FUNGSI GALERI
+    async function loadGallery(currentPostId) {
+        const section = document.getElementById('gallerySection');
+        const grid = document.getElementById('galleryGrid');
+        try {
+            const { data: photos, error } = await _supabase
+                .from('Galeri')
+                .select('*')
+                .eq('post_id', currentPostId);
+
+            if (error) throw error;
+
+            if (photos && photos.length > 0) {
+                section.style.display = 'block';
+                document.getElementById('galleryCount').innerText = photos.length;
+                let html = '';
+                photos.forEach(photo => {
+                    html += `<div style="border-radius: 15px; overflow: hidden; aspect-ratio: 1/1;"><img src="${photo.image_url}" style="width:100%; height:100%; object-fit:cover;"></div>`;
+                });
+                grid.innerHTML = html;
+            }
+        } catch (err) { console.error(err); }
+    }
+
+    // 5. FUNGSI AKTIVITAS LAINNYA
     async function loadOtherActivities(commName, currentPostId) {
         const container = document.getElementById('otherActivities');
         try {
@@ -223,14 +281,24 @@
                 .limit(3);
 
             if (error) throw error;
-            // ... (sisa logika render HTML tetap sama dengan kodemu)
+            if (others && others.length > 0) {
+                let html = '';
+                others.forEach(item => {
+                    html += `<a href="detail-postingan.html?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; gap:10px; margin-bottom:15px;">
+                        <img src="${item.photo_url}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;">
+                        <div><h4 style="margin:0; font-size:14px;">${item.title}</h4><small>${item.location}</small></div>
+                    </a>`;
+                });
+                container.innerHTML = html;
+            }
         } catch (err) { console.error(err); }
     }
 
-    // Fungsi loadComments, loadGallery, addLike, dll tetap sama dengan kodemu 
-    // karena nama tabel Komentar dan Galeri tidak berubah.
-    
-    // Jalankan saat startup
+    // Fungsi bantu lainnya (Like, Modal, dsb) tetap gunakan yang kamu punya sebelumnya
+    function openGalleryModal() { document.getElementById('modalGallery').style.display = 'flex'; }
+    function closeGalleryModal() { document.getElementById('modalGallery').style.display = 'none'; }
+    function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link disalin!"); }
+
     window.onload = loadFullPost;
 </script>
 
