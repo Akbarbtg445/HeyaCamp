@@ -1,0 +1,201 @@
+/* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
+/* =========================================
+   GAYA KHUSUS HALAMAN ACARA KOMUNITAS
+   ========================================= */
+
+body {
+    background-color: #fefaf6;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header Section */
+.header-section {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+.header-section h1 {
+    font-size: 36px;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+}
+.header-section h1 span { color: #ed8805; }
+.header-section p { color: #64748b; font-size: 16px; margin: 0; }
+
+/* Search & Filter Bar */
+.search-container {
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+    margin-bottom: 30px;
+}
+.search-box { flex: 1; display: flex; align-items: center; gap: 15px; }
+.search-box input {
+    width: 100%; border: none; outline: none; font-size: 16px; padding: 10px 0; font-family: inherit;
+}
+.divider { width: 1px; height: 30px; background-color: #e2e8f0; margin: 0 20px; }
+
+.filter-select {
+    border: none; outline: none; font-weight: 600; color: #1e293b; background: transparent; cursor: pointer; font-family: inherit;
+}
+
+/* Toggle Status (Mendatang / Selesai) */
+.status-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+.toggle-btn {
+    padding: 12px 25px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+.toggle-btn.active {
+    background: #ed8805;
+    color: white;
+    border-color: #ed8805;
+    box-shadow: 0 4px 12px rgba(237, 136, 5, 0.3);
+}
+.badge-count {
+    background: #e2e8f0;
+    color: #64748b;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 12px;
+}
+.active .badge-count {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* Empty State (Kotak Putus-putus) */
+.empty-state {
+    border: 2px dashed #ffedd5;
+    background-color: #fff7ed;
+    border-radius: 20px;
+    padding: 80px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+.icon-clock {
+    width: 80px;
+    height: 80px;
+    background: #ffedd5;
+    color: #ed8805;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+.empty-state h2 { margin: 0; color: #1e293b; font-size: 20px; font-weight: 800; }
+.empty-state p { margin: 0; color: #94a3b8; font-size: 15px; font-weight: 600; }
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    .search-container { flex-direction: column; align-items: stretch; gap: 10px; }
+    .divider { display: none; }
+    .status-toggle { flex-direction: column; }
+}

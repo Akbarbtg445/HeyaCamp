@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acara Komunitas - HeyaCamp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="ak.css">
+</head>
+<body>
+
+     <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
+            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li>
+                <a href="ca.html">
+                    <i class="fa-solid fa-tent"></i> 
+                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
+                </a>
+            </li>
+            <li><a href="#"><i class="fa-regular fa-calendar"></i> Acara</a></li>
+            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="header-section">
+            <h1>Acara <span>Komunitas</span></h1>
+            <p>Ikuti keseruan kegiatan outdoor</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
+                <input type="text" placeholder="Cari event seru...">
+            </div>
+            <div class="divider"></div>
+            <div class="filter-box" style="display: flex; align-items: center; gap: 10px;">
+                <i class="fa-solid fa-filter" style="color:#94a3b8;"></i>
+                <select class="filter-select">
+                    <option>Semua Lokasi</option>
+                    <option>Jawa Barat</option>
+                    <option>Jawa Tengah</option>
+                    <option>Jawa Timur</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="status-toggle">
+            <button class="toggle-btn active" onclick="switchTab(this)">
+                <i class="fa-regular fa-clock"></i> Mendatang
+            </button>
+            <button class="toggle-btn" onclick="switchTab(this)">
+                <i class="fa-solid fa-history"></i> Selesai <span class="badge-count"></span>
+            </button>
+        </div>
+
+        <div id="eventList">
+            <div class="empty-state">
+                <div class="icon-clock">
+                    <i class="fa-regular fa-clock"></i>
+                </div>
+                <h2>Belum ada event mendatang.</h2>
+                <p>Jadilah yang pertama membuat event!</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(btn) {
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const eventList = document.getElementById('eventList');
+            
+            if(btn.innerText.includes('Selesai')) {
+                eventList.innerHTML = `
+                    <div style="text-align:center; color:#94a3b8; padding:80px 0;">
+                        <i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:15px;"></i>
+                        <p>Memuat event yang sudah selesai...</p>
+                    </div>
+                `;
+            } else {
+                eventList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon-clock">
+                            <i class="fa-regular fa-clock"></i>
+                        </div>
+                        <h2>Belum ada event mendatang.</h2>
+                        <p>Jadilah yang pertama membuat event!</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
