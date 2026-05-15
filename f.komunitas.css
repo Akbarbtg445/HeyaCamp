@@ -11,15 +11,11 @@ body {
     background-size: 25px 25px;
     color: #333;
     margin: 0;
-    padding: 20px; 
-}
-
-h2 { 
-    color: #2d6a4f; 
+    padding: 20px;
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR DESKTOP (PILL-SHAPE)
    ========================================= */
 .navbar {
     display: flex;
@@ -30,12 +26,10 @@ h2 {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 0 auto 20px;
 }
 
 .nav-logo img {
@@ -54,7 +48,7 @@ h2 {
 
 .nav-links li a {
     text-decoration: none;
-    color: #4a5568; 
+    color: #4a5568;
     font-weight: 700;
     font-size: 15px;
     display: flex;
@@ -64,11 +58,7 @@ h2 {
 }
 
 .nav-links li a:hover {
-    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
-}
-
-.nav-links li a i {
-    font-size: 18px;
+    color: #ed8805;
 }
 
 .text-stack {
@@ -79,10 +69,12 @@ h2 {
     text-align: center;
 }
 
+/* =========================================
+   3. FORM LAYOUT & CONTAINER
+   ========================================= */
 .form-container {
     max-width: 1100px;
     margin: 40px auto;
-    font-family: 'Nunito', sans-serif;
 }
 
 .form-header {
@@ -99,6 +91,14 @@ h2 {
     border: 1px solid #ddd;
     background: white;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    background: #f1f5f9;
 }
 
 .form-grid {
@@ -113,9 +113,22 @@ h2 {
     border-radius: 15px;
     border: 1px solid #eee;
     margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
-/* Upload Style */
+.form-card h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #1e293b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* =========================================
+   4. INPUT & UPLOAD STYLES
+   ========================================= */
 .upload-box {
     border: 2px dashed #ffead4;
     background: #fffcf9;
@@ -123,23 +136,50 @@ h2 {
     text-align: center;
     border-radius: 10px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.upload-box i { font-size: 30px; color: #ed8805; margin-bottom: 10px; }
+.upload-box:hover {
+    background: #fff4e6;
+    border-color: #ed8805;
+}
 
-/* Input Style */
-.input-group { margin-bottom: 15px; }
-.input-group label { display: block; font-weight: bold; margin-bottom: 8px; }
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #475569;
+}
+
 input, textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #fcfcfc;
+    font-family: inherit;
+    box-sizing: border-box; /* Sangat penting untuk mobile */
 }
 
-/* Preview Card Style */
-.actual-card {
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #ed8805;
+    background: white;
+}
+
+/* =========================================
+   5. PREVIEW CARD & SUBMIT
+   ========================================= */
+.preview-card-container {
+    position: sticky;
+    top: 100px;
+}
+
+.community-card {
     background: white;
     border-radius: 15px;
     overflow: hidden;
@@ -147,13 +187,26 @@ input, textarea {
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-.card-cover { height: 120px; background: #ed8805; }
-.card-content { padding: 15px; position: relative; }
+.preview-cover {
+    height: 120px;
+    background: #ed8805;
+    background-position: center;
+    background-size: cover;
+}
+
 .mini-logo {
-    width: 50px; height: 50px; background: white;
-    border-radius: 10px; position: absolute; top: -25px;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: bold; color: #ed8805; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 10px;
+    position: absolute;
+    top: -25px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
 .btn-submit {
@@ -161,52 +214,77 @@ input, textarea {
     background: #ed8805;
     color: white;
     border: none;
-    padding: 15px;
-    border-radius: 10px;
-    font-weight: bold;
+    padding: 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 16px;
     cursor: pointer;
     margin-top: 20px;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(237, 136, 5, 0.2);
 }
-@media (max-width: 768px) {
-    /* 1. Sembunyikan Navbar Desktop */
-    .navbar { 
-        display: none !important; 
-    }
 
-    /* 2. Sesuaikan Container Form */
-    .container, .form-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 15px !important;
-        margin: 0 !important;
-    }
+.btn-submit:hover {
+    background: #d67a04;
+    transform: translateY(-2px);
+}
 
-    .card {
-        padding: 20px !important;
-        border-radius: 15px !important;
-        box-shadow: none !important; /* Hilangkan shadow agar tidak terlihat sempit */
-        border: 1px solid #e2e8f0;
+/* =========================================
+   6. RESPONSIVE MOBILE (HP)
+   ========================================= */
+@media screen and (max-width: 992px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
-
-    /* 3. Perbesar Input agar Mudah Diklik */
-    input[type="text"], 
-    input[type="url"], 
-    textarea, 
-    select {
-        font-size: 16px !important; /* Standar mobile agar browser tidak auto-zoom */
-        padding: 12px !important;
+    .preview-card-container {
+        position: static;
+        margin-bottom: 30px;
     }
+}
 
-    /* 4. Tombol Submit */
-    .btn-submit, button[type="submit"] {
-        width: 100% !important;
-        padding: 15px !important;
-        font-size: 16px !important;
-    }
-
-    /* 5. Jarak Bawah untuk Bottom Nav */
+@media screen and (max-width: 768px) {
     body {
-        padding-bottom: 100px !important;
-        background-image: none; /* Opsional: hilangkan pola titik agar lebih fokus isi form */
+        padding: 10px;
+        padding-bottom: 100px;
+        background-image: none; /* Bersihkan background di HP agar ringan */
+    }
+
+    .navbar {
+        display: none !important;
+    }
+
+    /* Mobile Bottom Nav */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .form-container {
+        margin: 20px 0;
+    }
+
+    .form-header h1 {
+        font-size: 1.5rem;
+    }
+
+    input, textarea {
+        font-size: 16px !important; /* Mencegah auto-zoom */
     }
 }
+
+/* Utility Mobile Nav */
+.mobile-nav { display: none; }
+.mobile-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px;
+}
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 20px; }
