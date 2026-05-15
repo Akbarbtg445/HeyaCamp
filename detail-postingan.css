@@ -1,16 +1,15 @@
+/* =========================================
+   1. GLOBAL & RESET
+   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
-/* =========================================
-   1. GLOBAL & BACKGROUND
-   ========================================= */
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    background-color: #f8fafc;
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
-    color: #333;
-    margin: 0;
-    padding: 20px;
 }
 
 /* =========================================
@@ -21,67 +20,28 @@ body {
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    padding: 0 25px; /* Kurangi padding atas bawah agar tidak terlalu gemuk */
+    padding: 0 25px;
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
     position: sticky;
     top: 20px;
     z-index: 1000;
-    margin: 0 auto 20px;
-    height: 70px; /* Kunci tinggi navbar */
+    margin: 20px auto;
+    height: 70px;
 }
 
-/* TAMBAHKAN INI: Kunci ukuran logo agar tidak RAKSASA */
-.nav-logo {
-    display: flex;
-    align-items: center;
-}
+.nav-logo img { height: 45px; width: auto; object-fit: contain; }
+.nav-links { display: flex; list-style: none; gap: 20px; padding: 0; }
+.nav-links li a { text-decoration: none; color: #4a5568; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 8px; }
 
-.nav-logo img {
-    height: 45px; /* Kunci tinggi logo */
-    width: auto;  /* Biar lebarnya menyesuaikan otomatis */
-    object-fit: contain;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 20px; /* Perkecil jarak antar menu sedikit agar muat */
-    margin: 0;
-    padding: 0;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #4a5568;
-    font-weight: 700;
-    font-size: 14px; /* Kecilkan sedikit font desktop agar elegan */
-    white-space: nowrap; /* Mencegah teks menu turun ke bawah (wrap) */
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.text-stack {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-    font-size: 14px;
-    text-align: center;
-}
-/* Gaya Utama Halaman Detail */
-body {
-    font-family: 'Nunito', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8fafc;
-}
-
+/* =========================================
+   3. HERO POSTINGAN (DESKTOP)
+   ========================================= */
 .hero-detail {
     position: relative;
     height: 500px;
-    border-radius: 0 0 40px 40px; /* Melengkung di bawah saja */
+    border-radius: 0 0 40px 40px;
     overflow: hidden;
     background-size: cover;
     background-position: center;
@@ -96,66 +56,30 @@ body {
 
 .hero-nav {
     position: absolute;
-    top: 30px;
-    left: 30px;
-    right: 30px;
-    display: flex;
-    justify-content: space-between;
-    z-index: 10;
+    top: 30px; left: 30px; right: 30px;
+    display: flex; justify-content: space-between; z-index: 10;
 }
 
 .btn-circle {
-    width: 45px;
-    height: 45px;
+    width: 45px; height: 45px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-circle:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
+    display: flex; align-items: center; justify-content: center;
+    color: white; text-decoration: none; cursor: pointer; transition: 0.3s;
 }
 
 .hero-content-text {
     position: absolute;
-    bottom: 50px;
-    left: 50px;
-    right: 50px;
-    color: white;
-    z-index: 5;
+    bottom: 50px; left: 50px; right: 50px;
+    color: white; z-index: 5;
 }
 
-.badge-info-container {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-}
+.detail-title { font-size: 48px; font-weight: 800; margin: 0; line-height: 1.2; }
 
-.badge-info {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 18px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    backdrop-filter: blur(5px);
-}
-
-.detail-title {
-    font-size: 48px;
-    font-weight: 800;
-    margin: 0;
-    line-height: 1.2;
-}
-
+/* =========================================
+   4. KONTEN DESKRIPSI (DESKTOP)
+   ========================================= */
 .description-container {
     max-width: 900px;
     margin: -30px auto 50px;
@@ -167,59 +91,52 @@ body {
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
-.description-text {
-    line-height: 1.8;
-    color: #475569;
-    font-size: 18px;
-    white-space: pre-wrap; /* Agar baris baru/enter dari textarea terbaca */
-}
+.description-text { line-height: 1.8; color: #475569; font-size: 18px; white-space: pre-wrap; }
+
 /* =========================================
-   RESPONSIVE DETAIL POSTINGAN (MOBILE)
+   5. RESPONSIVE MOBILE (HP)
    ========================================= */
 @media (max-width: 768px) {
-    /* 1. Sembunyikan Navbar Atas */
-    .navbar { 
-        display: none !important; 
+    .navbar { display: none !important; }
+
+    /* Banner Foto (Penuhi Layar) */
+    .hero-detail {
+        height: 300px !important;
+        border-radius: 0 !important;
     }
 
-    /* 2. Container Postingan (Full Width) */
-    .post-detail-container {
-        padding: 0 !important;
-        width: 100% !important;
-        margin: 0 !important;
+    .hero-content-text {
+        left: 20px; right: 20px; bottom: 40px;
     }
 
-    /* 3. Banner Foto (Penuhi Layar) */
-    .post-banner {
-        height: 250px !important;
-        border-radius: 0 !important; /* Hilangkan lengkungan di HP agar cinematic */
+    .detail-title {
+        font-size: 1.8rem !important;
     }
 
-    /* 4. Konten Teks */
-    .post-content-wrapper {
-        padding: 20px 15px !important;
-        border-radius: 25px 25px 0 0 !important;
-        margin-top: -30px !important; /* Membuat teks sedikit menumpuk di atas foto */
-        background: white;
-        position: relative;
+    /* Konten Teks */
+    .description-container {
+        padding: 30px 20px !important;
+        border-radius: 30px 30px 0 0 !important;
+        margin: -30px 0 0 0 !important;
+        width: auto !important;
     }
 
-    .post-title {
-        font-size: 1.6rem !important;
-        line-height: 1.3 !important;
+    .description-text {
+        font-size: 16px !important;
     }
 
-    /* 5. Info Meta (Lokasi, Tanggal, User) */
-    .post-meta-mobile {
-        display: flex;
+    /* Meta Info Badge */
+    .badge-info-container {
         flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 20px;
-        font-size: 0.85rem;
-        color: #64748b;
+        gap: 8px;
     }
 
-    /* 6. Navigasi Bawah */
+    .badge-info {
+        font-size: 11px !important;
+        padding: 6px 12px !important;
+    }
+
+    /* Navigasi Bawah */
     .mobile-nav {
         display: flex !important;
         position: fixed;
@@ -233,9 +150,7 @@ body {
         border-radius: 20px 20px 0 0;
     }
 
-    body {
-        padding-bottom: 100px !important;
-    }
+    body { padding-bottom: 90px !important; }
 }
 
 /* Sembunyikan Nav Bawah di Desktop */
@@ -245,3 +160,4 @@ body {
     text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px;
 }
 .mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 20px; }
