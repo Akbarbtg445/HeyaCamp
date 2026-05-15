@@ -6,71 +6,48 @@
     <title>Buat Aktivitas Baru - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="f. aktivitas.css">
+    <link rel="stylesheet" href="f.aktivitas.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-     <nav class="navbar">
-        <div class="nav-logo">
-            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
-            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
-            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
-            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
-            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
-            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
-            <li>
-                <a href="ca.html">
-                    <i class="fa-solid fa-tent"></i> 
-                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
-                </a>
-            </li>
-            <li><a href="ak.html"><i class="fa-regular fa-calendar"></i> Acara</a></li>
-            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
-        </ul>
-    </nav>
 
     <div class="container">
-        <a href="aktivitas.html" class="btn-back">
+        <a href="komunitas.html" class="btn-back">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
 
         <div class="form-card">
             <div class="form-header">
                 <h2>Buat Aktivitas Baru</h2>
-                <p>Bagikan cerita petualanganmu dengan komunitas</p>
             </div>
 
             <form id="formAktivitas">
-                <div class="form-label">Tautan Foto (Minimal 1 untuk Sampul)</div>
+                <div class="form-label">Foto Aktivitas</div>
                 <div class="photo-links-container">
                     <div class="link-row">
-                        <span class="badge-cover">Sampul</span>
-                        <input type="url" id="photo1" class="form-control" placeholder="Paste link foto utama" required>
+                        <span class="badge-cover">Cover</span>
+                        <input type="url" id="photo1" class="form-control" placeholder="Paste link foto utama (Pinterest/ImgBB)" required>
                     </div>
-                    <div class="link-row">
-                        <div class="badge-empty"></div>
-                        <input type="url" id="photo2" class="form-control" placeholder="Link foto tambahan 1 (Opsional)">
-                    </div>
-                    <div class="link-row">
-                        <div class="badge-empty"></div>
-                        <input type="url" id="photo3" class="form-control" placeholder="Link foto tambahan 2 (Opsional)">
-                    </div>
+                    <p style="color: #ef4444; font-size: 12px; margin-top: 5px;">* Minimal 1 foto (cover)</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Judul Aktivitas</label>
-                    <input type="text" id="title" class="form-control" placeholder="Contoh: Camping Telaga Sidringo" required>
+                    <input type="text" id="title" class="form-control" placeholder="Contoh: Camping di Danau Toba" required>
                 </div>
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label class="form-label">Pilih Komunitas</label>
-                        <select id="communitySelect" class="form-control" required>
-                            <option value="" disabled selected>Memuat komunitas...</option>
+                        <label class="form-label">Kategori</label>
+                        <select id="category" class="form-control">
+                            <option value="" disabled selected>Pilih kategori</option>
+                            <option>Camping</option>
+                            <option>Hiking</option>
+                            <option>Glamping</option>
+                            <option>Touring</option>
+                            <option>Review</option>
+                            <option>Tutorial</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -79,28 +56,21 @@
                     </div>
                 </div>
 
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Lokasi</label>
-                        <input type="text" id="location" class="form-control" placeholder="Gunung / Kota / Tempat" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Kategori</label>
-                        <select id="category" class="form-control">
-                            <option>Camping</option>
-                            <option>Hiking</option>
-                            <option>Glamping</option>
-                            <option>Touring</option>
-                            <option>Other</option>
-                            <option>Review</option>
-                            <option>Tutorial</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Pilih Komunitas (Region)</label>
+                    <select id="communitySelect" class="form-control" required>
+                        <option value="" disabled selected>Memuat komunitas...</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Cerita Singkat</label>
-                    <textarea id="description" class="form-control" rows="4" placeholder="Ceritakan sedikit tentang kegiatan ini..."></textarea>
+                    <label class="form-label">Lokasi</label>
+                    <input type="text" id="location" class="form-control" placeholder="Lokasi kegiatan" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea id="description" class="form-control" rows="6" placeholder="Ceritakan pengalaman anda... (Support Markdown)"></textarea>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn-submit">Posting ke Komunitas</button>
@@ -113,43 +83,32 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    async function fetchCommunities() {
-    const select = document.getElementById('communitySelect');
-    
-    try {
-        console.log("Mengambil data dari tabel Komunitas...");
-        
-        // MENGAMBIL DATA DARI TABEL 'Komunitas' KOLOM 'nama'
-        const { data, error } = await _supabase
-            .from('Komunitas') 
-            .select('nama');
+        // 1. Memuat daftar komunitas dari tabel 'Komunitas'
+        async function fetchCommunities() {
+            const select = document.getElementById('communitySelect');
+            try {
+                const { data, error } = await _supabase
+                    .from('Komunitas') 
+                    .select('nama');
 
-        if (error) throw error;
+                if (error) throw error;
 
-        if (data && data.length > 0) {
-            let html = '<option value="" disabled selected>Pilih Komunitas</option>';
-            
-            data.forEach(item => {
-                // Pastikan menggunakan item.nama sesuai kolom di database kamu
-                html += `<option value="${item.nama}">${item.nama}</option>`;
-            });
-            
-            select.innerHTML = html;
-            console.log("Daftar komunitas berhasil dimuat!");
-        } else {
-            select.innerHTML = '<option value="" disabled>Belum ada komunitas di database</option>';
+                let html = '<option value="" disabled selected>Pilih Komunitas</option>';
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        html += `<option value="${item.nama}">${item.nama}</option>`;
+                    });
+                } else {
+                    html = '<option value="" disabled>Belum ada komunitas</option>';
+                }
+                select.innerHTML = html;
+            } catch (err) {
+                console.error("Error:", err.message);
+                select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
+            }
         }
-        
-    } catch (err) {
-        console.error("Gagal memuat komunitas:", err.message);
-        select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
-    }
-}
 
-// Jalankan fungsi saat halaman siap
-document.addEventListener('DOMContentLoaded', fetchCommunities);
-
-        // 2. Event Listener Form Submit (Hanya SATU saja)
+        // 2. Submit Data ke Tabel 'Aktivitas'
         document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -158,14 +117,12 @@ document.addEventListener('DOMContentLoaded', fetchCommunities);
 
             const payload = {
                 title: document.getElementById('title').value,
-                community_name: document.getElementById('communitySelect').value, // Ambil dari select
+                community_name: document.getElementById('communitySelect').value,
                 activity_date: document.getElementById('date').value,
                 location: document.getElementById('location').value,
                 category: document.getElementById('category').value,
                 description: document.getElementById('description').value,
-                photo_url: document.getElementById('photo1').value,
-                photo_extra1: document.getElementById('photo2').value,
-                photo_extra2: document.getElementById('photo3').value
+                photo_url: document.getElementById('photo1').value
             };
 
             const { error } = await _supabase.from('Aktivitas').insert([payload]);
@@ -180,7 +137,6 @@ document.addEventListener('DOMContentLoaded', fetchCommunities);
             }
         });
 
-        // Jalankan fetch saat halaman siap
         document.addEventListener('DOMContentLoaded', fetchCommunities);
     </script>
 </body>
