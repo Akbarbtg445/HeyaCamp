@@ -163,3 +163,64 @@ body {
 .mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
 .mobile-nav-item.active { color: #ed8805; }
 .mobile-nav-item i { font-size: 20px; }
+/* =========================================
+   PERBAIKAN AUTHOR INFO (UKURAN KECIL)
+   ========================================= */
+.author-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    margin-top: 10px;
+}
+
+.author-avatar { 
+    width: 55px;   /* Ukuran lingkaran avatar */
+    height: 55px; 
+    border-radius: 50%; 
+    background: #e2e8f0; 
+    overflow: hidden; 
+    position: relative; 
+    flex-shrink: 0; /* Biar gak gepeng kalau teks panjang */
+    border: 2px solid #f1f5f9;
+}
+
+.author-avatar img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.author-badge { 
+    position: absolute; 
+    bottom: -2px; 
+    right: -2px; 
+    background: #ed8805; 
+    color: white; 
+    width: 20px; 
+    height: 20px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 10px; 
+    border: 2px solid white; 
+    font-weight: bold; 
+    z-index: 5;
+}
+
+/* Tulisan Nama & Status di Samping */
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-details strong {
+    font-size: 16px;
+    color: #1e293b;
+    line-height: 1.2;
+}
+
+.author-details span {
+    font-size: 13px;
+    font-weight: 600;
+}
