@@ -1,74 +1,66 @@
-/* =========================================
-   1. GLOBAL & BACKGROUND POLA TITIK
-   ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
+/* =========================================
+   1. GLOBAL & BACKGROUND
+   ========================================= */
 body {
-    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Nunito', sans-serif;
     background-color: #ffffff;
-    /* Efek Pola Titik (Dotted Background) */
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
     color: #333;
     margin: 0;
-    padding: 20px; 
-}
-
-h2 { 
-    color: #2d6a4f; 
+    padding: 20px;
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR DESKTOP
    ========================================= */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    padding: 10px 25px;
+    padding: 0 25px; /* Kurangi padding atas bawah agar tidak terlalu gemuk */
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 0 auto 20px;
+    height: 70px; /* Kunci tinggi navbar */
+}
+
+/* TAMBAHKAN INI: Kunci ukuran logo agar tidak RAKSASA */
+.nav-logo {
+    display: flex;
+    align-items: center;
 }
 
 .nav-logo img {
-    height: 40px;
+    height: 45px; /* Kunci tinggi logo */
+    width: auto;  /* Biar lebarnya menyesuaikan otomatis */
     object-fit: contain;
 }
 
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 25px;
+    gap: 20px; /* Perkecil jarak antar menu sedikit agar muat */
     margin: 0;
     padding: 0;
-    align-items: center;
 }
 
 .nav-links li a {
     text-decoration: none;
-    color: #4a5568; 
+    color: #4a5568;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px; /* Kecilkan sedikit font desktop agar elegan */
+    white-space: nowrap; /* Mencegah teks menu turun ke bawah (wrap) */
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: color 0.3s ease;
-}
-
-.nav-links li a:hover {
-    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
-}
-
-.nav-links li a i {
-    font-size: 18px;
 }
 
 .text-stack {
@@ -181,3 +173,75 @@ body {
     font-size: 18px;
     white-space: pre-wrap; /* Agar baris baru/enter dari textarea terbaca */
 }
+/* =========================================
+   RESPONSIVE DETAIL POSTINGAN (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Sembunyikan Navbar Atas */
+    .navbar { 
+        display: none !important; 
+    }
+
+    /* 2. Container Postingan (Full Width) */
+    .post-detail-container {
+        padding: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* 3. Banner Foto (Penuhi Layar) */
+    .post-banner {
+        height: 250px !important;
+        border-radius: 0 !important; /* Hilangkan lengkungan di HP agar cinematic */
+    }
+
+    /* 4. Konten Teks */
+    .post-content-wrapper {
+        padding: 20px 15px !important;
+        border-radius: 25px 25px 0 0 !important;
+        margin-top: -30px !important; /* Membuat teks sedikit menumpuk di atas foto */
+        background: white;
+        position: relative;
+    }
+
+    .post-title {
+        font-size: 1.6rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* 5. Info Meta (Lokasi, Tanggal, User) */
+    .post-meta-mobile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    /* 6. Navigasi Bawah */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 20px 20px 0 0;
+    }
+
+    body {
+        padding-bottom: 100px !important;
+    }
+}
+
+/* Sembunyikan Nav Bawah di Desktop */
+.mobile-nav { display: none; }
+.mobile-nav-item {
+    display: flex; flex-direction: column; align-items: center;
+    text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px;
+}
+.mobile-nav-item.active { color: #ed8805; }
