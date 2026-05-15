@@ -63,7 +63,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Judul Aktivitas</label>
-                    <input type="text" id="title" class="form-control" placeholder="Contoh: Camping Santai di Ranu Kumbolo" required>
+                    <input type="text" id="title" class="form-control" placeholder="Contoh: Camping Telaga Sidringo" required>
                 </div>
 
                 <div class="grid-2">
@@ -113,35 +113,41 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // 1. Fungsi memuat daftar komunitas
-        async function fetchCommunities() {
-            const select = document.getElementById('communitySelect');
-            try {
-                const { data: communities, error } = await _supabase
-                    .from('Aktivitas') 
-                    .select('community_name')
-                    .not('community_name', 'is', null);
+    async function fetchCommunities() {
+    const select = document.getElementById('communitySelect');
+    
+    try {
+        console.log("Mengambil data dari tabel Komunitas...");
+        
+        // MENGAMBIL DATA DARI TABEL 'Komunitas' KOLOM 'nama'
+        const { data, error } = await _supabase
+            .from('Komunitas') 
+            .select('nama');
 
-                if (error) throw error;
+        if (error) throw error;
 
-                // Hilangkan duplikat
-                const uniqueCommunities = [...new Set(communities.map(item => item.community_name))];
-
-                let html = '<option value="" disabled selected>Pilih Komunitas</option>';
-                if (uniqueCommunities.length > 0) {
-                    uniqueCommunities.forEach(name => {
-                        html += `<option value="${name}">${name}</option>`;
-                    });
-                } else {
-                    html = '<option value="" disabled>Belum ada komunitas terdaftar</option>';
-                }
-                
-                select.innerHTML = html;
-            } catch (err) {
-                console.error("Gagal memuat komunitas:", err);
-                select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
-            }
+        if (data && data.length > 0) {
+            let html = '<option value="" disabled selected>Pilih Komunitas</option>';
+            
+            data.forEach(item => {
+                // Pastikan menggunakan item.nama sesuai kolom di database kamu
+                html += `<option value="${item.nama}">${item.nama}</option>`;
+            });
+            
+            select.innerHTML = html;
+            console.log("Daftar komunitas berhasil dimuat!");
+        } else {
+            select.innerHTML = '<option value="" disabled>Belum ada komunitas di database</option>';
         }
+        
+    } catch (err) {
+        console.error("Gagal memuat komunitas:", err.message);
+        select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
+    }
+}
+
+// Jalankan fungsi saat halaman siap
+document.addEventListener('DOMContentLoaded', fetchCommunities);
 
         // 2. Event Listener Form Submit (Hanya SATU saja)
         document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
