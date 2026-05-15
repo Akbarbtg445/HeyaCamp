@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Katalog Alat</title>
+    <title>Katalog Alat - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="coba.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Gaya Dasar */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
         .quantity-control {
             display: flex;
             align-items: center;
@@ -16,93 +24,61 @@
             border-radius: 8px;
             width: fit-content;
         }
+
         .btn-qty {
             background: #1e5631;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 30px; height: 30px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
         }
-        .qty-value {
-            font-weight: bold;
-            min-width: 20px;
-            text-align: center;
-        }
-        /* Gaya tambahan untuk deskripsi agar rapi */
-        .card-desc {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin: 5px 0 10px 0;
-            line-height: 1.4;
-        }
+
+        /* RESPONSIVE MOBILE */
         @media (max-width: 768px) {
-    /* 1. Sembunyikan Navbar Atas yang lama */
-    .navbar {
-        display: none; 
-    }
+            .navbar { display: none; }
+            
+            .mobile-nav {
+                display: flex !important;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 70px;
+                background: white;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+                z-index: 9999;
+                border-radius: 20px 20px 0 0;
+            }
 
-    /* 2. Buat Navbar Baru di Bawah (Fixed Bottom) */
-    .mobile-nav {
-        display: flex !important; /* Pastikan muncul di HP */
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 70px;
-        background: white;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        z-index: 9999;
-        border-radius: 20px 20px 0 0;
-        padding-bottom: 5px;
-    }
+            .grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 Kolom di HP */
+                gap: 12px;
+            }
 
-    .mobile-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: #94a3b8;
-        font-size: 10px;
-        gap: 4px;
-    }
+            body { padding-bottom: 100px; }
+        }
 
-    .mobile-nav-item i {
-        font-size: 20px;
-    }
-
-    .mobile-nav-item.active {
-        color: #ed8805;
-    }
-
-    /* 3. Beri jarak di bawah body agar konten tidak tertutup navbar baru */
-    body {
-        padding-bottom: 80px;
-    }
-}
-
-/* Sembunyikan Mobile Nav di Desktop */
-.mobile-nav {
-    display: none;
-}
+        .mobile-nav { display: none; }
+        .mobile-nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px;
+        }
+        .mobile-nav-item.active { color: #ed8805; }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+   <nav class="navbar">
         <div class="nav-logo">
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
-            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
             <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
-            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i>Lokasi</a></li>
-            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i>Cara Sewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
             <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
             <li>
                 <a href="ca.html">
@@ -114,68 +90,34 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
+
     <div class="mobile-nav">
-    <a href="index.html" class="mobile-nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
-    </a>
-    <a href="katalog.html" class="mobile-nav-item">
-        <i class="fa-solid fa-campground"></i>
-        <span>Sewa</span>
-    </a>
-    <a href="komunitas.html" class="mobile-nav-item">
-        <i class="fa-regular fa-user"></i>
-        <span>Komunitas</span>
-    </a>
-    <a href="aktivitas.html" class="mobile-nav-item">
-        <i class="fa-regular fa-calendar"></i>
-        <span>Aktivitas</span>
-    </a>
-    <a href="ca.html" class="mobile-nav-item">
-        <i class="fa-solid fa-tent"></i>
-        <span>Area</span>
-    </a>
-</div>
+        <a href="index.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Beranda</span></a>
+        <a href="katalog.html" class="mobile-nav-item active"><i class="fa-solid fa-campground"></i><span>Sewa</span></a>
+        <a href="komunitas.html" class="mobile-nav-item"><i class="fa-regular fa-user"></i><span>Komunitas</span></a>
+        <a href="aktivitas.html" class="mobile-nav-item"><i class="fa-regular fa-calendar"></i><span>Aktivitas</span></a>
+        <a href="ca.html" class="mobile-nav-item"><i class="fa-solid fa-tent"></i><span>Area</span></a>
+    </div>
 
     <div class="container">
-        <h2>Pilih Alat Outdoor</h2>
+        <h2 style="margin-top: 20px;">Pilih Alat Outdoor</h2>
         <div class="grid" id="katalogList"></div>
 
-        <div class="card" style="margin-top: 30px;">
+        <div class="card" style="margin-top: 30px; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
             <h3>Data Penyewa</h3>
-            
-            <div style="margin-bottom: 15px;">
-                <label>Nama Lengkap</label>
-                <input type="text" id="namaPenyewa" placeholder="Masukkan nama Anda..." style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <label>Nomor HP (WhatsApp)</label>
-                <input type="tel" id="hpPenyewa" placeholder="Contoh: 08123456789" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <label>Tanggal Sewa</label>
-                <input type="date" id="tglSewa" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;">
-            </div>
-
-            <div style="margin-bottom: 15px;">
-                <label>Alamat</label>
-                <textarea id="alamatPenyewa" placeholder="Masukkan alamat lengkap..." style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; height: 80px;"></textarea>
-            </div>
-            
-            <button id="btnSewa" class="btn" style="background: #1e5631; font-size: 1.1rem;" onclick="prosesSewaSemua()">Sewa Sekarang (Semua Item)</button>
+            <input type="text" id="namaPenyewa" placeholder="Nama Lengkap" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="tel" id="hpPenyewa" placeholder="Nomor WhatsApp" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="date" id="tglSewa" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
+            <textarea id="alamatPenyewa" placeholder="Alamat Lengkap" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; height: 80px;"></textarea>
+            <button id="btnSewa" class="btn" style="background: #1e5631; width: 100%; color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;" onclick="prosesSewaSemua()">Sewa Sekarang</button>
         </div>
     </div>
 
     <script>
         const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
-        
-        const { createClient } = supabase;
-        const _supabase = createClient(supabaseUrl, supabaseKey);
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Menambahkan properti 'desc' pada data alat
         const alatOutdoor = [
             { id: 1, nama: "Tenda Baseway Pavilo", harga: 35000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Tenda%20Pavilo.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
             { id: 2, nama: "Tenda WildShell JayaDipa", harga: 35000, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20wild%20shel.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
@@ -196,22 +138,26 @@
 
         let cart = {};
 
+        // RENDER KATALOG (Hanya dijalankan sekali saat page load)
         const katalogList = document.getElementById('katalogList');
         alatOutdoor.forEach(alat => {
             cart[alat.id] = 0;
             katalogList.innerHTML += `
-                <div class="card">
-                    <img src="${alat.img}" alt="${alat.nama}" style="width:100%; border-radius: 8px;">
-                    <h3 style="margin-bottom: 0;">${alat.nama}</h3>
-                    <p class="card-desc">${alat.desc}</p> <!-- Deskripsi alat -->
-                    <p style="font-weight: bold; color: #1e5631;">Rp ${alat.harga.toLocaleString()}/hari</p>
-                    <div class="quantity-control">
-                        <button class="btn-qty" onclick="updateQty(${alat.id}, -1)">-</button>
-                        <span class="qty-value" id="qty-${alat.id}">0</span>
-                        <button class="btn-qty" onclick="updateQty(${alat.id}, 1)">+</button>
+                <div class="card" style="background: white; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <img src="${alat.img}" alt="${alat.nama}" style="width:100%; height: 140px; object-fit: contain; border-radius: 8px;">
+                        <h3 style="font-size: 1rem; margin: 10px 0 5px;">${alat.nama}</h3>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">${alat.desc}</p>
                     </div>
-                </div>
-            `;
+                    <div>
+                        <p style="font-weight: bold; color: #1e5631;">Rp ${alat.harga.toLocaleString()}/hari</p>
+                        <div class="quantity-control">
+                            <button class="btn-qty" onclick="updateQty(${alat.id}, -1)">-</button>
+                            <span class="qty-value" id="qty-${alat.id}">0</span>
+                            <button class="btn-qty" onclick="updateQty(${alat.id}, 1)">+</button>
+                        </div>
+                    </div>
+                </div>`;
         });
 
         function updateQty(id, delta) {
@@ -227,7 +173,6 @@
             const hp = document.getElementById('hpPenyewa').value;
             const tgl = document.getElementById('tglSewa').value;
             const alamat = document.getElementById('alamatPenyewa').value;
-            const btnSewa = document.getElementById('btnSewa');
 
             let itemTerpilih = [];
             let totalHarga = 0;
@@ -235,52 +180,26 @@
             alatOutdoor.forEach(alat => {
                 let qty = cart[alat.id];
                 if (qty > 0) {
-                    itemTerpilih.push({
-                        nama: alat.nama,
-                        harga: alat.harga,
-                        jumlah: qty,
-                        subtotal: alat.harga * qty
-                    });
+                    itemTerpilih.push({ nama: alat.nama, jumlah: qty, subtotal: alat.harga * qty });
                     totalHarga += (alat.harga * qty);
                 }
             });
 
             if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
-                alert("Harap lengkapi data diri dan tambah minimal 1 alat!");
+                alert("Lengkapi data dan pilih minimal 1 alat!");
                 return;
             }
 
-            btnSewa.innerText = "Mengirim Pesanan...";
-            btnSewa.disabled = true;
-
             try {
-                const { error } = await _supabase
-                    .from('Pesanan')
-                    .insert([
-                        {
-                            nama_penyewa: nama,
-                            nomor_hp: hp,
-                            tanggal_sewa: tgl,
-                            alamat: alamat,
-                            item_disewa: itemTerpilih,
-                            total_harga: totalHarga,
-                            status: 'Menunggu Konfirmasi'
-                        }
-                    ]);
-
+                const { error } = await _supabase.from('Pesanan').insert([{
+                    nama_penyewa: nama, nomor_hp: hp, tanggal_sewa: tgl,
+                    alamat: alamat, item_disewa: itemTerpilih, total_harga: totalHarga
+                }]);
                 if (error) throw error;
-
-                alert(`Pemesanan Berhasil!\nTotal: Rp ${totalHarga.toLocaleString()}`);
-                
-                const rincianWA = itemTerpilih.map(i => `- ${i.nama} (x${i.jumlah})`).join('\n');
-                const pesanWA = `Halo Admin HeyaCamp, saya ${nama} ingin menyewa:\n${rincianWA}\n\nTanggal: ${tgl}\nTotal: Rp ${totalHarga.toLocaleString()}`;
-                window.open(`https://wa.me/628123456789?text=${encodeURIComponent(pesanWA)}`, '_blank');
-
+                alert("Pesanan berhasil dikirim!");
+                window.open(`https://wa.me/628123456789?text=${encodeURIComponent("Halo, saya " + nama + " ingin menyewa alat...")}`);
             } catch (err) {
-                alert("Gagal memproses pesanan: " + err.message);
-            } finally {
-                btnSewa.innerText = "Sewa Sekarang (Semua Item)";
-                btnSewa.disabled = false;
+                alert("Error: " + err.message);
             }
         }
     </script>
