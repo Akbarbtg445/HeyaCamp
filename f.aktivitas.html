@@ -11,6 +11,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+     <nav class="navbar">
+        <div class="nav-logo">
+            <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
+            <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
+            <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
+            <li>
+                <a href="ca.html">
+                    <i class="fa-solid fa-tent"></i> 
+                    <span class="text-stack"><span>Camp</span><span>Area</span></span>
+                </a>
+            </li>
+            <li><a href="ak.html"><i class="fa-regular fa-calendar"></i> Acara</a></li>
+            <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
+        </ul>
+    </nav>
 
     <div class="container">
         <a href="aktivitas.html" class="btn-back">
@@ -47,11 +68,11 @@
 
                 <div class="grid-2">
                     <div class="form-group">
-    <label class="form-label">Pilih Komunitas</label>
-    <select id="communitySelect" class="form-control" required>
-        <option value="" disabled selected>Memuat komunitas...</option>
-    </select>
-</div>
+                        <label class="form-label">Pilih Komunitas</label>
+                        <select id="communitySelect" class="form-control" required>
+                            <option value="" disabled selected>Memuat komunitas...</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">Tanggal</label>
                         <input type="date" id="date" class="form-control" required>
@@ -70,7 +91,6 @@
                             <option>Hiking</option>
                             <option>Glamping</option>
                             <option>Touring</option>
-                            <option>Hiking</option>
                             <option>Other</option>
                             <option>Review</option>
                             <option>Tutorial</option>
@@ -93,6 +113,37 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+        // 1. Fungsi memuat daftar komunitas
+        async function fetchCommunities() {
+            const select = document.getElementById('communitySelect');
+            try {
+                const { data: communities, error } = await _supabase
+                    .from('Aktivitas') 
+                    .select('community_name')
+                    .not('community_name', 'is', null);
+
+                if (error) throw error;
+
+                // Hilangkan duplikat
+                const uniqueCommunities = [...new Set(communities.map(item => item.community_name))];
+
+                let html = '<option value="" disabled selected>Pilih Komunitas</option>';
+                if (uniqueCommunities.length > 0) {
+                    uniqueCommunities.forEach(name => {
+                        html += `<option value="${name}">${name}</option>`;
+                    });
+                } else {
+                    html = '<option value="" disabled>Belum ada komunitas terdaftar</option>';
+                }
+                
+                select.innerHTML = html;
+            } catch (err) {
+                console.error("Gagal memuat komunitas:", err);
+                select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
+            }
+        }
+
+        // 2. Event Listener Form Submit (Hanya SATU saja)
         document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -101,7 +152,7 @@
 
             const payload = {
                 title: document.getElementById('title').value,
-                community_name: document.getElementById('community').value,
+                community_name: document.getElementById('communitySelect').value, // Ambil dari select
                 activity_date: document.getElementById('date').value,
                 location: document.getElementById('location').value,
                 category: document.getElementById('category').value,
@@ -122,57 +173,9 @@
                 window.location.href = 'komunitas.html';
             }
         });
-        // 1. Fungsi untuk memuat daftar komunitas ke dalam dropdown
-async function fetchCommunities() {
-    const select = document.getElementById('communitySelect');
-    
-    try {
-        // Ambil data dari tabel yang menyimpan daftar komunitas kamu
-        // Contoh: tabel bernama 'Komunitas' dengan kolom 'name'
-        const { data: communities, error } = await _supabase
-            .from('Aktivitas') // Ganti dengan nama tabel komunitasmu jika berbeda
-            .select('community_name')
-            .not('community_name', 'is', null);
 
-        if (error) throw error;
-
-        // Hilangkan duplikat nama komunitas
-        const uniqueCommunities = [...new Set(communities.map(item => item.community_name))];
-
-        let html = '<option value="" disabled selected>Pilih Komunitas</option>';
-        uniqueCommunities.forEach(name => {
-            html += `<option value="${name}">${name}</option>`;
-        });
-        
-        select.innerHTML = html;
-    } catch (err) {
-        console.error("Gagal memuat komunitas:", err);
-        select.innerHTML = '<option value="" disabled>Gagal memuat data</option>';
-    }
-}
-
-// 2. Sesuaikan pengambilan data saat submit form
-document.getElementById('formAktivitas').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    
-    const payload = {
-        title: document.getElementById('title').value,
-        // Ambil nama komunitas dari select dropdown
-        community_name: document.getElementById('communitySelect').value, 
-        activity_date: document.getElementById('date').value,
-        location: document.getElementById('location').value,
-        category: document.getElementById('category').value,
-        description: document.getElementById('description').value, // Pastikan id textarea sesuai
-        photo_url: document.getElementById('photo1').value
-    };
-
-    const { error } = await _supabase.from('Aktivitas').insert([payload]);
-    // ... sisa kode alert dan redirect
-});
-
-// Panggil fungsi saat halaman dimuat
-window.onload = fetchCommunities;
+        // Jalankan fetch saat halaman siap
+        document.addEventListener('DOMContentLoaded', fetchCommunities);
     </script>
 </body>
 </html>
