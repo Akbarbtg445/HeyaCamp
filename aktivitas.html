@@ -84,99 +84,117 @@
     </main>
 
     <script>
-        // 1. Konfigurasi Supabase
-        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
-        const { createClient } = supabase;
-        const _supabase = createClient(supabaseUrl, supabaseKey);
+    // 1. Konfigurasi Supabase
+    const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // 2. Fungsi untuk mengambil data dari tabel 'Aktivitas'
-        async function fetchActivities() {
-            const grid = document.getElementById('activityGrid');
-            
-            try {
-                const { data: activities, error } = await _supabase
-                    .from('Aktivitas') // Pastikan nama tabel ini benar-benar ada di Supabase
-                    .select('*')
-                    .order('created_at', { ascending: false });
+    // 2. Fungsi mengambil data Aktivitas
+    async function fetchActivities() {
+        const grid = document.getElementById('activityGrid');
+        try {
+            const { data: activities, error } = await _supabase
+                .from('Aktivitas')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-                if (error) throw error;
+            if (error) throw error;
 
-                if (activities && activities.length > 0) {
-                    let html = '';
-                   // Cari bagian loop activities.forEach di aktivitas.html
-activities.forEach(act => {
-    const dateObj = new Date(act.activity_date);
-    const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            if (activities && activities.length > 0) {
+                let html = '';
+                activities.forEach(act => {
+                    const dateObj = new Date(act.activity_date);
+                    const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Tambahkan tag <a> yang membungkus seluruh card
-    html += `
-    <a href="detail-postingan.html?id=${act.id}" class="activity-card-link" style="text-decoration: none; color: inherit;">
-        <div class="activity-card">
-            <div class="card-img-wrapper">
-                <img src="${act.photo_url}" alt="${act.title}">
-                <div class="card-tags">
-                    <span class="tag-community">${act.community_name}</span>
-                    <span class="tag-location"><i class="fa-solid fa-location-dot"></i> ${act.location}</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <h3 class="card-title">${act.title}</h3>
-                <div class="card-date"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>
-                
-            </div>
-        </div>
-    </a>`;
-});
-                    grid.innerHTML = html;
-                } else {
-                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Belum ada aktivitas. Yuk jadi yang pertama berbagi!</p>';
-                }
-            } catch (err) {
-                console.error("Gagal memuat:", err);
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 50px;">Gagal memuat data: ${err.message}</p>`;
-            }
-        }
-
-        // Panggil fungsi saat halaman dibuka
-        document.addEventListener('DOMContentLoaded', fetchActivities);
-        // Fungsi untuk memfilter aktivitas secara real-time
-function setupFilters() {
-    const searchInput = document.getElementById('searchInput');
-    const filterCategory = document.getElementById('filterCategory');
-    const filterRegion = document.getElementById('filterRegion');
-
-    const runFilter = () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const categoryTerm = filterCategory.value;
-        const regionTerm = filterRegion.value;
-
-        const cards = document.querySelectorAll('.activity-card-link');
-        
-        cards.forEach(card => {
-            const title = card.querySelector('.card-title').innerText.toLowerCase();
-            const location = card.querySelector('.tag-location').innerText.toLowerCase();
-            const category = card.getAttribute('data-category'); // Pastikan tambahkan attribute ini saat render
-            const region = card.querySelector('.tag-community').innerText;
-
-            const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
-            const matchesCategory = categoryTerm === "" || category === categoryTerm;
-            const matchesRegion = regionTerm === "" || region === regionTerm;
-
-            if (matchesSearch && matchesCategory && matchesRegion) {
-                card.style.display = "block";
+                    // PERBAIKAN: Menambahkan data-category agar filter berfungsi
+                    html += `
+                    <a href="detail-postingan.html?id=${act.id}" class="activity-card-link" data-category="${act.category}" style="text-decoration: none; color: inherit;">
+                        <div class="activity-card">
+                            <div class="card-img-wrapper">
+                                <img src="${act.photo_url}" alt="${act.title}">
+                                <div class="card-tags">
+                                    <span class="tag-community">${act.community_name}</span>
+                                    <span class="tag-location"><i class="fa-solid fa-location-dot"></i> ${act.location}</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">${act.title}</h3>
+                                <div class="card-date"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>
+                            </div>
+                        </div>
+                    </a>`;
+                });
+                grid.innerHTML = html;
             } else {
-                card.style.display = "none";
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Belum ada aktivitas.</p>';
             }
-        });
-    };
+        } catch (err) {
+            console.error(err);
+            grid.innerHTML = `<p style="text-align: center; color: red;">Gagal memuat data.</p>`;
+        }
+    }
 
-    searchInput.addEventListener('input', runFilter);
-    filterCategory.addEventListener('change', runFilter);
-    filterRegion.addEventListener('change', runFilter);
-}
+    // 3. FUNGSI BARU: Mengambil daftar Region dari tabel Komunitas
+    async function fetchRegions() {
+        const filterRegion = document.getElementById('filterRegion');
+        try {
+            const { data, error } = await _supabase
+                .from('Komunitas')
+                .select('nama');
 
-// Panggil setupFilters() di dalam DOMContentLoaded setelah fetchActivities selesai
-    </script>
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                let html = '<option value="">Semua Region</option>';
+                data.forEach(item => {
+                    html += `<option value="${item.nama}">${item.nama}</option>`;
+                });
+                filterRegion.innerHTML = html;
+            }
+        } catch (err) {
+            console.error("Gagal memuat region:", err);
+        }
+    }
+
+    // 4. Fungsi Filter Real-time
+    function setupFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const filterCategory = document.getElementById('filterCategory');
+        const filterRegion = document.getElementById('filterRegion');
+
+        const runFilter = () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const categoryTerm = filterCategory.value;
+            const regionTerm = filterRegion.value;
+
+            const cards = document.querySelectorAll('.activity-card-link');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').innerText.toLowerCase();
+                const location = card.querySelector('.tag-location').innerText.toLowerCase();
+                const category = card.getAttribute('data-category'); 
+                const region = card.querySelector('.tag-community').innerText;
+
+                const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
+                const matchesCategory = categoryTerm === "" || category === categoryTerm;
+                const matchesRegion = regionTerm === "" || region === regionTerm;
+
+                card.style.display = (matchesSearch && matchesCategory && matchesRegion) ? "block" : "none";
+            });
+        };
+
+        searchInput.addEventListener('input', runFilter);
+        filterCategory.addEventListener('change', runFilter);
+        filterRegion.addEventListener('change', runFilter);
+    }
+
+    // 5. Jalankan semua fungsi saat halaman siap
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchActivities(); // Load data kartu
+        await fetchRegions();    // Load data dropdown region
+        setupFilters();          // Aktifkan sistem filter
+    });
+</script>
 </body>
 </html>
