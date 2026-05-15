@@ -1,25 +1,20 @@
-  /* =========================================
-   1. GLOBAL & BACKGROUND POLA TITIK
+/* =========================================
+   1. GLOBAL & RESET
    ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 body {
-    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
-    /* Efek Pola Titik (Dotted Background) */
+    font-family: 'Nunito', sans-serif;
+    background-color: #fefaf6;
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
-    color: #333;
     margin: 0;
-    padding: 20px; 
-}
-
-h2 { 
-    color: #2d6a4f; 
+    padding: 0; /* Reset agar navbar mobile full width */
+    color: #334155;
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR DESKTOP (SLIM & CLEAN)
    ========================================= */
 .navbar {
     display: flex;
@@ -70,202 +65,166 @@ h2 {
 .nav-links li a i {
     font-size: 18px;
 }
+.text-stack { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; text-align: center; }
 
-.text-stack {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-    font-size: 14px;
-    text-align: center;
+/* =========================================
+   3. CONTAINER & FORM CARD
+   ========================================= */
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 16px;
+    margin-bottom: 25px;
+    transition: 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.btn-back:hover { transform: translateX(-5px); color: #ea580c; }
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8fafc;
-            margin: 0;
-            padding: 40px 20px;
-            color: #334155;
-        }
+.form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+.form-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #1e293b;
+    margin: 0 0 30px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
 
-        /* Tombol Kembali */
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #0f172a;
-            font-weight: 800;
-            font-size: 16px;
-            margin-bottom: 25px;
-            transition: transform 0.2s;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .btn-back:hover { transform: translateX(-5px); }
+.form-group { margin-bottom: 25px; }
+.form-label {
+    display: block;
+    font-weight: 800;
+    color: #334155;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
 
-        /* Kartu Form Utama */
-        .form-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
-        }
+.form-control {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+.form-control:focus { border-color: #ea580c; box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1); }
 
-        .form-title {
-            font-size: 28px;
-            font-weight: 800;
-            color: #1e293b;
-            margin-top: 0;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f1f5f9;
-        }
+/* Grid 2 Kolom */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-        /* Elemen Form */
-        .form-group { margin-bottom: 25px; }
-        .form-label {
-            display: block;
-            font-weight: 800;
-            color: #334155;
-            margin-bottom: 10px;
-            font-size: 15px;
-        }
-        .form-label i { margin-right: 5px; }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            color: #1e293b;
-            outline: none;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }
-        .form-control:focus { border-color: #ea580c; }
-        .form-control::placeholder { color: #94a3b8; }
+/* Fasilitas Pills */
+.facilities-container { display: flex; flex-wrap: wrap; gap: 12px; }
+.facility-label {
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    padding: 10px 20px;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+    font-weight: 700;
+}
+.facility-checkbox { display: none; }
+.facility-checkbox:checked + .facility-label {
+    border-color: #ea580c;
+    background: #fff7ed;
+    color: #ea580c;
+}
 
-        /* Kotak Tambah Foto (Dashed) */
-        .photo-upload-box {
-            width: 160px;
-            height: 160px;
-            border: 2px dashed #cbd5e1;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            color: #64748b;
-            background: #f8fafc;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-        .photo-upload-box:hover { border-color: #ea580c; background: #fff7ed; }
-        .photo-icon-circle {
-            width: 50px;
-            height: 50px;
-            background: #fff7ed;
-            color: #ea580c;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        .photo-note { color: #ef4444; font-size: 13px; margin-top: 10px; display: block; }
+/* Area Tombol Simpan */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 25px;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #f1f5f9;
+}
 
-        /* Grid 2 Kolom */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+.btn-cancel { color: #64748b; font-weight: 800; background: none; border: none; cursor: pointer; font-size: 16px; }
 
-        /* Checkbox Fasilitas (Pills Style) */
-        .facilities-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .facility-label {
-            border: 1px solid #e2e8f0;
-            border-radius: 50px;
-            padding: 10px 20px;
-            color: #475569;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-            font-weight: 600;
-            user-select: none;
-        }
-        .facility-checkbox { display: none; }
-        /* Jika checkbox dicentang, ubah warna labelnya */
-        .facility-checkbox:checked + .facility-label {
-            border-color: #ea580c;
-            background: #fff7ed;
-            color: #ea580c;
-        }
+.btn-save {
+    background: #f97316;
+    color: white;
+    padding: 14px 35px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 900;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #c2410c;
+    transition: all 0.1s;
+}
+.btn-save:active { transform: translateY(4px); box-shadow: 0 1px 0 #c2410c; }
 
-        /* Area Tombol Bawah */
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 25px;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #f1f5f9;
-        }
+/* =========================================
+   4. RESPONSIVE MOBILE (PEMBERSIHAN TOTAL)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Hapus Navbar Desktop yang berantakan */
+    .navbar { display: none !important; }
 
-        .btn-cancel {
-            color: #334155;
-            font-weight: 800;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-family: inherit;
-        }
-        
-        /* Tombol Simpan 3D */
-        .btn-save {
-            background: #f97316;
-            color: white;
-            padding: 14px 30px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 5px 0 #c2410c; /* Efek 3D Bawah */
-            transition: all 0.1s;
-            font-family: inherit;
-        }
-        .btn-save:active {
-            transform: translateY(5px); /* Efek ditekan */
-            box-shadow: 0 0 0 #c2410c;
-        }
+    body { padding: 10px; padding-bottom: 100px !important; }
 
-        /* Responsif HP */
-        @media (max-width: 600px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .form-card { padding: 25px; }
-            .form-actions { flex-direction: column-reverse; gap: 15px; align-items: stretch; }
-            .btn-save { text-align: center; }
-        }
+    .container { margin: 20px auto; padding: 0 10px; }
+
+    .form-card { padding: 25px 20px; border-radius: 20px; }
+
+    .grid-2 { grid-template-columns: 1fr; } /* Input tumpuk di HP */
+
+    .form-actions { 
+        flex-direction: column-reverse; 
+        gap: 20px; 
+        align-items: stretch; 
+    }
+
+    .btn-save { width: 100%; text-align: center; }
+    .btn-cancel { text-align: center; }
+
+    /* Navigasi Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        z-index: 10000;
+        border-radius: 20px 20px 0 0;
+    }
+}
+
+/* Nav Mobile Utility */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 20px; }
