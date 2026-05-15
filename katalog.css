@@ -1,0 +1,80 @@
+/* =========================================
+   1. GLOBAL & BACKGROUND POLA TITIK
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
+    color: #333;
+    margin: 0;
+    padding: 20px; 
+}
+
+h2 { 
+    color: #2d6a4f; 
+}
+
+/* =========================================
+   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 25px;
+    border-radius: 60px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+}
+
+.nav-logo img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #4a5568; 
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
+}
+
+.nav-links li a i {
+    font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
+}
