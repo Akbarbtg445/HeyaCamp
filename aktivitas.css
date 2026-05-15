@@ -317,3 +317,75 @@ body {
 .activity-card-link:hover, .post-card-link:hover {
     transform: translateY(-5px); /* Memberikan efek angkat saat diarahkan kursor */
 }
+.search-wrapper {
+    margin: 20px 0 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 8px 25px;
+    border-radius: 100px; /* Membuat bar berbentuk pil */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border: 1px solid #f1f5f9;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.search-input-group {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-input-group i { color: #94a3b8; }
+
+.search-input-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 15px;
+    color: #1e293b;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 30px;
+    background: #e2e8f0;
+    margin: 0 20px;
+}
+
+.filter-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.filter-group i:first-child { color: #22c55e; } /* Warna hijau untuk icon tag */
+
+.filter-group select {
+    appearance: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    width: 100%;
+    padding-right: 20px;
+}
+
+.chevron {
+    position: absolute;
+    right: 0;
+    font-size: 10px;
+    color: #94a3b8;
+    pointer-events: none;
+}

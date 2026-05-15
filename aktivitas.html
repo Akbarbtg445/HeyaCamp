@@ -43,8 +43,40 @@
             </a>
         </div>
 
-        <div class="search-container">
-            </div>
+        <div class="search-wrapper">
+    <div class="search-bar-container">
+        <div class="search-input-group">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Cari aktivitas">
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="filter-group">
+            <i class="fa-solid fa-tag"></i>
+            <select id="filterCategory">
+                <option value="">Semua Kategori</option>
+                <option>Camping</option>
+                            <option>Hiking</option>
+                            <option>Glamping</option>
+                            <option>Touring</option>
+                            <option>Review</option>
+                            <option>Tutorial</option>
+            </select>
+            <i class="fa-solid fa-chevron-down chevron"></i>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div class="filter-group">
+            <i class="fa-solid fa-filter"></i>
+            <select id="filterRegion">
+                <option value="">Semua Region</option>
+                </select>
+            <i class="fa-solid fa-chevron-down chevron"></i>
+        </div>
+    </div>
+</div>
 
         <div id="activityGrid" class="activity-grid">
             <p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Memuat aktivitas terbaru...</p>
@@ -108,6 +140,43 @@ activities.forEach(act => {
 
         // Panggil fungsi saat halaman dibuka
         document.addEventListener('DOMContentLoaded', fetchActivities);
+        // Fungsi untuk memfilter aktivitas secara real-time
+function setupFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const filterCategory = document.getElementById('filterCategory');
+    const filterRegion = document.getElementById('filterRegion');
+
+    const runFilter = () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const categoryTerm = filterCategory.value;
+        const regionTerm = filterRegion.value;
+
+        const cards = document.querySelectorAll('.activity-card-link');
+        
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title').innerText.toLowerCase();
+            const location = card.querySelector('.tag-location').innerText.toLowerCase();
+            const category = card.getAttribute('data-category'); // Pastikan tambahkan attribute ini saat render
+            const region = card.querySelector('.tag-community').innerText;
+
+            const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
+            const matchesCategory = categoryTerm === "" || category === categoryTerm;
+            const matchesRegion = regionTerm === "" || region === regionTerm;
+
+            if (matchesSearch && matchesCategory && matchesRegion) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    };
+
+    searchInput.addEventListener('input', runFilter);
+    filterCategory.addEventListener('change', runFilter);
+    filterRegion.addEventListener('change', runFilter);
+}
+
+// Panggil setupFilters() di dalam DOMContentLoaded setelah fetchActivities selesai
     </script>
 </body>
 </html>
