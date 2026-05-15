@@ -1,83 +1,7 @@
 /* =========================================
-   1. GLOBAL & BACKGROUND POLA TITIK
+   1. VARIABLES & GLOBAL RESET
    ========================================= */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-
-body {
-    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
-    /* Efek Pola Titik (Dotted Background) */
-    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
-    background-size: 25px 25px;
-    color: #333;
-    margin: 0;
-    padding: 20px; 
-}
-
-h2 { 
-    color: #2d6a4f; 
-}
-
-/* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
-   ========================================= */
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #ffffff;
-    padding: 10px 25px;
-    border-radius: 60px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
-}
-
-.nav-logo img {
-    height: 40px;
-    object-fit: contain;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 25px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #4a5568; 
-    font-weight: 700;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.3s ease;
-}
-
-.nav-links li a:hover {
-    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
-}
-
-.nav-links li a i {
-    font-size: 18px;
-}
-
-.text-stack {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-    font-size: 14px;
-    text-align: center;
-}
 
 :root {
     --primary: #ea580c;
@@ -91,14 +15,58 @@ h2 {
 body {
     font-family: 'Nunito', sans-serif;
     background-color: var(--bg);
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
     margin: 0;
-    padding: 20px;
+    padding: 0; /* Ubah ke 0 agar navbar mobile bisa full screen ke samping */
     color: var(--secondary);
 }
 
+/* =========================================
+   2. NAVBAR DESKTOP (CLEAN & SLIM - SINKRON)
+   ========================================= */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--white);
+    padding: 0 30px;
+    border-radius: 100px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 1250px;
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 20px auto;
+    height: 65px;
+}
+
+.nav-logo img { height: 35px; object-fit: contain; }
+.nav-links { display: flex; list-style: none; gap: 15px; margin: 0; padding: 0; align-items: center; }
+.nav-links li a { 
+    text-decoration: none; 
+    color: #475569; 
+    font-weight: 700; 
+    font-size: 13.5px; 
+    display: flex; 
+    align-items: center; 
+    gap: 7px; 
+    transition: color 0.3s ease; 
+}
+.nav-links li a i { font-size: 16px; color: #475569; }
+.nav-links li a:hover { color: var(--primary); }
+
+/* Stack teks untuk menu CampArea */
+.text-stack { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; text-align: center; }
+
+/* =========================================
+   3. FORM LAYOUT & CONTAINER
+   ========================================= */
 .container {
     max-width: 800px;
     margin: 40px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .btn-back {
@@ -111,14 +79,14 @@ body {
     margin-bottom: 20px;
     transition: 0.2s;
 }
-
 .btn-back:hover { color: var(--primary); }
 
+/* KARTU FORM */
 .form-card {
     background: var(--white);
     padding: 40px;
     border-radius: 24px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
     border: 1px solid var(--border);
 }
 
@@ -139,7 +107,6 @@ body {
     box-sizing: border-box;
     transition: 0.2s;
 }
-
 .form-control:focus {
     outline: none;
     border-color: var(--primary);
@@ -161,7 +128,6 @@ body {
     gap: 12px;
     margin-bottom: 12px;
 }
-
 .link-row:last-child { margin-bottom: 0; }
 
 .badge-cover {
@@ -174,10 +140,7 @@ body {
     text-transform: uppercase;
     white-space: nowrap;
 }
-
-.badge-empty {
-    width: 55px;
-}
+.badge-empty { width: 55px; }
 
 .grid-2 {
     display: grid;
@@ -198,14 +161,61 @@ body {
     transition: 0.3s;
     margin-top: 10px;
 }
-
 .btn-submit:hover {
     background: #c2410c;
     transform: translateY(-2px);
     box-shadow: 0 8px 15px rgba(234, 88, 12, 0.3);
 }
 
-@media (max-width: 600px) {
-    .grid-2 { grid-template-columns: 1fr; }
-    .form-card { padding: 25px; }
+/* =========================================
+   4. RESPONSIVE MOBILE (HP)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Sembunyikan Navbar Desktop */
+    .navbar { display: none !important; }
+
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .form-card {
+        padding: 25px;
+        border-radius: 20px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr; /* Input tumpuk vertikal di HP */
+        gap: 15px;
+    }
+
+    .link-row {
+        flex-direction: column; /* Baris input foto melar ke bawah */
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .badge-empty { display: none; } /* Sembunyikan spacer kosong di HP */
+
+    /* 2. Aktifkan Navigasi Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 20px 20px 0 0;
+    }
+
+    body { padding-bottom: 100px !important; }
 }
+
+/* Nav Mobile Utility */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 20px; }
