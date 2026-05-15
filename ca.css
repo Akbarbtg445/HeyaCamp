@@ -1,15 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-
 /* =========================================
    1. GLOBAL & BACKGROUND
    ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
 body {
-    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8fafc; /* Warna krem polos khusus halaman ini */
-    background-image: none;
+    font-family: 'Nunito', sans-serif;
+    background-color: #fefaf6; /* Menyamakan warna background soft */
+    background-image: radial-gradient(#d1d5db 1px, transparent 1px);
+    background-size: 25px 25px;
     color: #333;
     margin: 0;
-    padding: 20px; 
+    padding: 0; 
 }
 
 h2 { 
@@ -17,7 +18,7 @@ h2 {
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE)
+   2. NAVBAR DESKTOP (CLEAN & SLIM - SINKRON)
    ========================================= */
 .navbar {
     display: flex;
@@ -28,10 +29,12 @@ h2 {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    position: sticky;
-    top: 20px;
-    z-index: 1000;
-    margin: 0 auto 20px;
+    
+    /* Tambahkan Kode di Bawah Ini */
+    position: sticky;      /* Membuat navbar menempel */
+    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
+    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
+    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
 }
 
 .nav-logo img {
@@ -60,75 +63,83 @@ h2 {
 }
 
 .nav-links li a:hover {
-    color: #ed8805;
+    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
 }
 
 .nav-links li a i {
     font-size: 18px;
 }
 
-.text-stack {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-    font-size: 14px;
-    text-align: center;
-}
+.text-stack { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; text-align: center; }
 
 /* =========================================
    3. HEADER & CONTAINER CAMP AREA
    ========================================= */
 .container {
     max-width: 1100px;
-    margin: 0 auto;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
 .header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
     margin-bottom: 30px;
 }
 
-.header-title h1 { font-size: 36px; font-weight: 900; color: #0f172a; margin: 0 0 5px 0; }
+.header-title h1 { font-size: 38px; font-weight: 900; color: #0f172a; margin: 0 0 5px 0; }
 .header-title h1 span { color: #ed8805; }
-.header-title p { font-size: 16px; color: #64748b; margin: 0; }
+.header-title p { font-size: 18px; color: #64748b; margin: 0; }
 
+/* TOMBOL TAMBAH CAMP (GLOWING SHADOW) */
 .btn-add-camp {
-    background-color: #ea580c; 
+    background-color: #ed8805; 
     color: white; 
     border: none; 
-    padding: 12px 24px; 
-    border-radius: 50px; 
+    padding: 14px 28px; 
+    border-radius: 15px; 
     font-size: 15px; 
-    font-weight: 700; 
+    font-weight: 800; 
     cursor: pointer; 
     display: flex; 
     align-items: center; 
     gap: 10px; 
-    transition: 0.2s; 
+    transition: 0.3s; 
     text-decoration: none;
+    box-shadow: 0 10px 20px rgba(237, 136, 5, 0.3);
 }
 .btn-add-camp:hover { background-color: #c2410c; transform: translateY(-2px); }
 
 /* =========================================
-   4. SEARCH BAR SECTION
+   4. SEARCH BAR SECTION (ULTRA CLEAN PILL)
    ========================================= */
 .search-container {
+    display: flex;
+    align-items: center;
     background: white; 
-    border-radius: 15px; 
-    display: flex; 
-    align-items: center; 
-    padding: 10px 20px; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+    padding: 10px 30px; 
+    border-radius: 100px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.03); 
+    border: 1px solid #f1f5f9;
     margin-bottom: 40px;
 }
-.search-box { flex: 1; display: flex; align-items: center; gap: 15px; }
-.search-box input { width: 100%; border: none; outline: none; font-size: 16px; color: #333; padding: 10px 0; font-family: inherit; }
+.search-box { flex: 2; display: flex; align-items: center; gap: 15px; }
+.search-box i { color: #94a3b8; font-size: 18px; }
+.search-box input { width: 100%; border: none; outline: none; font-size: 16px; color: #1e293b; padding: 10px 0; font-family: inherit; }
 .search-box input::placeholder { color: #94a3b8; }
-.divider { width: 1px; height: 30px; background-color: #e2e8f0; margin: 0 20px; }
-.filter-box { display: flex; align-items: center; gap: 10px; color: #0f172a; font-weight: 600; cursor: pointer; }
+
+.divider { width: 1px; height: 35px; background-color: #e2e8f0; margin: 0 25px; }
+
+/* FILTER BOX (TEXT TIDAK BOLD & IKON HIJAU) */
+.filter-box { flex: 1; display: flex; align-items: center; gap: 10px; position: relative; }
+.filter-box i:first-child { color: #22c55e !important; font-size: 18px; } /* Ikon filter hijau */
+
+.filter-box select { 
+    appearance: none; border: none; outline: none; background: transparent;
+    font-size: 16px; font-weight: 500; color: #475569; width: 100%; cursor: pointer; font-family: inherit;
+}
+.chevron { color: #94a3b8; font-size: 12px; margin-left: auto; pointer-events: none; }
 
 /* =========================================
    5. GRID & KARTU CAMP
@@ -141,16 +152,17 @@ h2 {
 
 .camp-card {
     background: white;
-    border-radius: 15px;
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
+    transition: 0.3s ease;
     cursor: pointer;
     text-decoration: none;
     display: flex;
     flex-direction: column;
+    border: 1px solid #f1f5f9;
 }
-.camp-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.camp-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
 
 .card-img-wrapper { position: relative; height: 220px; width: 100%; }
 .card-img { width: 100%; height: 100%; object-fit: cover; }
@@ -160,20 +172,63 @@ h2 {
 }
 
 .location-tag {
-    position: absolute; bottom: 15px; left: 15px; background-color: rgba(0, 0, 0, 0.65); color: white; padding: 6px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    position: absolute; bottom: 15px; left: 15px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px); max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .fac-container { position: absolute; bottom: 15px; right: 15px; display: flex; gap: 6px; }
 .fac-icon { width: 28px; height: 28px; background-color: white; color: #ea580c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-.card-content { padding: 20px; }
-.card-title { margin: 0; font-size: 18px; font-weight: 800; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-content { padding: 25px; }
+.card-title { margin: 0; font-size: 20px; font-weight: 800; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* =========================================
    6. RESPONSIVE MOBILE
    ========================================= */
 @media (max-width: 768px) {
-    .header-section { flex-direction: column; align-items: flex-start; gap: 20px; }
-    .search-container { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
-    .divider { width: 100%; height: 1px; margin: 5px 0; }
+    .navbar { display: none !important; }
+    
+    .container { margin: 20px auto; padding: 0 15px; }
+    
+    .header-section { flex-direction: column; text-align: center; gap: 20px; }
+    .btn-add-camp { width: 100%; justify-content: center; }
+
+    .search-container { 
+        flex-direction: column; 
+        border-radius: 25px; 
+        padding: 20px; 
+        gap: 15px; 
+    }
+    .divider { display: none; }
+    
+    .search-box, .filter-box { 
+        width: 100%; 
+        background: #f8fafc;
+        padding: 12px 15px;
+        border-radius: 12px;
+        box-sizing: border-box;
+    }
+
+    .camp-grid { grid-template-columns: 1fr !important; }
+
+    /* Navigasi Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 75px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        z-index: 9999;
+        border-radius: 25px 25px 0 0;
+    }
+
+    body { padding-bottom: 100px !important; }
 }
+
+/* Nav Mobile Utility */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 22px; }
