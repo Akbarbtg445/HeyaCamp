@@ -202,3 +202,86 @@ body {
 .tab-content { display: none; animation: fadeIn 0.3s ease; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* Container Kartu Bagikan */
+.share-card {
+    background: #f0f7ff !important; /* Warna biru sangat muda */
+    border: none !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+}
+
+/* Judul & Deskripsi di dalam Kartu */
+.share-card h3 {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #1e293b !important;
+    margin-bottom: 2px !important;
+}
+
+.share-card p {
+    font-size: 13px !important;
+    color: #64748b !important;
+}
+
+/* Tombol Salin Link (Pill Shape) */
+.btn-share-link {
+    width: 100% !important;
+    padding: 12px !important;
+    margin-top: 15px !important;
+    background: white !important;
+    color: #0066ff !important;
+    border: 2px solid #bedbff !important; /* Border biru muda tipis */
+    border-radius: 50px !important; /* Bentuk kapsul/pill */
+    font-weight: 800 !important;
+    font-size: 15px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-share-link:hover {
+    background: #0066ff !important;
+    color: white !important;
+    border-color: #0066ff !important;
+}
+/* Container Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Lingkaran Ikon */
+.icon-circle {
+    width: 90px;
+    height: 90px;
+    background: white !important;
+    border: 2px solid #ffead4 !important; /* Border oranye tipis */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.icon-circle i {
+    font-size: 32px !important;
+    color: #ed8805 !important;
+    opacity: 0.6;
+}
+
+/* Teks Judul & Deskripsi */
+.empty-state h3 {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 10px !important;
+}
+
+.empty-state p {
+    font-size: 15px !important;
+    color: #64748b !important;
+    max-width: 250px;
+    line-height: 1.5;
+}
