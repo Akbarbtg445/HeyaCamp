@@ -308,3 +308,12 @@ body {
     .divider { width: 100%; height: 1px; margin: 5px 0; }
     .filter-box { justify-content: space-between; }
 }
+/* Menghilangkan gaya default link pada kartu */
+.activity-card-link, .post-card-link {
+    display: block;
+    transition: transform 0.2s ease-in-out;
+}
+
+.activity-card-link:hover, .post-card-link:hover {
+    transform: translateY(-5px); /* Memberikan efek angkat saat diarahkan kursor */
+}

@@ -72,28 +72,30 @@
 
                 if (activities && activities.length > 0) {
                     let html = '';
-                    activities.forEach(act => {
-                        // Format Tanggal (Contoh: 15 Mei 2026)
-                        const dateObj = new Date(act.activity_date);
-                        const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                   // Cari bagian loop activities.forEach di aktivitas.html
+activities.forEach(act => {
+    const dateObj = new Date(act.activity_date);
+    const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-                        html += `
-                        <div class="activity-card">
-                            <div class="card-img-wrapper">
-                                <img src="${act.photo_url}" alt="${act.title}">
-                                <div class="card-tags">
-                                    <span class="tag-community">${act.community_name}</span>
-                                    <span class="tag-location"><i class="fa-solid fa-location-dot"></i> ${act.location}</span>
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h3 class="card-title">${act.title}</h3>
-                                <div class="card-date"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>
-                                
-                            </div>
-                        </div>
-                        `;
-                    });
+    // Tambahkan tag <a> yang membungkus seluruh card
+    html += `
+    <a href="detail-postingan.html?id=${act.id}" class="activity-card-link" style="text-decoration: none; color: inherit;">
+        <div class="activity-card">
+            <div class="card-img-wrapper">
+                <img src="${act.photo_url}" alt="${act.title}">
+                <div class="card-tags">
+                    <span class="tag-community">${act.community_name}</span>
+                    <span class="tag-location"><i class="fa-solid fa-location-dot"></i> ${act.location}</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">${act.title}</h3>
+                <div class="card-date"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>
+                
+            </div>
+        </div>
+    </a>`;
+});
                     grid.innerHTML = html;
                 } else {
                     grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Belum ada aktivitas. Yuk jadi yang pertama berbagi!</p>';

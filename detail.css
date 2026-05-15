@@ -478,3 +478,12 @@ body {
     min-height: 250px;
     object-fit: cover;
 }
+/* Menghilangkan gaya default link pada kartu */
+.activity-card-link, .post-card-link {
+    display: block;
+    transition: transform 0.2s ease-in-out;
+}
+
+.activity-card-link:hover, .post-card-link:hover {
+    transform: translateY(-5px); /* Memberikan efek angkat saat diarahkan kursor */
+}
