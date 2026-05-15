@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aktivitas Komunitas - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="aktivitas.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <nav class="navbar">
+     <nav class="navbar">
         <div class="nav-logo">
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
@@ -33,7 +33,6 @@
     </nav>
 
     <main class="container">
-        
         <div class="header-komunitas">
             <div>
                 <h1>Aktivitas <span>Camping</span></h1>
@@ -45,44 +44,68 @@
         </div>
 
         <div class="search-container">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
-                <input type="text" placeholder="Cari aktivitas, lokasi, atau pengguna...">
             </div>
-            
-            <div class="divider"></div>
-            
-            <div class="filter-box">
-                <i class="fa-solid fa-tag" style="color: #22c55e;"></i>
-                <select class="filter-select">
-                    <option>Semua Kategori</option>
-                    <option>Camping</option>
-                    <option>Experimen</option>
-                    <option>Fishing</option>
-                    <option>Glamping</option>
-                    <option>Hiking</option>
-                    <option>Other</option>
-                    <option>Review</option>
-                    <option>Touring</option>
-                    <option>Tutorial</option>
-                </select>
-            </div>
-            
-            <div class="divider"></div>
-            
-            <div class="filter-box">
-                <i class="fa-solid fa-filter" style="color: #94a3b8;"></i>
-                <select class="filter-select">
-                    <option>Semua Region</option>
-                    <option>Jawa Barat</option>
-                    <option>Jawa Tengah</option>
-                    <option>Jawa Timur</option>
-                </select>
-            </div>
+
+        <div id="activityGrid" class="activity-grid">
+            <p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Memuat aktivitas terbaru...</p>
         </div>
-
-
     </main>
 
+    <script>
+        // 1. Konfigurasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        // 2. Fungsi untuk mengambil data dari tabel 'Aktivitas'
+        async function fetchActivities() {
+            const grid = document.getElementById('activityGrid');
+            
+            try {
+                const { data: activities, error } = await _supabase
+                    .from('Aktivitas') // Pastikan nama tabel ini benar-benar ada di Supabase
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (activities && activities.length > 0) {
+                    let html = '';
+                    activities.forEach(act => {
+                        // Format Tanggal (Contoh: 15 Mei 2026)
+                        const dateObj = new Date(act.activity_date);
+                        const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                        html += `
+                        <div class="activity-card">
+                            <div class="card-img-wrapper">
+                                <img src="${act.photo_url}" alt="${act.title}">
+                                <div class="card-tags">
+                                    <span class="tag-community">${act.community_name}</span>
+                                    <span class="tag-location"><i class="fa-solid fa-location-dot"></i> ${act.location}</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <h3 class="card-title">${act.title}</h3>
+                                <div class="card-date"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>
+                                
+                            </div>
+                        </div>
+                        `;
+                    });
+                    grid.innerHTML = html;
+                } else {
+                    grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 50px;">Belum ada aktivitas. Yuk jadi yang pertama berbagi!</p>';
+                }
+            } catch (err) {
+                console.error("Gagal memuat:", err);
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #ef4444; padding: 50px;">Gagal memuat data: ${err.message}</p>`;
+            }
+        }
+
+        // Panggil fungsi saat halaman dibuka
+        document.addEventListener('DOMContentLoaded', fetchActivities);
+    </script>
 </body>
 </html>
