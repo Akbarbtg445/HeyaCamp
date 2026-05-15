@@ -96,13 +96,15 @@ body {
 }
 
 /* =========================================
-   4. RESPONSIVE MOBILE (HP)
+   4. RESPONSIVE MOBILE (HP) - FIXED VERSION
    ========================================= */
 @media (max-width: 768px) {
-    .navbar { 
+    /* 1. Sembunyikan TOTAL navbar desktop agar tidak muncul sama sekali */
+    nav.navbar, .navbar { 
         display: none !important; 
     }
 
+    /* 2. Munculkan Mobile Nav di bawah */
     .mobile-nav {
         display: flex !important;
         position: fixed;
@@ -111,22 +113,44 @@ body {
         background: white;
         justify-content: space-around;
         align-items: center;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
         z-index: 9999;
         border-radius: 20px 20px 0 0;
+        padding-bottom: env(safe-area-inset-bottom); /* Untuk HP layar penuh/poni */
     }
 
+    /* 3. Perbaikan Grid Katalog (2 Kolom) */
     .grid {
+        display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
+        margin-top: 15px !important;
+    }
+
+    /* 4. Perbaikan Ukuran Card & Gambar */
+    .card {
+        padding: 10px !important;
     }
 
     .card img {
-        height: 110px !important;
+        height: 100px !important; /* Ukuran pas untuk HP */
+        object-fit: contain !important;
     }
 
+    .card h3 {
+        font-size: 0.9rem !important;
+    }
+
+    /* 5. Jarak Body agar tidak tertutup menu bawah */
     body { 
-        padding-bottom: 100px; 
+        padding: 15px !important;
+        padding-bottom: 100px !important; 
+    }
+
+    /* 6. Judul H2 */
+    h2 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
     }
 }
 
