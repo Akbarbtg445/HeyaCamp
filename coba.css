@@ -1,7 +1,7 @@
 /* =========================================
    1. GLOBAL & BACKGROUND POLA TITIK
    ========================================= */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
 
 body {
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,8 +30,6 @@ h2 {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
     position: sticky;      /* Membuat navbar menempel */
     top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
     z-index: 1000;         /* Memastikan navbar di atas elemen lain */
@@ -80,7 +78,7 @@ h2 {
 }
 
 /* =========================================
-   3. LAYOUT CONTAINER
+   3. LAYOUT CONTAINER & CARD
    ========================================= */
 .container { 
     max-width: 1100px; 
@@ -88,6 +86,27 @@ h2 {
     padding: 0 20px; 
     box-sizing: border-box;
 }
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.card h2 {
+    font-size: 24px;
+    font-weight: 900;
+    color: #1e293b;
+    margin-top: 0;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card h2 i { color: #ea580c; }
 
 /* =========================================
    4. KATALOG GRID & ITEMS (PREMIUM CARD)
@@ -177,19 +196,24 @@ h2 {
     color: #1e293b;
 }
 
+.btn-hapus {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-hapus:hover { background: #fca5a5; }
+
 /* =========================================
-   6. TABLES & STATUS (RESPONSIVE WRAPPER)
+   6. TABLES & STATUS (DESKTOP)
    ========================================= */
-/* BUNGKUS TABEL KAMU DENGAN CLASS INI DI HTML */
 .table-responsive {
     width: 100%;
-    overflow-x: auto; /* Membuka fitur swipe ke samping di HP */
-    -webkit-overflow-scrolling: touch;
     background: white;
     border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    border: 1px solid #f1f5f9;
-    margin-top: 25px;
 }
 
 table { 
@@ -202,26 +226,28 @@ th, td {
     text-align: left; 
     border-bottom: 1px solid #f1f5f9; 
     font-size: 15px;
-    white-space: nowrap; /* Mencegah kolom tabel penyok berantakan */
+    white-space: nowrap; 
 }
 
 th { 
-    background: #f8fafc; /* Diubah abu-abu terang agar modern, teks kontras */
+    background: #f8fafc; 
     color: #1e293b; 
     font-weight: 800;
 }
 
-.status { 
+.status, .status-badge { 
     padding: 6px 14px; 
     border-radius: 50px; 
     font-size: 12px; 
     font-weight: 700;
-    background: #fef3c7; 
-    color: #d97706; /* Soft amber/yellow style */
+    display: inline-block;
 }
+.status { background: #fef3c7; color: #d97706; }
+.status-konfirmasi { background: #fef3c7; color: #92400e; }
+.status-selesai { background: #dcfce7; color: #166534; }
 
 /* =========================================
-   7. RESPONSIVE MOBILE
+   7. RESPONSIVE MOBILE (PERBAIKAN TOTAL)
    ========================================= */
 @media (max-width: 768px) {
     .navbar { display: none !important; }
@@ -230,27 +256,103 @@ th {
 
     .container { margin: 20px auto; padding: 0 10px; }
 
-    /* Katalog di HP jadi 2 kolom sejajar agar menghemat tempat */
+    .card { padding: 20px 15px; border-radius: 20px; }
+    .card h2 { font-size: 20px; margin-bottom: 20px; }
+
+    /* Katalog di HP jadi 2 kolom */
     .grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 15px;
     }
+    .item { padding: 10px; border-radius: 15px; }
+    .item img { height: 120px; }
+    .btn { padding: 10px; font-size: 13px; }
 
-    .item {
-        padding: 10px;
-        border-radius: 15px;
+    /* --- TRICK MERUBAH TABEL MENJADI STRUKTUR KARTU --- */
+    .table-responsive {
+        overflow-x: visible; 
+        border: none;
+        box-shadow: none;
     }
 
-    .item img {
-        height: 120px; /* Diperkecil di HP agar proporsional */
+    /* Paksa elemen tabel berperilaku seperti block biasa (menumpuk vertikal) */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
     }
 
-    .btn {
-        padding: 10px;
+    /* Sembunyikan header kolom asli */
+    thead { display: none; }
+
+    /* Ubah baris pesanan (tr) menjadi box kartu mandiri */
+    tbody tr {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+    }
+
+    /* Khusus untuk baris tulisan "Belum ada pesanan masuk" */
+    tbody tr:has(td[colspan]) {
+        text-align: center !important;
+        background: transparent;
+        border: 1px dashed #cbd5e1;
+        box-shadow: none;
+        padding: 40px 10px;
+    }
+
+    tbody tr td[colspan] {
+        text-align: center !important;
+        color: #64748b;
+        font-size: 15px;
+        white-space: normal;
+        border: none;
+    }
+
+    /* Atur kolom data di dalam kartu */
+    tbody tr td {
+        padding: 10px 0;
+        border-bottom: 1px dashed #f1f5f9;
+        white-space: normal; /* Supaya teks otomatis turun jika panjang */
+        text-align: left;
+    }
+
+    /* Sembunyikan pembatas di data terakhir (Aksi/Tombol) */
+    tbody tr td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        display: flex;
+        justify-content: flex-end; /* Tombol sampah geser ke kanan */
+    }
+
+    /* Tambahkan teks panduan otomatis di atas data */
+    tbody tr td:nth-child(2)::before {
+        content: "Alat disewa:";
+        display: block;
+        font-size: 11px;
+        color: #94a3b8;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    tbody tr td:nth-child(3)::before {
+        content: "Tanggal Sewa:";
+        display: block;
+        font-size: 11px;
+        color: #94a3b8;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    .btn-hapus {
+        padding: 8px 20px;
         font-size: 13px;
     }
 
-    /* Tampilkan Navigasi Bawah */
+    /* Tampilkan Navigasi Bawah Mobile */
     .mobile-nav {
         display: flex !important;
         position: fixed;
@@ -270,50 +372,3 @@ th {
 .mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
 .mobile-nav-item.active { color: #ed8805; }
 .mobile-nav-item i { font-size: 22px; }
- /* Gaya tambahan khusus elemen tabel booking */
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            background: #e2e8f0;
-            display: inline-block;
-        }
-        .status-konfirmasi { background: #fef3c7; color: #92400e; }
-        .status-selesai { background: #dcfce7; color: #166534; }
-        
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-            border: 1px solid #e2e8f0;
-        }
-        
-        .card h2 {
-            font-size: 24px;
-            font-weight: 900;
-            color: #1e293b;
-            margin-top: 0;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card h2 i { color: #ea580c; }
-
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 15px; white-space: nowrap; }
-        th { background-color: #f8fafc; color: #1e293b; font-weight: 800; }
-        
-        .btn-hapus {
-            background: #fee2e2;
-            color: #ef4444;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-hapus:hover { background: #fca5a5; }
