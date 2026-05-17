@@ -400,7 +400,7 @@
                         <div class="info-box-icon" style="background: #fdf2f8; color: #db2777;"><i class="fa-solid fa-users"></i></div>
                         <div class="info-box-text">
                             <span>Kapasitas</span>
-                            <strong>24 Peserta</strong>
+                            <strong id="viewQuota">Memuat...</strong>
                             <small style="color: #65a30d;">Tidak Dibatasi</small>
                         </div>
                     </div>
@@ -408,7 +408,7 @@
                         <div class="info-box-icon" style="background: #dcfce7; color: #16a34a;"><i class="fa-solid fa-ticket"></i></div>
                         <div class="info-box-text">
                             <span>Harga Tiket</span>
-                            <strong>Rp 25.000</strong>
+                            <strong id="viewPrice">Memuat...</strong>
                         </div>
                     </div>
                 </div>
@@ -495,7 +495,11 @@
                 document.getElementById('viewProvinsi').innerText = ev.provinsi;
                 document.getElementById('viewFooterLocation').innerText = `${ev.location}, ${ev.provinsi}`;
 
-                // SUNTIK DATA DESKRIPSI DARI SUPABASE KE KOTAK "TENTANG EVENT"
+                // SINKRONISASI DATA DINAMIS KAPASITAS & HARGA TIKET (FIXED)
+                document.getElementById('viewQuota').innerText = ev.quota || 'Tidak Dibatasi';
+                document.getElementById('viewPrice').innerText = ev.price || 'Gratis';
+
+                // Suntik data deskripsi dari Supabase ke kotak "Tentang Event"
                 document.getElementById('viewDescription').innerText = ev.description || 'Tidak ada deskripsi lengkap mengenai kegiatan event ini.';
 
                 // Logika Iframe Google Maps Otomatis berbasis Alamat Teks
