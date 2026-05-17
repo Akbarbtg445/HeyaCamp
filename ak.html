@@ -31,28 +31,29 @@
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
-     <div class="mobile-nav">
-    <a href="index.html" class="mobile-nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
-    </a>
-    <a href="katalog.html" class="mobile-nav-item">
-        <i class="fa-solid fa-campground"></i>
-        <span>Sewa</span>
-    </a>
-    <a href="komunitas.html" class="mobile-nav-item">
-        <i class="fa-regular fa-user"></i>
-        <span>Komunitas</span>
-    </a>
-    <a href="aktivitas.html" class="mobile-nav-item">
-        <i class="fa-solid fa-wave-square"></i>
-        <span>Aktivitas</span>
-    </a>
-    <a href="ca.html" class="mobile-nav-item">
-        <i class="fa-solid fa-tent"></i>
-        <span>Area</span>
-    </a>
-</div>
+    
+    <div class="mobile-nav">
+        <a href="index.html" class="mobile-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="katalog.html" class="mobile-nav-item">
+            <i class="fa-solid fa-campground"></i>
+            <span>Sewa</span>
+        </a>
+        <a href="komunitas.html" class="mobile-nav-item">
+            <i class="fa-regular fa-user"></i>
+            <span>Komunitas</span>
+        </a>
+        <a href="ak.html" class="mobile-nav-item active">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Aktivitas</span>
+        </a>
+        <a href="ca.html" class="mobile-nav-item">
+            <i class="fa-solid fa-tent"></i>
+            <span>Area</span>
+        </a>
+    </div>
 
     <main class="container">
         <div class="header-section">
@@ -89,24 +90,32 @@
         <div id="eventList"></div>
     </main>
 
-    <div id="modalEvent" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
-        <div style="background:white; padding:30px; border-radius:24px; width:90%; max-width:500px; box-shadow: 0 20px 25px rgba(0,0,0,0.15); box-sizing: border-box;">
-            <h2 style="margin-top:0; color:#1e293b; font-weight:800;">Buat Event Outdoor Baru ⛺</h2>
+    <div id="modalEvent" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px); overflow-y: auto; padding: 20px 0;">
+        <div style="background:white; padding:30px; border-radius:24px; width:90%; max-width:550px; box-shadow: 0 20px 25px rgba(0,0,0,0.15); box-sizing: border-box; margin: auto;">
+            <h2 style="margin-top:0; color:#1e293b; font-weight:800; font-size: 22px;">Buat Event Outdoor Baru ⛺</h2>
             <form id="formBuatEvent" style="display: flex; flex-direction: column; gap: 12px;">
                 <div>
                     <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Nama Event / Kegiatan</label>
-                    <input type="text" id="eventTitle" placeholder="Contoh:Fun Camp Sikunir" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    <input type="text" id="eventTitle" placeholder="Contoh: Fun Camp Sikunir" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
                 </div>
-                <div>
-                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Kategori</label>
-                    <select id="eventCategory" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
-                        <option value="Camp Bareng">Camp Bareng</option>
-                        <option value="Hiking">Hiking</option>
-                        <option value="Penanaman">Penanaman</option>
-                        <option value="Aksi Sosial">Aksi Sosial</option>
-                        <option value="Bersepeda">Bersepeda</option>
-                    </select>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Kategori</label>
+                        <select id="eventCategory" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                            <option value="Camp Bareng">Camp Bareng</option>
+                            <option value="Hiking">Hiking</option>
+                            <option value="Penanaman">Penanaman</option>
+                            <option value="Aksi Sosial">Aksi Sosial</option>
+                            <option value="Bersepeda">Bersepeda</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Tanggal Main</label>
+                        <input type="date" id="eventDate" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    </div>
                 </div>
+
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div>
                         <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Wilayah Provinsi</label>
@@ -117,18 +126,32 @@
                         </select>
                     </div>
                     <div>
-                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Tanggal Main</label>
-                        <input type="date" id="eventDate" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Detail Alamat / Lokasi Camp</label>
+                        <input type="text" id="eventLocation" placeholder="Contoh: Pantai Ketawang, Purworejo" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
                     </div>
                 </div>
-                <div>
-                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Detail Alamat / Lokasi Camp</label>
-                    <input type="text" id="eventLocation" placeholder="Contoh: Kembanglangit, Blado, Batang" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Kapasitas (Kuota)</label>
+                        <input type="text" id="eventQuota" placeholder="Contoh: 24 Peserta" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Harga Tiket (HTM)</label>
+                        <input type="text" id="eventPrice" placeholder="Contoh: Rp 25.000" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    </div>
                 </div>
+
                 <div>
                     <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">URL Link Foto Cover</label>
                     <input type="url" id="eventPhoto" placeholder="Masukkan link gambar bebas..." style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
                 </div>
+
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Deskripsi Lengkap Kegiatan</label>
+                    <textarea id="eventDescription" rows="4" placeholder="Tulis rincian acara, perlengkapan bawaan, ketetapan HTM, dll..." style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box; font-family:inherit; resize:vertical;" required></textarea>
+                </div>
+
                 <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
                     <button type="button" onclick="tutupModalEvent()" style="padding:10px 20px; border-radius:8px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
                     <button type="submit" style="padding:10px 20px; border-radius:8px; border:none; background:#ed8805; color:white; font-weight:600; cursor:pointer;">Publish Event</button>
@@ -163,15 +186,12 @@
                 renderSistemEvent();
             } catch (err) {
                 console.warn("Gagal fetch Supabase (Gunakan fallback lokal):", err.message);
-                semuaDataEvent = [
-                    
-                ];
+                semuaDataEvent = [];
                 renderSistemEvent();
             }
         }
 
         // 3. Render List Event ke HTML
-        // 3. Render List Event ke HTML (Warna Tombol Updated ke Oranye)
         function renderSistemEvent(dataDisaring = null) {
             const container = document.getElementById('eventList');
             const targetData = dataDisaring || semuaDataEvent;
@@ -210,22 +230,16 @@
                 <div class="event-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
             `;
 
-           eventTersaring.forEach(ev => {
+            eventTersaring.forEach(ev => {
                 const tglFormat = new Date(ev.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 const imgCover = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
                 
-                // Sinkronisasi Warna Badge Kategori
                 let badgeStyle = "background:#fef3c7; color:#d97706;"; 
                 if (ev.category === 'Aksi Sosial') badgeStyle = "background:#fee2e2; color:#991b1b;"; 
                 if (ev.category === 'Hiking') badgeStyle = "background:#e0f2fe; color:#0369a1;"; 
                 if (ev.category === 'Penanaman') badgeStyle = "background:#dcfce7; color:#166534;"; 
+                if (ev.category === 'Bersepeda') badgeStyle = "background:#fae8ff; color:#a21caf;"; 
 
-                // SUSUN FORMAT TEKS UNTUK WHATSAPP DAFTAR EVENT
-                const nomorAdmin = "6285641039650"; // Nomor WA Toko HeyaCamp kamu
-                const teksWA = `Halo Admin HeyaCamp! 👋\nSaya mau daftar dan gabung ke Event Komunitas berikut:\n\n*Nama Event:* ${ev.title}\*Kategori:* ${ev.category}\n*Tanggal:* ${tglFormat}\n*Lokasi:* ${ev.location}\n\nMohon informasi info kumpul dan persiapannya ya, terima kasih! 🙏`;
-                const linkWhatsAppEvent = `https://wa.me/${nomorAdmin}?text=${encodeURIComponent(teksWA)}`;
-
-                // SEKARANG TOMBOL "IKUT" DIBUNGKUS DENGAN TARGET LINK WHATSAPP
                 htmlGrid += `
                     <div class="event-card" style="background: white; border: 1px solid #f1f5f9; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display:flex; flex-direction:column; justify-content:space-between;">
                         <div>
@@ -239,11 +253,9 @@
                         <div style="padding: 0 20px 20px 20px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px;">
                                 <span style="font-size: 13px; color: #94a3b8; font-weight: 600;"><i class="fa-regular fa-calendar"></i> ${tglFormat}</span>
-                                
- 
-<a href="detail-event.html?id=${ev.id}" style="color: #ed8805; text-decoration: none; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 4px;">
-    Ikut <i class="fa-solid fa-arrow-right"></i>
-</a>
+                                <a href="detail-event.html?id=${ev.id}" style="color: #ed8805; text-decoration: none; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 4px;">
+                                    Ikut <i class="fa-solid fa-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -268,15 +280,15 @@
             renderSistemEvent(hasilSaring);
         }
 
-        // 5. Perbaikan Fungsi Navigasi Tab Switcher (FIXED)
+        // 5. Fungsi Navigasi Tab Switcher
         function switchTab(pilihanTab) {
             tabAktif = pilihanTab;
             document.getElementById('tabMendatang').classList.toggle('active', pilihanTab === 'Mendatang');
             document.getElementById('tabSelesai').classList.toggle('active', pilihanTab === 'Selesai');
-            renderSistemEvent(); // Memicu render kartu secara real-time
+            renderSistemEvent(); 
         }
 
-        // 6. Logika Input Form Kirim Event ke Supabase
+        // 6. Logika Input Form Kirim Event Lengkap ke Supabase
         document.getElementById('formBuatEvent').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -285,14 +297,24 @@
             const prov = document.getElementById('eventProvinsi').value;
             const tgl = document.getElementById('eventDate').value;
             const lokasi = document.getElementById('eventLocation').value;
+            const kuota = document.getElementById('eventQuota').value;
+            const harga = document.getElementById('eventPrice').value;
             const foto = document.getElementById('eventPhoto').value;
+            const deskripsi = document.getElementById('eventDescription').value;
 
             try {
                 const { error } = await _supabase
                     .from('Events')
                     .insert([{
-                        title: judul, category: kategori, provinsi: prov,
-                        event_date: tgl, location: lokasi, photo_url: foto
+                        title: judul, 
+                        category: kategori, 
+                        provinsi: prov,
+                        event_date: tgl, 
+                        location: lokasi, 
+                        quota: kuota,
+                        price: harga,
+                        photo_url: foto,
+                        description: deskripsi
                     }]);
 
                 if (error) throw error;
@@ -302,7 +324,7 @@
                 document.getElementById('formBuatEvent').reset();
                 ambilSistemEvent(); 
             } catch (err) {
-                alert("Gagal memposting event: " + err.message + "\n\n(Catatan: Pastikan kamu sudah membuat tabel bernama 'Events' di dashboard Supabase milikmu)");
+                alert("Gagal memposting event: " + err.message + "\n\n(Catatan: Pastikan kolom 'quota', 'price', dan 'description' sudah kamu tambahkan di Supabase)");
             }
         });
 
