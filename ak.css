@@ -1,11 +1,11 @@
 /* =========================================
    1. GLOBAL & BACKGROUND POLA TITIK
    ========================================= */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
 
 body {
     font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #ffffff;
+    background-color: #fefaf6; /* Menyesuaikan tema warm halaman acara */
     /* Efek Pola Titik (Dotted Background) */
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
@@ -19,7 +19,7 @@ h2 {
 }
 
 /* =========================================
-   2. NAVBAR CUSTOM (PILL-SHAPE) - UPDATED
+   2. NAVBAR CUSTOM (PILL-SHAPE)
    ========================================= */
 .navbar {
     display: flex;
@@ -30,8 +30,6 @@ h2 {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
     position: sticky;      /* Membuat navbar menempel */
     top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
     z-index: 1000;         /* Memastikan navbar di atas elemen lain */
@@ -78,36 +76,40 @@ h2 {
     font-size: 14px;
     text-align: center;
 }
+
 /* =========================================
-   GAYA KHUSUS HALAMAN ACARA KOMUNITAS
+   3. LAYOUT CONTAINER & HEADER ACARA
    ========================================= */
-
-body {
-    background-color: #fefaf6;
-    margin: 0;
-    padding: 20px;
-}
-
 .container {
     max-width: 1100px;
     margin: 0 auto;
 }
 
-/* Header Section */
 .header-section {
     margin-top: 30px;
     margin-bottom: 40px;
 }
+
 .header-section h1 {
     font-size: 36px;
     font-weight: 900;
     color: #0f172a;
     margin: 0 0 10px 0;
 }
-.header-section h1 span { color: #ed8805; }
-.header-section p { color: #64748b; font-size: 16px; margin: 0; }
 
-/* Search & Filter Bar */
+.header-section h1 span { 
+    color: #ed8805; 
+}
+
+.header-section p { 
+    color: #64748b; 
+    font-size: 16px; 
+    margin: 0; 
+}
+
+/* =========================================
+   4. SEARCH & FILTER BAR (DESKTOP)
+   ========================================= */
 .search-container {
     background: white;
     border-radius: 15px;
@@ -118,23 +120,52 @@ body {
     border: 1px solid #f1f5f9;
     margin-bottom: 30px;
 }
-.search-box { flex: 1; display: flex; align-items: center; gap: 15px; }
-.search-box input {
-    width: 100%; border: none; outline: none; font-size: 16px; padding: 10px 0; font-family: inherit;
+
+.search-box { 
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
 }
-.divider { width: 1px; height: 30px; background-color: #e2e8f0; margin: 0 20px; }
+
+.search-box input {
+    width: 100%; 
+    border: none; 
+    outline: none; 
+    font-size: 16px; 
+    padding: 10px 0; 
+    font-family: inherit;
+    background: transparent;
+}
+
+.divider { 
+    width: 1px; 
+    height: 30px; 
+    background-color: #e2e8f0; 
+    margin: 0 20px; 
+}
 
 .filter-select {
-    border: none; outline: none; font-weight: 600; color: #1e293b; background: transparent; cursor: pointer; font-family: inherit;
+    border: none; 
+    outline: none; 
+    font-weight: 600; 
+    color: #1e293b; 
+    background: transparent; 
+    cursor: pointer; 
+    font-family: inherit;
+    font-size: 15px;
 }
 
-/* Toggle Status (Mendatang / Selesai) */
+/* =========================================
+   5. TOGGLE STATUS BUTTONS
+   ========================================= */
 .status-toggle {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-bottom: 40px;
 }
+
 .toggle-btn {
     padding: 12px 25px;
     border-radius: 12px;
@@ -147,13 +178,16 @@ body {
     align-items: center;
     gap: 10px;
     transition: 0.3s;
+    font-family: inherit;
 }
+
 .toggle-btn.active {
     background: #ed8805;
     color: white;
     border-color: #ed8805;
     box-shadow: 0 4px 12px rgba(237, 136, 5, 0.3);
 }
+
 .badge-count {
     background: #e2e8f0;
     color: #64748b;
@@ -161,12 +195,15 @@ body {
     border-radius: 50px;
     font-size: 12px;
 }
+
 .active .badge-count {
     background: rgba(255,255,255,0.2);
     color: white;
 }
 
-/* Empty State (Kotak Putus-putus) */
+/* =========================================
+   6. EMPTY STATE (KOTAK PUTUS-PUTUS)
+   ========================================= */
 .empty-state {
     border: 2px dashed #ffedd5;
     background-color: #fff7ed;
@@ -177,7 +214,9 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    margin-bottom: 30px;
 }
+
 .icon-clock {
     width: 80px;
     height: 80px;
@@ -190,12 +229,155 @@ body {
     font-size: 40px;
     margin-bottom: 10px;
 }
-.empty-state h2 { margin: 0; color: #1e293b; font-size: 20px; font-weight: 800; }
-.empty-state p { margin: 0; color: #94a3b8; font-size: 15px; font-weight: 600; }
 
-/* Responsive Mobile */
+.empty-state h2 { 
+    margin: 0; 
+    color: #1e293b; 
+    font-size: 20px; 
+    font-weight: 800; 
+}
+
+.empty-state p { 
+    margin: 0; 
+    color: #94a3b8; 
+    font-size: 15px; 
+    font-weight: 600; 
+}
+
+/* Sembunyikan Mobile Nav Bawaan di Desktop */
+.mobile-nav { 
+    display: none; 
+}
+
+/* =========================================
+   7. RESPONSIVE DESIGN UNTUK HP (MOBILE)
+   ========================================= */
 @media (max-width: 768px) {
-    .search-container { flex-direction: column; align-items: stretch; gap: 10px; }
-    .divider { display: none; }
-    .status-toggle { flex-direction: column; }
+    /* Sembunyikan total navbar desktop */
+    .navbar { 
+        display: none !important; 
+    }
+
+    /* Tambahkan ruang di bawah body agar tidak tertutup menu mobile */
+    body { 
+        padding: 10px !important; 
+        padding-bottom: 95px !important; 
+    }
+
+    .container { 
+        margin: 15px auto !important; 
+        padding: 0 10px !important; 
+    }
+
+    /* Ukuran Judul di HP */
+    .header-section {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .header-section h1 {
+        font-size: 24px !important;
+    }
+
+    .header-section p {
+        font-size: 14px !important;
+    }
+
+    /* RombaK bar pencarian menyamping jadi menumpuk rapi kebawah */
+    .search-container { 
+        flex-direction: column !important; 
+        align-items: stretch !important; 
+        gap: 10px !important; 
+        padding: 15px !important;
+        border-radius: 18px !important;
+    }
+
+    .divider { 
+        display: none !important; 
+    }
+
+    .search-box, .filter-box {
+        width: 100% !important;
+    }
+
+    .filter-select {
+        width: 100% !important;
+        padding: 8px 0;
+    }
+
+    /* Pembagian simetris tombol toggle status di mobile */
+    .status-toggle { 
+        flex-direction: row !important; 
+        width: 100%;
+        gap: 10px;
+    }
+
+    .toggle-btn {
+        flex: 1; /* Membagi dua area tombol sama rata kanan-kiri */
+        justify-content: center;
+        font-size: 13px !important;
+        padding: 10px 5px !important;
+        border-radius: 10px;
+    }
+
+    /* Mengubah grid daftar kartu kegiatan menjadi 1 kolom di HP */
+    .event-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .event-card img {
+        height: 160px !important;
+    }
+
+    /* Penyesuaian modal form pop-up saat dibuka di HP */
+    #modalEvent > div {
+        width: 95% !important;
+        padding: 20px !important;
+        border-radius: 20px !important;
+    }
+
+    #modalEvent h2 {
+        font-size: 18px !important;
+    }
+
+    /* Baris Wilayah & Tanggal di form dipaksa menumpuk kebawah */
+    #modalEvent form > div:nth-child(3) {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    /* Tampilkan Navigasi Menu Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 70px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        z-index: 9999;
+        border-radius: 20px 20px 0 0;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Perorangan Utility Item Menu Mobile */
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 10px;
+    gap: 4px;
+}
+
+.mobile-nav-item.active { 
+    color: #ed8805; 
+}
+
+.mobile-nav-item i { 
+    font-size: 20px; 
 }
