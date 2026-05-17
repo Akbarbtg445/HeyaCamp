@@ -8,12 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* =========================================
-           1. GLOBAL STYLE & NUNITO FONT
+           1. RESET & GLOBAL STYLES (NUNITO)
            ========================================= */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
         body {
-            font-family: 'Nunito', 'Segoe UI', sans-serif;
+            font-family: 'Nunito', sans-serif;
             background-color: #fefaf6;
             background-image: radial-gradient(#d1d5db 1px, transparent 1px);
             background-size: 25px 25px;
@@ -23,7 +23,7 @@
         }
 
         /* =========================================
-           2. NAVBAR CUSTOM (DESKTOP)
+           2. NAVBAR DESKTOP
            ========================================= */
         .navbar {
             display: flex;
@@ -40,243 +40,254 @@
             margin: 0 auto 20px;
         }
 
-        .nav-logo img {
-            height: 40px;
-            object-fit: contain;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-            margin: 0;
-            padding: 0;
-            align-items: center;
-        }
-
-        .nav-links li a {
-            text-decoration: none;
-            color: #4a5568; 
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links li a:hover {
-            color: #ed8805;
-        }
-
-        .text-stack {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-            font-size: 14px;
-            text-align: center;
-        }
+        .nav-logo img { height: 40px; object-fit: contain; }
+        .nav-links { display: flex; list-style: none; gap: 25px; margin: 0; padding: 0; align-items: center; }
+        .nav-links li a { text-decoration: none; color: #4a5568; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease; }
+        .nav-links li a:hover { color: #ed8805; }
+        .text-stack { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; text-align: center; }
 
         /* =========================================
-           3. POSTINGAN CONTAINER LAYOUT (PERSIS GAMBAR)
+           3. MAIN CONTAINER & HERO HEADER
            ========================================= */
-        .post-container {
-            max-width: 680px; /* Ukuran pas tengah agar mirip detail postingan */
+        .main-container {
+            max-width: 1100px;
             margin: 30px auto 60px;
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            border: 1px solid #f1f5f9;
             box-sizing: border-box;
         }
 
-        /* Header Pembuat (Avatar + Nama + Tombol Kembali) */
-        .post-header {
+        .event-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            position: relative;
         }
 
-        .author-box {
+        .title-area { flex: 1; }
+        .btn-top-circle {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: 0.2s;
+            text-decoration: none;
+        }
+        .btn-top-circle:hover { background: #f8fafc; color: #0f172a; transform: scale(1.05); }
+
+        .event-header h1 {
+            font-size: 34px;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 10px 0;
+            line-height: 1.3;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* =========================================
+           4. SPLIT LAYOUT (POSTER VS INFO BLOCK)
+           ========================================= */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .poster-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            height: fit-content;
+        }
+
+        .poster-card img {
+            width: 100%;
+            height: auto;
+            max-height: 450px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Info Block Card Kanan */
+        .info-main-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-box-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
-        .author-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #ffedd5;
+        .info-box-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: #fff7ed;
             color: #ed8805;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            border: 1px solid #fed7aa;
+            flex-shrink: 0;
         }
 
-        .author-info strong {
-            font-size: 15px;
+        .info-box-text span {
+            font-size: 13px;
+            color: #94a3b8;
+            display: block;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .info-box-text strong {
+            font-size: 16px;
             color: #1e293b;
             display: block;
             font-weight: 800;
         }
 
-        .author-info span {
-            font-size: 12px;
-            color: #94a3b8;
-            font-weight: 600;
-        }
-
-        .btn-back-text {
-            background: none;
-            border: none;
-            color: #64748b;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 10px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-
-        .btn-back-text:hover {
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-
-        /* Judul Post / Event */
-        .post-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #0f172a;
-            margin: 0 0 15px 0;
-            line-height: 1.4;
-        }
-
-        /* Gambar Main Cover (Full Width di dalam card) */
-        .post-main-img {
-            width: 100%;
-            height: 320px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        /* Meta Tag / Info Strip */
-        .info-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .tag-item {
+        .info-box-text small {
             font-size: 13px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: #64748b;
         }
 
-        /* Isi Text Deskripsi */
-        .article-content {
-            font-size: 15px;
-            line-height: 1.8;
-            color: #334155;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .article-content p {
-            margin: 0 0 15px 0;
-        }
-
-        /* =========================================
-           4. TOMBOL SEPERTI POSTINGAN (BOTTOM ACTIONS)
-           ========================================= */
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-join-wa {
+        /* Tombol Utama Bottom */
+        .btn-action-primary {
             background: #ed8805;
             color: white;
             border: none;
-            padding: 10px 24px;
-            border-radius: 30px;
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
             font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(237,136,5,0.2);
-            transition: 0.2s;
-            text-decoration: none;
-        }
-
-        .btn-join-wa:hover {
-            background: #d67600;
-            transform: translateY(-1px);
-        }
-
-        .btn-share-alt {
-            background: #f1f5f9;
-            color: #64748b;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            gap: 10px;
             transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(237,136,5,0.2);
+            text-decoration: none;
+            box-sizing: border-box;
         }
 
-        .btn-share-alt:hover {
-            background: #e2e8f0;
-            color: #1e293b;
+        .btn-action-primary:hover {
+            background: #ea580c;
+            transform: translateY(-1px);
         }
 
-        /* Sembunyikan Nav Mobile di Laptop */
+        /* =========================================
+           5. GOOGLE MAPS SECTION (PERSIS GAMBAR)
+           ========================================= */
+        .maps-card {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            margin-top: 25px;
+            box-sizing: border-box;
+        }
+
+        .maps-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .maps-title i { color: #ed8805; }
+
+        .wrapper-iframe {
+            width: 100%;
+            height: 350px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .wrapper-iframe iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .maps-footer {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* Mobile View Hide Utility */
         .mobile-nav { display: none; }
 
         /* =========================================
-           5. RESPONSIVE DESIGN UNTUK HP (MOBILE)
+           6. RESPONSIVE MOBILE (HP)
            ========================================= */
         @media (max-width: 768px) {
             .navbar { display: none !important; }
             body { padding: 10px; padding-bottom: 90px !important; }
-            
-            .post-container {
-                margin: 5px auto;
-                padding: 15px;
-                border-radius: 16px;
+
+            .main-container { margin: 10px auto; }
+
+            .event-header h1 { font-size: 22px; margin: 8px 0; }
+            .btn-top-circle { width: 38px; height: 38px; font-size: 14px; }
+
+            /* Jadikan tumpukan ke bawah di mobile */
+            .split-layout {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
             }
 
-            .post-title {
-                font-size: 19px;
-            }
+            .info-main-card { padding: 20px; }
+            .info-grid { grid-template-columns: 1fr !important; gap: 20px; }
 
-            .post-main-img {
-                height: 200px;
-            }
+            .wrapper-iframe { height: 260px; }
 
-            /* Navigasi Mobile Bawah */
+            /* Menu Navigasi Bawah */
             .mobile-nav {
                 display: flex !important;
                 position: fixed;
@@ -289,17 +300,7 @@
                 z-index: 9999;
                 border-radius: 20px 20px 0 0;
             }
-
-            .mobile-nav-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-decoration: none;
-                color: #94a3b8;
-                font-size: 10px;
-                gap: 4px;
-            }
-
+            .mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
             .mobile-nav-item.active { color: #ed8805; }
             .mobile-nav-item i { font-size: 20px; }
         }
@@ -329,49 +330,76 @@
         </ul>
     </nav>
 
-    <div class="post-container">
+    <main class="main-container">
         
-        <div class="post-header">
-            <div class="author-box">
-                <div class="author-avatar">
-                    <i class="fa-solid fa-campground"></i>
-                </div>
-                <div class="author-info">
-                    <strong>HeyaCamp Admin</strong>
-                    <span>Official Organizer</span>
-                </div>
+        <div class="event-header">
+            <div class="title-area">
+                <span id="viewStatusBadge" class="status-badge" style="background: #ffedd5; color: #ed8805;">Mendatang</span>
+                <h1 id="viewTitle">Memuat Event...</h1>
             </div>
-            <button onclick="window.history.back()" class="btn-back-text">
-                <i class="fa-solid fa-angle-left"></i> Kembali
-            </button>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button onclick="window.history.back()" class="btn-top-circle"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="salinLinkEvent()" class="btn-top-circle"><i class="fa-solid fa-share-nodes"></i></button>
+            </div>
         </div>
 
-        <h1 class="post-title" id="viewTitle">Memuat Event...</h1>
+        <div class="split-layout">
+            <div class="poster-card">
+                <img id="eventPosterImg" src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" alt="Poster Event">
+            </div>
 
-        <img id="eventImg" src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800" class="post-main-img" alt="Cover Event">
+            <div class="info-main-card">
+                <div class="info-grid">
+                    <div class="info-box-item">
+                        <div class="info-box-icon" style="background: #fff7ed; color: #ed8805;"><i class="fa-regular fa-calendar"></i></div>
+                        <div class="info-box-text">
+                            <span>Tanggal & Waktu</span>
+                            <strong id="viewDate">Memuat...</strong>
+                            <small id="subDate">Memuat...</small>
+                        </div>
+                    </div>
+                    <div class="info-box-item">
+                        <div class="info-box-icon" style="background: #e0f2fe; color: #0369a1;"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="info-box-text">
+                            <span>Lokasi</span>
+                            <strong id="viewLocationName">Memuat...</strong>
+                            <small id="viewProvinsi">Memuat...</small>
+                        </div>
+                    </div>
+                    <div class="info-box-item">
+                        <div class="info-box-icon" style="background: #fdf2f8; color: #db2777;"><i class="fa-solid fa-users"></i></div>
+                        <div class="info-box-text">
+                            <span>Kapasitas</span>
+                            <strong>24 Peserta</strong>
+                            <small style="color: #65a30d;">Tidak Dibatasi</small>
+                        </div>
+                    </div>
+                    <div class="info-box-item">
+                        <div class="info-box-icon" style="background: #dcfce7; color: #16a34a;"><i class="fa-solid fa-ticket"></i></div>
+                        <div class="info-box-text">
+                            <span>Harga Tiket</span>
+                            <strong>Rp 25.000</strong>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="info-tags">
-            <div id="viewCategory" class="tag-item" style="background: #fff7ed; color: #ed8805;">Kategori</div>
-            <div class="tag-item" style="background: #e0f2fe; color: #0369a1;"><i class="fa-regular fa-calendar"></i> <span id="viewDate">Memuat...</span></div>
-            <div class="tag-item" style="background: #fee2e2; color: #991b1b;"><i class="fa-solid fa-location-dot"></i> <span id="viewLocation">Memuat...</span></div>
+                <button id="btnHubungiWA" class="btn-action-primary">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 18px;"></i> Hubungi Admin / Ikut Event
+                </button>
+            </div>
         </div>
 
-        <div class="article-content">
-            <p>Halo Camper Petualang! Yuk gabung ke dalam keseruan agenda kegiatan outdoor resmi <strong><span id="textNamaEvent" style="color: #ed8805;">...</span></strong> yang diselenggarakan oleh Komunitas Besar HeyaCamp.</p>
-            <p>Agenda ini terbuka untuk umum bagi seluruh pecinta alam, ajang seru untuk menjalin relasi baru sesama penggiat kemping, serta berbagi pengalaman seputar dunia penjelajahan alam bebas.</p>
-            <p>Pastikan kondisi fisik kamu dalam keadaan prima dan membawa peralatan logistik pribadimu. Jika kamu masih kekurangan logistik kemping seperti tenda, nesting, matras, atau tas carrier, kamu bisa langsung melakukan reservasi instan lewat menu penyewaan logistik HeyaCamp ya!</p>
+        <div class="maps-card">
+            <h3 class="maps-title"><i class="fa-solid fa-map-location-dot"></i> Lokasi Event</h3>
+            <div class="wrapper-iframe">
+                <iframe id="mapsIframe" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="maps-footer">
+                <i class="fa-solid fa-location-dot" style="color: #64748b;"></i> <span id="viewFooterLocation">Memuat nama tempat...</span>
+            </div>
         </div>
 
-        <div class="post-actions">
-            <button id="btnHubungiWA" class="btn-join-wa">
-                <i class="fa-brands fa-whatsapp" style="font-size: 16px;"></i> Hubungi Admin / Ikut
-            </button>
-            <button onclick="salinLinkEvent()" class="btn-share-alt">
-                <i class="fa-solid fa-share-nodes"></i>
-            </button>
-        </div>
-
-    </div>
+    </main>
 
     <div class="mobile-nav">
         <a href="index.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Beranda</span></a>
@@ -382,7 +410,7 @@
     </div>
 
 <script>
-    // Konfigurasi Supabase HeyaCamp
+    // 1. Konfigurasi Client Supabase
     const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
     const { createClient } = supabase;
@@ -406,29 +434,52 @@
             if (ev) {
                 const tglFormat = new Date(ev.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 
-                // Pasang data Gambar dan Teks secara dinamis
-                document.getElementById('eventImg').src = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
-                document.getElementById('viewTitle').innerText = ev.title;
-                document.getElementById('textNamaEvent').innerText = ev.title;
-                document.getElementById('viewDate').innerText = tglFormat;
-                document.getElementById('viewLocation').innerText = `${ev.location} (${ev.provinsi})`;
-                document.getElementById('viewCategory').innerText = ev.category;
+                // Cek status berdasarkan Hari Ini
+                const hariIni = new Date().toISOString().split('T')[0];
+                const badge = document.getElementById('viewStatusBadge');
+                const btnWA = document.getElementById('btnHubungiWA');
 
-                // Setup aksi klik tombol WhatsApp
-                document.getElementById('btnHubungiWA').onclick = function() {
-                    const nomorWA = "6285641039650"; // Nomor WhatsApp HeyaCamp
-                    const teksWA = `Halo Admin HeyaCamp! 👋\nSaya mau ikut dan daftar gabung ke event *${ev.title}*.\n\n📅 *Tanggal:* ${tglFormat}\n📍 *Lokasi:* ${ev.location}\n\nMohon info syarat pendaftaran dan grup koordinasinya ya, terima kasih!`;
-                    window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(teksWA)}`, '_blank');
-                };
+                if (ev.event_date < hariIni) {
+                    badge.innerText = "Event Selesai";
+                    badge.style.cssText = "background: #f1f5f9; color: #64748b;";
+                    btnWA.innerText = "Event Sudah Selesai";
+                    btnWA.style.cssText = "background: #cbd5e1; color: #94a3b8; cursor: not-allowed; pointer-events: none; box-shadow: none;";
+                } else {
+                    badge.innerText = "Mendatang";
+                    badge.style.cssText = "background: #fff7ed; color: #ed8805;";
+                }
+
+                // Masukkan data dasar
+                document.getElementById('eventPosterImg').src = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
+                document.getElementById('viewTitle').innerText = ev.title;
+                document.getElementById('viewDate').innerText = tglFormat;
+                document.getElementById('subDate').innerText = tglFormat;
+                document.getElementById('viewLocationName').innerText = ev.location;
+                document.getElementById('viewProvinsi').innerText = ev.provinsi;
+                document.getElementById('viewFooterLocation').innerText = `${ev.location}, ${ev.provinsi}`;
+
+                // 2. LOGIKA GENERATE GOOGLE MAPS EMBED IFRAME SECARA OTOMATIS
+                // Mengonversi alamat teks biasa menjadi format URL safe agar dibaca Google Maps
+                const alamatQuery = encodeURIComponent(`${ev.location}, ${ev.provinsi}`);
+                document.getElementById('mapsIframe').src = `https://maps.google.com/maps?q=${alamatQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+
+                // Atur klik WhatsApp pendaftaran
+                if (ev.event_date >= hariIni) {
+                    btnWA.onclick = function() {
+                        const nomorWA = "6285641039650";
+                        const teksWA = `Halo Admin HeyaCamp! 👋\nSaya berminat daftar gabung ke event Komunitas: *${ev.title}*.\n\n📅 *Tanggal:* ${tglFormat}\n📍 *Lokasi:* ${ev.location}\n\nMohon info detail pendaftaran dan koordinasinya ya!`;
+                        window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(teksWA)}`, '_blank');
+                    };
+                }
             }
         } catch (err) {
-            console.error("Gagal memuat data event:", err.message);
+            console.error("Gagal sinkronisasi data detail event:", err.message);
         }
     }
 
     function salinLinkEvent() {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link halaman event berhasil disalin!");
+        alert("Link tautan halaman event disalin!");
     }
 
     window.onload = muatDetailEvent;
