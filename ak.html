@@ -142,9 +142,15 @@
                     </div>
                 </div>
 
-                <div>
-                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">URL Link Foto Cover</label>
-                    <input type="url" id="eventPhoto" placeholder="Masukkan link gambar bebas..." style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Jam Main / Jam Kumpul</label>
+                        <input type="text" id="eventTime" placeholder="Contoh: 16:00 WIB atau Jam 4 Sore" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">URL Link Foto Cover</label>
+                        <input type="url" id="eventPhoto" placeholder="Masukkan link gambar bebas..." style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                    </div>
                 </div>
 
                 <div>
@@ -161,7 +167,6 @@
     </div>
 
     <script>
-        // 1. Inisialisasi Supabase
         const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const { createClient } = supabase;
@@ -170,7 +175,6 @@
         let semuaDataEvent = [];
         let tabAktif = 'Mendatang';
 
-        // 2. Ambil Data dari Supabase
         async function ambilSistemEvent() {
             const container = document.getElementById('eventList');
             container.innerHTML = `<p style="text-align:center; color:#94a3b8; padding:40px 0;"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi Event...</p>`;
@@ -191,16 +195,12 @@
             }
         }
 
-        // 3. Render List Event ke HTML (FIXED TIMEOUT TIMEZONE LOGIC)
         function renderSistemEvent(dataDisaring = null) {
             const container = document.getElementById('eventList');
             const targetData = dataDisaring || semuaDataEvent;
-
-            // Membaca hari ini fiks berbasis YYYY-MM-DD zona waktu lokal Indonesia
             const hariIni = new Date().toLocaleDateString('en-CA'); 
             
             const eventTersaring = targetData.filter(ev => {
-                // Bandingkan string tanggal '2026-05-02' dengan hari ini '2026-05-18'
                 const cocokTab = tabAktif === 'Mendatang' ? (ev.event_date >= hariIni) : (ev.event_date < hariIni);
                 return cocokTab;
             });
@@ -268,7 +268,6 @@
             container.innerHTML = htmlGrid;
         }
 
-        // 4. Sistem Live Search & Filter Provinsi
         function filterSistemEvent() {
             const kataKunci = document.getElementById('inputCari').value.toLowerCase();
             const filterProv = document.getElementById('selectFilterProvinsi').value;
@@ -282,7 +281,6 @@
             renderSistemEvent(hasilSaring);
         }
 
-        // 5. Fungsi Navigasi Tab Switcher
         function switchTab(pilihanTab) {
             tabAktif = pilihanTab;
             document.getElementById('tabMendatang').classList.toggle('active', pilihanTab === 'Mendatang');
@@ -290,7 +288,6 @@
             renderSistemEvent(); 
         }
 
-        // 6. Logika Input Form Kirim Event Lengkap ke Supabase
         document.getElementById('formBuatEvent').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -301,6 +298,7 @@
             const lokasi = document.getElementById('eventLocation').value;
             const kuota = document.getElementById('eventQuota').value;
             const harga = document.getElementById('eventPrice').value;
+            const jam = document.getElementById('eventTime').value;
             const foto = document.getElementById('eventPhoto').value;
             const deskripsi = document.getElementById('eventDescription').value;
 
@@ -308,15 +306,9 @@
                 const { error } = await _supabase
                     .from('Events')
                     .insert([{
-                        title: judul, 
-                        category: kategori, 
-                        provinsi: prov,
-                        event_date: tgl, 
-                        location: lokasi, 
-                        quota: kuota,
-                        price: harga,
-                        photo_url: foto,
-                        description: deskripsi
+                        title: judul, category: kategori, provinsi: prov,
+                        event_date: tgl, location: lokasi, quota: kuota,
+                        price: harga, event_time: jam, photo_url: foto, description: deskripsi
                     }]);
 
                 if (error) throw error;
@@ -326,7 +318,7 @@
                 document.getElementById('formBuatEvent').reset();
                 ambilSistemEvent(); 
             } catch (err) {
-                alert("Gagal memposting event: " + err.message + "\n\n(Catatan: Pastikan kolom 'quota', 'price', dan 'description' sudah kamu tambahkan di Supabase)");
+                alert("Gagal memposting event: " + err.message);
             }
         });
 
