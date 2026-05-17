@@ -46,7 +46,7 @@
             <span>Komunitas</span>
         </a>
         <a href="ak.html" class="mobile-nav-item active">
-            <i class="fa-regular fa-calendar"></i>
+            <i class="fa-solid fa-compass"></i>
             <span>Aktivitas</span>
         </a>
         <a href="ca.html" class="mobile-nav-item">
@@ -185,20 +185,22 @@
                 semuaDataEvent = data || [];
                 renderSistemEvent();
             } catch (err) {
-                console.warn("Gagal fetch Supabase (Gunakan fallback lokal):", err.message);
+                console.warn("Gagal fetch Supabase:", err.message);
                 semuaDataEvent = [];
                 renderSistemEvent();
             }
         }
 
-        // 3. Render List Event ke HTML
+        // 3. Render List Event ke HTML (FIXED TIMEOUT TIMEZONE LOGIC)
         function renderSistemEvent(dataDisaring = null) {
             const container = document.getElementById('eventList');
             const targetData = dataDisaring || semuaDataEvent;
 
-            const hariIni = new Date().toISOString().split('T')[0];
+            // Membaca hari ini fiks berbasis YYYY-MM-DD zona waktu lokal Indonesia
+            const hariIni = new Date().toLocaleDateString('en-CA'); 
             
             const eventTersaring = targetData.filter(ev => {
+                // Bandingkan string tanggal '2026-05-02' dengan hari ini '2026-05-18'
                 const cocokTab = tabAktif === 'Mendatang' ? (ev.event_date >= hariIni) : (ev.event_date < hariIni);
                 return cocokTab;
             });
