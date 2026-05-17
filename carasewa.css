@@ -80,27 +80,35 @@ h2 {
 }
 
 /* =========================================
-   3. AGENDA SECTION (SESUAI GAMBAR)
+   3. AGENDA SECTION (CARA SEWA LAYOUT)
    ========================================= */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
 .agenda-section {
     max-width: 1100px;
-    margin: 60px auto;
+    margin: 40px auto;
     text-align: center;
 }
 
 .agenda-header h2 {
     font-size: 3rem;
-    font-weight: 800;
+    font-weight: 900;
     color: #1e293b;
     margin: 0;
 }
 
 .agenda-header .highlight {
     font-size: 3rem;
-    font-weight: 800;
-    color: #ed8805; /* Warna Oranye HeyaCamp */
-    margin-top: -10px;
+    font-weight: 900;
+    color: #ea580c; /* Warna Oranye utama HeyaCamp */
+    margin-top: -5px;
     margin-bottom: 50px;
+    display: block;
 }
 
 .agenda-container {
@@ -113,18 +121,18 @@ h2 {
 .agenda-card {
     background: #ffffff;
     border: 1px solid #f1f5f9;
-    border-radius: 40px; /* Lengkungan besar sesuai gambar */
-    padding: 50px 45px;
+    border-radius: 30px; /* Diatur seimbang agar tidak terlalu over melungking */
+    padding: 40px 35px;
     flex: 1;
     min-width: 300px;
     max-width: 500px;
     text-align: left;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .agenda-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
     border-color: #e2e8f0;
 }
@@ -132,33 +140,83 @@ h2 {
 /* Styling Ikon */
 .icon-box {
     font-size: 2.5rem;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .icon-box.orange { color: #ed8805; }
 .icon-box.blue { color: #3b82f6; }
 
 .agenda-card h4 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: #1e293b;
-    margin-bottom: 15px;
+    margin: 0 0 15px 0;
 }
 
 .agenda-card p {
     color: #64748b;
-    line-height: 1.8;
+    line-height: 1.7;
     font-size: 1.05rem;
     margin: 0;
 }
 
-/* Responsive */
+/* =========================================
+   4. RESPONSIVE MOBILE (HP)
+   ========================================= */
 @media (max-width: 768px) {
+    /* Sembunyikan Navbar Atas */
+    .navbar { display: none !important; }
+
+    body { padding: 10px; padding-bottom: 100px !important; }
+
+    .agenda-section { margin: 20px auto; }
+
     .agenda-header h2, .agenda-header .highlight {
-        font-size: 2.2rem;
+        font-size: 2rem;
     }
     
-    .nav-links {
-        display: none; /* Sembunyikan menu di mobile atau ganti dengan hamburger */
+    .agenda-header .highlight {
+        margin-bottom: 30px;
+    }
+
+    .agenda-container {
+        gap: 15px;
+        padding: 0 10px;
+    }
+
+    .agenda-card {
+        padding: 30px 25px;
+        border-radius: 20px;
+        max-width: 100%; /* Kartu melebar penuh di HP */
+    }
+
+    .icon-box {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .agenda-card h4 {
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    /* Munculkan Navigasi Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 75px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        z-index: 9999;
+        border-radius: 25px 25px 0 0;
     }
 }
+
+/* Utility Nav Mobile Items */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 22px; }
