@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acara Komunitas - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="ak.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -27,7 +27,7 @@
                     <span class="text-stack"><span>Camp</span><span>Area</span></span>
                 </a>
             </li>
-            <li><a href="#"><i class="fa-regular fa-calendar"></i> Acara</a></li>
+            <li><a href="ak.html"><i class="fa-regular fa-calendar"></i> Acara</a></li>
             <li><a href="#"><i class="fa-regular fa-circle-play"></i> Nonton</a></li>
         </ul>
     </nav>
@@ -41,66 +41,242 @@
         <div class="search-container">
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass" style="color:#94a3b8;"></i>
-                <input type="text" placeholder="Cari event seru...">
+                <input type="text" id="inputCari" placeholder="Cari event seru..." oninput="filterSistemEvent()">
             </div>
             <div class="divider"></div>
             <div class="filter-box" style="display: flex; align-items: center; gap: 10px;">
                 <i class="fa-solid fa-filter" style="color:#94a3b8;"></i>
-                <select class="filter-select">
-                    <option>Semua Lokasi</option>
-                    <option>Jawa Barat</option>
-                    <option>Jawa Tengah</option>
-                    <option>Jawa Timur</option>
+                <select class="filter-select" id="selectFilterProvinsi" onchange="filterSistemEvent()">
+                    <option value="Semua">Semua Lokasi</option>
+                    <option value="Jawa Barat">Jawa Barat</option>
+                    <option value="Jawa Tengah">Jawa Tengah</option>
+                    <option value="Jawa Timur">Jawa Timur</option>
                 </select>
             </div>
         </div>
 
-        <div class="status-toggle">
-            <button class="toggle-btn active" onclick="switchTab(this)">
+        <div class="status-toggle" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px;">
+            <button class="toggle-btn active" id="tabMendatang" onclick="switchTab('Mendatang')">
                 <i class="fa-regular fa-clock"></i> Mendatang
             </button>
-            <button class="toggle-btn" onclick="switchTab(this)">
-                <i class="fa-solid fa-history"></i> Selesai <span class="badge-count"></span>
+            <button class="toggle-btn" id="tabSelesai" onclick="switchTab('Selesai')">
+                <i class="fa-solid fa-history"></i> Selesai
             </button>
         </div>
 
-        <div id="eventList">
-            <div class="empty-state">
-                <div class="icon-clock">
-                    <i class="fa-regular fa-clock"></i>
-                </div>
-                <h2>Belum ada event mendatang.</h2>
-                <p>Jadilah yang pertama membuat event!</p>
-            </div>
-        </div>
+        <div id="eventList"></div>
     </main>
 
+    <div id="modalEvent" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
+        <div style="background:white; padding:30px; border-radius:24px; width:90%; max-width:500px; box-shadow: 0 20px 25px rgba(0,0,0,0.15); box-sizing: border-box;">
+            <h2 style="margin-top:0; color:#1e293b; font-weight:800;">Buat Event Outdoor Baru ⛺</h2>
+            <form id="formBuatEvent" style="display: flex; flex-direction: column; gap: 12px;">
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Nama Event / Kegiatan</label>
+                    <input type="text" id="eventTitle" placeholder="Contoh:Fun Camp Sikunir" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Kategori</label>
+                    <select id="eventCategory" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                        <option value="Camp Bareng">Camp Bareng</option>
+                        <option value="Hiking">Hiking</option>
+                        <option value="Penanaman">Penanaman</option>
+                        <option value="Aksi Sosial">Aksi Sosial</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Wilayah Provinsi</label>
+                        <select id="eventProvinsi" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                            <option value="Jawa Tengah">Jawa Tengah</option>
+                            <option value="Jawa Barat">Jawa Barat</option>
+                            <option value="Jawa Timur">Jawa Timur</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Tanggal Main</label>
+                        <input type="date" id="eventDate" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                    </div>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">Detail Alamat / Lokasi Camp</label>
+                    <input type="text" id="eventLocation" placeholder="Contoh: Kembanglangit, Blado, Batang" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;" required>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600; font-size:14px;">URL Link Foto Cover</label>
+                    <input type="url" id="eventPhoto" placeholder="Masukkan link gambar bebas..." style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:8px; box-sizing:border-box;">
+                </div>
+                <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:10px;">
+                    <button type="button" onclick="tutupModalEvent()" style="padding:10px 20px; border-radius:8px; border:none; background:#f1f5f9; font-weight:600; cursor:pointer;">Batal</button>
+                    <button type="submit" style="padding:10px 20px; border-radius:8px; border:none; background:#ed8805; color:white; font-weight:600; cursor:pointer;">Publish Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        function switchTab(btn) {
-            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        // 1. Inisialisasi Supabase
+        const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
+        const { createClient } = supabase;
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        let semuaDataEvent = [];
+        let tabAktif = 'Mendatang';
+
+        // 2. Ambil Data dari Supabase
+        async function ambilSistemEvent() {
+            const container = document.getElementById('eventList');
+            container.innerHTML = `<p style="text-align:center; color:#94a3b8; padding:40px 0;"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi Event...</p>`;
             
-            const eventList = document.getElementById('eventList');
-            
-            if(btn.innerText.includes('Selesai')) {
-                eventList.innerHTML = `
-                    <div style="text-align:center; color:#94a3b8; padding:80px 0;">
-                        <i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:15px;"></i>
-                        <p>Memuat event yang sudah selesai...</p>
-                    </div>
-                `;
-            } else {
-                eventList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon-clock">
-                            <i class="fa-regular fa-clock"></i>
-                        </div>
-                        <h2>Belum ada event mendatang.</h2>
-                        <p>Jadilah yang pertama membuat event!</p>
-                    </div>
-                `;
+            try {
+                const { data, error } = await _supabase
+                    .from('Events') 
+                    .select('*')
+                    .order('event_date', { ascending: true });
+
+                if (error) throw error;
+                semuaDataEvent = data || [];
+                renderSistemEvent();
+            } catch (err) {
+                console.warn("Gagal fetch Supabase (Gunakan fallback lokal):", err.message);
+                semuaDataEvent = [
+                    { id: 991, title: "Camp Ceria & Silaturahmi Pendaki", category: "Camp Bareng", provinsi: "Jawa Tengah", location: "Kembanglangit, Blado, Batang", event_date: "2026-05-24", photo_url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500" },
+                    { id: 992, title: "Bersih Sampah & Reboisasi Gunung", category: "Aksi Sosial", provinsi: "Jawa Tengah", location: "Jalur Pendakian Prau via Patakbanteng", event_date: "2026-06-07", photo_url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500" }
+                ];
+                renderSistemEvent();
             }
         }
+
+        // 3. Render List Event ke HTML
+        // 3. Render List Event ke HTML (Warna Tombol Updated ke Oranye)
+        function renderSistemEvent(dataDisaring = null) {
+            const container = document.getElementById('eventList');
+            const targetData = dataDisaring || semuaDataEvent;
+
+            const hariIni = new Date().toISOString().split('T')[0];
+            
+            const eventTersaring = targetData.filter(ev => {
+                const cocokTab = tabAktif === 'Mendatang' ? (ev.event_date >= hariIni) : (ev.event_date < hariIni);
+                return cocokTab;
+            });
+
+            if (eventTersaring.length === 0) {
+                if (tabAktif === 'Mendatang') {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon-clock"><i class="fa-regular fa-clock"></i></div>
+                            <h2>Belum ada event mendatang.</h2>
+                            <p>Jadilah yang pertama membuat event!</p>
+                            <button onclick="bukaModalEvent()" style="background:#ed8805; color:white; border:none; padding:12px 25px; border-radius:30px; font-weight:800; margin-top:15px; cursor:pointer; box-shadow:0 4px 10px rgba(237,136,5,0.2);"><i class="fa-solid fa-plus"></i> Buat Event Sekarang</button>
+                        </div>`;
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align:center; color:#94a3b8; padding:80px 0;">
+                            <i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:15px;"></i>
+                            <p>Belum ada rekaman sejarah event yang diselesaikan.</p>
+                        </div>`;
+                }
+                return;
+            }
+
+            let htmlGrid = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; margin-bottom:20px;">
+                    <h3 style="color:#1e293b; font-weight:800; margin:0;">Daftar Kegiatan (${eventTersaring.length})</h3>
+                    ${tabAktif === 'Mendatang' ? '<button onclick="bukaModalEvent()" style="background:#ed8805; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer; font-size:13px; box-shadow:0 4px 10px rgba(237,136,5,0.15);"><i class="fa-solid fa-plus"></i> Tambah Event</button>' : ''}
+                </div>
+                <div class="event-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+            `;
+
+            eventTersaring.forEach(ev => {
+                const tglFormat = new Date(ev.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const imgCover = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
+                
+                let badgeStyle = "background:#fef3c7; color:#d97706;"; 
+                if (ev.category === 'Aksi Sosial') badgeStyle = "background:#fee2e2; color:#991b1b;"; 
+                if (ev.category === 'Hiking') badgeStyle = "background:#e0f2fe; color:#0369a1;"; 
+                if (ev.category === 'Penanaman') badgeStyle = "background:#dcfce7; color:#166534;"; 
+
+                htmlGrid += `
+                    <div class="event-card" style="background: white; border: 1px solid #f1f5f9; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <img src="${imgCover}" style="width: 100%; height: 180px; object-fit: cover;">
+                            <div style="padding: 20px;">
+                                <span style="${badgeStyle} padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase;">${ev.category || 'Outdoor'}</span>
+                                <h4 style="margin: 10px 0 5px 0; font-size: 18px; color: #1e293b; font-weight: 800;">${ev.title}</h4>
+                                <p style="color: #64748b; font-size: 13px; margin: 0 0 15px 0;"><i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> ${ev.location}</p>
+                            </div>
+                        </div>
+                        <div style="padding: 0 20px 20px 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+                                <span style="font-size: 13px; color: #94a3b8; font-weight: 600;"><i class="fa-regular fa-calendar"></i> ${tglFormat}</span>
+                                <span style="color: #ed8805; font-weight: 700; font-size: 14px; cursor:pointer;">Ikut <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            htmlGrid += `</div>`;
+            container.innerHTML = htmlGrid;
+        }
+
+        // 4. Sistem Live Search & Filter Provinsi
+        function filterSistemEvent() {
+            const kataKunci = document.getElementById('inputCari').value.toLowerCase();
+            const filterProv = document.getElementById('selectFilterProvinsi').value;
+
+            const hasilSaring = semuaDataEvent.filter(ev => {
+                const cocokNama = ev.title.toLowerCase().includes(kataKunci) || ev.location.toLowerCase().includes(kataKunci);
+                const cocokProv = filterProv === 'Semua' || ev.provinsi === filterProv;
+                return cocokNama && cocokProv;
+            });
+
+            renderSistemEvent(hasilSaring);
+        }
+
+        // 5. Perbaikan Fungsi Navigasi Tab Switcher (FIXED)
+        function switchTab(pilihanTab) {
+            tabAktif = pilihanTab;
+            document.getElementById('tabMendatang').classList.toggle('active', pilihanTab === 'Mendatang');
+            document.getElementById('tabSelesai').classList.toggle('active', pilihanTab === 'Selesai');
+            renderSistemEvent(); // Memicu render kartu secara real-time
+        }
+
+        // 6. Logika Input Form Kirim Event ke Supabase
+        document.getElementById('formBuatEvent').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const judul = document.getElementById('eventTitle').value;
+            const kategori = document.getElementById('eventCategory').value;
+            const prov = document.getElementById('eventProvinsi').value;
+            const tgl = document.getElementById('eventDate').value;
+            const lokasi = document.getElementById('eventLocation').value;
+            const foto = document.getElementById('eventPhoto').value;
+
+            try {
+                const { error } = await _supabase
+                    .from('Events')
+                    .insert([{
+                        title: judul, category: kategori, provinsi: prov,
+                        event_date: tgl, location: lokasi, photo_url: foto
+                    }]);
+
+                if (error) throw error;
+                
+                alert("Selamat! Event komunitasmu berhasil dipublikasikan.");
+                tutupModalEvent();
+                document.getElementById('formBuatEvent').reset();
+                ambilSistemEvent(); 
+            } catch (err) {
+                alert("Gagal memposting event: " + err.message + "\n\n(Catatan: Pastikan kamu sudah membuat tabel bernama 'Events' di dashboard Supabase milikmu)");
+            }
+        });
+
+        function bukaModalEvent() { document.getElementById('modalEvent').style.display = 'flex'; }
+        function tutupModalEvent() { document.getElementById('modalEvent').style.display = 'none'; }
+
+        window.onload = ambilSistemEvent;
     </script>
 </body>
 </html>
