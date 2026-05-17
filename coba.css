@@ -80,53 +80,67 @@ h2 {
 }
 
 /* =========================================
-   3. LAYOUT KHUSUS KATALOG & BOOKING
+   3. LAYOUT CONTAINER
    ========================================= */
 .container { 
-    max-width: 1000px; /* Sedikit diperlebar agar seimbang dengan navbar */
+    max-width: 1100px; 
     margin: 40px auto; 
-    padding: 20px; 
+    padding: 0 20px; 
+    box-sizing: border-box;
 }
 
-/* ... Sisa kode .grid, .item, dan table kamu tetap di bawah sini ... */
-
 /* =========================================
-   4. KATALOG GRID & ITEMS
+   4. KATALOG GRID & ITEMS (PREMIUM CARD)
    ========================================= */
 .grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-    gap: 20px; 
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 25px; 
 }
 
 .item { 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
-    padding: 10px; 
+    border: 1px solid #f1f5f9; 
+    border-radius: 20px; 
+    padding: 15px; 
     text-align: center; 
     background: #fff; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
 .item img { 
     width: 100%; 
-    border-radius: 5px; 
-    height: 150px; 
+    border-radius: 12px; 
+    height: 160px; 
     object-fit: cover; 
 }
 
 /* =========================================
-   5. BUTTONS & COUNTER
+   5. BUTTONS & COUNTER (HEYACAMP THEME)
    ========================================= */
 .btn { 
-    background: #2d6a4f; 
+    background: #ed8805; /* Warna Oranye utama */
     color: white; 
     border: none; 
-    padding: 8px; 
-    border-radius: 5px; 
+    padding: 12px; 
+    border-radius: 10px; 
     cursor: pointer; 
     width: 100%; 
     margin-top: 10px; 
-    font-size: 0.9rem; 
+    font-size: 14px; 
+    font-weight: 800;
+    box-shadow: 0 4px 10px rgba(237, 136, 5, 0.2);
+    transition: 0.2s;
+}
+
+.btn:hover { 
+    background: #ea580c; 
+    transform: translateY(-1px);
 }
 
 .counter-container {
@@ -134,54 +148,125 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 15px;
-    margin: 10px 0;
+    margin: 12px 0;
 }
 
 .btn-qty {
-    background: #eee;
-    border: 1px solid #ccc;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 16px;
+    color: #475569;
     transition: 0.2s;
 }
 
 .btn-qty:hover {
-    background: #2d6a4f;
+    background: #ed8805;
     color: white;
+    border-color: #ed8805;
 }
 
 .qty-val {
-    font-weight: bold;
-    font-size: 1.1rem;
+    font-weight: 800;
+    font-size: 16px;
     min-width: 20px;
+    color: #1e293b;
 }
 
 /* =========================================
-   6. TABLES & STATUS
+   6. TABLES & STATUS (RESPONSIVE WRAPPER)
    ========================================= */
+/* BUNGKUS TABEL KAMU DENGAN CLASS INI DI HTML */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Membuka fitur swipe ke samping di HP */
+    -webkit-overflow-scrolling: touch;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+    margin-top: 25px;
+}
+
 table { 
     width: 100%; 
     border-collapse: collapse; 
-    margin-top: 20px; 
 }
 
 th, td { 
-    padding: 12px; 
+    padding: 16px; 
     text-align: left; 
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid #f1f5f9; 
+    font-size: 15px;
+    white-space: nowrap; /* Mencegah kolom tabel penyok berantakan */
 }
 
 th { 
-    background: #2d6a4f; 
-    color: white; 
+    background: #f8fafc; /* Diubah abu-abu terang agar modern, teks kontras */
+    color: #1e293b; 
+    font-weight: 800;
 }
 
 .status { 
-    padding: 5px 10px; 
-    border-radius: 20px; 
+    padding: 6px 14px; 
+    border-radius: 50px; 
     font-size: 12px; 
-    background: #ffeaa7; 
+    font-weight: 700;
+    background: #fef3c7; 
+    color: #d97706; /* Soft amber/yellow style */
 }
+
+/* =========================================
+   7. RESPONSIVE MOBILE
+   ========================================= */
+@media (max-width: 768px) {
+    .navbar { display: none !important; }
+
+    body { padding: 10px; padding-bottom: 100px !important; }
+
+    .container { margin: 20px auto; padding: 0 10px; }
+
+    /* Katalog di HP jadi 2 kolom sejajar agar menghemat tempat */
+    .grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px;
+    }
+
+    .item {
+        padding: 10px;
+        border-radius: 15px;
+    }
+
+    .item img {
+        height: 120px; /* Diperkecil di HP agar proporsional */
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    /* Tampilkan Navigasi Bawah */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 75px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        z-index: 9999;
+        border-radius: 25px 25px 0 0;
+    }
+}
+
+/* Utility Menu Mobile */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 22px; }

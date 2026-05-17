@@ -1,48 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Booking - Monitoring</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="coba.css">
-    <!-- WAJIB: Tambahkan library Supabase -->
+    <link rel="stylesheet" href="aktivitas.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Gaya tambahan untuk status */
+        /* Gaya tambahan khusus elemen tabel booking */
         .status-badge {
-            padding: 5px 10px;
-            border-radius: 20px;
+            padding: 6px 14px;
+            border-radius: 50px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 700;
             background: #e2e8f0;
+            display: inline-block;
         }
         .status-konfirmasi { background: #fef3c7; color: #92400e; }
         .status-selesai { background: #dcfce7; color: #166534; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
-        th { background-color: #f8fafc; }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card h2 {
+            font-size: 24px;
+            font-weight: 900;
+            color: #1e293b;
+            margin-top: 0;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 i { color: #ea580c; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 15px; white-space: nowrap; }
+        th { background-color: #f8fafc; color: #1e293b; font-weight: 800; }
         
         .btn-hapus {
             background: #fee2e2;
             color: #ef4444;
             border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: 0.2s;
         }
+        .btn-hapus:hover { background: #fca5a5; }
     </style>
 </head>
 <body>
+
     <nav class="navbar">
         <div class="nav-logo">
             <img src="https://i.pinimg.com/736x/63/f7/b9/63f7b9e05066366fc3a65f4c3ae9eebd.jpg" alt="Logo">
         </div>
         <ul class="nav-links">
             <li><a href="index.html"><i class="fa-solid fa-house"></i> Beranda</a></li>
-            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i>Sewa Alat</a></li>
+            <li><a href="katalog.html"><i class="fa-solid fa-campground"></i> Sewa Alat</a></li>
             <li><a href="boking.html"><i class="fa-solid fa-mountain"></i> Alat Yang Sedang Disewa</a></li>
-            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i>Lokasi</a></li>
-            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i>Cara Sewa</a></li>
+            <li><a href="lokasi.html"><i class="fa-solid fa-map-location-dot"></i> Lokasi</a></li>
+            <li><a href="cara sewa.html"><i class="fa-solid fa-book-open"></i> Cara Sewa</a></li>
             <li><a href="komunitas.html"><i class="fa-regular fa-user"></i> Komunitas</a></li>
             <li>
                 <a href="ca.html">
@@ -55,10 +81,19 @@
         </ul>
     </nav>
 
-    <div class="container">
+    <div class="mobile-nav">
+        <a href="index.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Beranda</span></a>
+        <a href="katalog.html" class="mobile-nav-item"><i class="fa-solid fa-campground"></i><span>Sewa</span></a>
+        <a href="komunitas.html" class="mobile-nav-item"><i class="fa-regular fa-user"></i><span>Komunitas</span></a>
+        <a href="aktivitas.html" class="mobile-nav-item"><i class="fa-regular fa-calendar"></i><span>Aktivitas</span></a>
+        <a href="ca.html" class="mobile-nav-item"><i class="fa-solid fa-tent"></i><span>Area</span></a>
+    </div>
+
+    <main class="container">
         <div class="card">
             <h2><i class="fa-solid fa-clock-rotate-left"></i> Monitoring Sewa Real-time</h2>
-            <div style="overflow-x: auto;">
+            
+            <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
@@ -70,13 +105,12 @@
                         </tr>
                     </thead>
                     <tbody id="bookingTable">
-                        <!-- Data akan muncul di sini -->
                         <tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         // 1. Konfigurasi Supabase
@@ -86,63 +120,58 @@
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
         // 2. Fungsi Ambil Data Pesanan
-        // 2. Fungsi Ambil Data Pesanan
-async function muatDataBooking() {
-    const tbody = document.getElementById('bookingTable');
-    
-    try {
-        // Ambil data dari tabel 'Pesanan'
-        const { data: Pesanan, error } = await _supabase
-            .from('Pesanan')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        // Jika data kosong
-        if (!Pesanan || Pesanan.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = ''; // Bersihkan tulisan "Memuat data..."
-
-        // PERBAIKAN: Gunakan variabel 'Pesanan' (P besar) agar sesuai dengan hasil select di atas
-        Pesanan.forEach(item => {
-            // Cek apakah item_disewa ada, jika tidak buat array kosong agar tidak error
-            const items = item.item_disewa || [];
+        async function muatDataBooking() {
+            const tbody = document.getElementById('bookingTable');
             
-            const rincianAlat = items.map(alat => 
-                `${alat.nama} (x${alat.jumlah})`
-            ).join('<br>');
+            try {
+                const { data: Pesanan, error } = await _supabase
+                    .from('Pesanan')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <strong>${item.nama_penyewa}</strong><br>
-                    <small style="color: #64748b;">${item.nomor_hp}</small>
-                </td>
-                <td>${rincianAlat}</td>
-                <td>${item.tanggal_sewa}</td>
-                <td>
-                    <span class="status-badge ${item.status === 'Selesai' ? 'status-selesai' : 'status-konfirmasi'}">
-                        ${item.status || 'Menunggu'}
-                    </span>
-                </td>
-                <td>
-                    <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
+                if (error) throw error;
 
-    } catch (err) {
-        console.error("Detail Error:", err);
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data: ' + err.message + '</td></tr>';
-    }
-}
+                if (!Pesanan || Pesanan.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = ''; 
+
+                Pesanan.forEach(item => {
+                    const items = item.item_disewa || [];
+                    
+                    const rincianAlat = items.map(alat => 
+                        `${alat.nama} <strong>(x${alat.jumlah})</strong>`
+                    ).join('<br>');
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <strong>${item.nama_penyewa}</strong><br>
+                            <small style="color: #64748b;">${item.nomor_hp}</small>
+                        </td>
+                        <td>${rincianAlat}</td>
+                        <td>${item.tanggal_sewa}</td>
+                        <td>
+                            <span class="status-badge ${item.status === 'Selesai' ? 'status-selesai' : 'status-konfirmasi'}">
+                                ${item.status || 'Menunggu'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error("Detail Error:", err);
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data: ' + err.message + '</td></tr>';
+            }
+        }
 
         // 3. Fungsi Hapus Pesanan
         async function hapusPesanan(id) {
@@ -155,12 +184,11 @@ async function muatDataBooking() {
                 if (error) {
                     alert("Gagal menghapus data");
                 } else {
-                    muatDataBooking(); // Refresh tabel
+                    muatDataBooking(); 
                 }
             }
         }
 
-        // Jalankan saat halaman dibuka
         window.onload = muatDataBooking;
     </script>
 </body>
