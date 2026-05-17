@@ -1,16 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-
 /* =========================================
-   1. GLOBAL & BACKGROUND
+   1. GLOBAL & BACKGROUND POLA TITIK
    ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
+
 body {
     font-family: 'Nunito', sans-serif;
     background-color: #ffffff;
+    /* Efek Pola Titik (Dotted Background) */
     background-image: radial-gradient(#d1d5db 1px, transparent 1px);
     background-size: 25px 25px;
     color: #333;
     margin: 0;
     padding: 20px;
+}
+
+h2 { 
+    color: #2d6a4f; 
 }
 
 /* =========================================
@@ -25,8 +30,6 @@ body {
     border-radius: 60px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
     position: sticky;      /* Membuat navbar menempel */
     top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
     z-index: 1000;         /* Memastikan navbar di atas elemen lain */
@@ -64,6 +67,14 @@ body {
 
 .nav-links li a i {
     font-size: 18px;
+}
+
+.text-stack {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-size: 14px;
+    text-align: center;
 }
 
 /* =========================================
@@ -114,7 +125,58 @@ body {
 }
 
 /* =========================================
-   4. RESPONSIVE MOBILE (HP) - FIXED VERSION
+   4. FLOATING CART BADGE (KERANJANG MELAYANG)
+   ========================================= */
+.floating-cart {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ea580c; /* Warna oranye khas HeyaCamp */
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4);
+    z-index: 9999; /* Tetap berada di atas elemen apa pun */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0); /* Tersembunyi default (skala 0) saat cart kosong */
+}
+
+.floating-cart:hover {
+    background: #c2410c;
+    transform: scale(1.1) translateY(-3px);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #1e5631; /* Warna hijau penanda jumlah */
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Kelas Animasi Pemicu Efek Mengembang Mengagetkan */
+.cart-pop {
+    transform: scale(1.2) !important;
+}
+
+/* =========================================
+   5. RESPONSIVE MOBILE (HP) - FIXED VERSION
    ========================================= */
 @media (max-width: 768px) {
     /* 1. Sembunyikan TOTAL navbar desktop agar tidak muncul sama sekali */
@@ -170,9 +232,26 @@ body {
         font-size: 1.4rem;
         margin-bottom: 10px;
     }
+
+    /* 7. Geser posisi Keranjang Melayang ke atas agar tidak menutupi menu bawah */
+    .floating-cart {
+        bottom: 90px; /* Jarak aman di atas bar .mobile-nav */
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
+    }
+
+    .cart-count {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
 }
 
-/* Sembunyikan Mobile Nav di Desktop */
+/* =========================================
+   6. UTILITY MOBILE NAV (DESKTOP HIDDEN)
+   ========================================= */
 .mobile-nav { 
     display: none; 
 }
