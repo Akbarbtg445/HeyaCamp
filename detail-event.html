@@ -126,7 +126,6 @@
             display: block;
         }
 
-        /* Info Block Card Kanan */
         .info-main-card {
             background: white;
             border-radius: 24px;
@@ -185,7 +184,6 @@
             color: #64748b;
         }
 
-        /* Tombol Utama Bottom */
         .btn-action-primary {
             background: #ed8805;
             color: white;
@@ -206,10 +204,7 @@
             box-sizing: border-box;
         }
 
-        .btn-action-primary:hover {
-            background: #ea580c;
-            transform: translateY(-1px);
-        }
+        .btn-action-primary:hover { background: #ea580c; transform: translateY(-1px); }
 
         /* =========================================
            5. SECTION TENTANG EVENT (DESKRIPSI)
@@ -224,23 +219,9 @@
             box-sizing: border-box;
         }
 
-        .about-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0 0 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .about-title { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; }
         .about-title i { color: #ed8805; }
-
-        .article-content {
-            font-size: 15px;
-            line-height: 1.8;
-            color: #334155;
-            white-space: pre-line; /* Agar enter/baris baru dari database tetap rapi */
-        }
+        .article-content { font-size: 15px; line-height: 1.8; color: #334155; white-space: pre-line; }
 
         /* =========================================
            6. GOOGLE MAPS SECTION
@@ -255,81 +236,26 @@
             box-sizing: border-box;
         }
 
-        .maps-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0 0 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .maps-title { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; }
         .maps-title i { color: #ed8805; }
+        .wrapper-iframe { width: 100%; height: 350px; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; position: relative; }
+        .wrapper-iframe iframe { width: 100%; height: 100%; border: none; }
+        .maps-footer { margin-top: 15px; font-size: 14px; color: #64748b; display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
-        .wrapper-iframe {
-            width: 100%;
-            height: 350px;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            position: relative;
-        }
-
-        .wrapper-iframe iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .maps-footer {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-        }
-
-        /* Mobile View Utility Navigation */
         .mobile-nav { display: none; }
 
-        /* =========================================
-           7. RESPONSIVE MOBILE (HP)
-           ========================================= */
         @media (max-width: 768px) {
             .navbar { display: none !important; }
             body { padding: 10px; padding-bottom: 90px !important; }
-
             .main-container { margin: 10px auto; }
-
             .event-header h1 { font-size: 22px; margin: 8px 0; }
             .btn-top-circle { width: 38px; height: 38px; font-size: 14px; }
-
-            .split-layout {
-                grid-template-columns: 1fr !important;
-                gap: 15px;
-            }
-
+            .split-layout { grid-template-columns: 1fr !important; gap: 15px; }
             .info-main-card { padding: 20px; }
             .info-grid { grid-template-columns: 1fr !important; gap: 20px; }
-
             .about-card { padding: 20px; }
             .wrapper-iframe { height: 260px; }
-
-            /* Bottom Menu Navigasi HP */
-            .mobile-nav {
-                display: flex !important;
-                position: fixed;
-                bottom: 0; left: 0; right: 0;
-                height: 70px;
-                background: white;
-                justify-content: space-around;
-                align-items: center;
-                box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
-                z-index: 9999;
-                border-radius: 20px 20px 0 0;
-            }
+            .mobile-nav { display: flex !important; position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: white; justify-content: space-around; align-items: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); z-index: 9999; border-radius: 20px 20px 0 0; }
             .mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
             .mobile-nav-item.active { color: #ed8805; }
             .mobile-nav-item i { font-size: 20px; }
@@ -361,7 +287,6 @@
     </nav>
 
     <main class="main-container">
-        
         <div class="event-header">
             <div class="title-area">
                 <span id="viewStatusBadge" class="status-badge" style="background: #ffedd5; color: #ed8805;">Mendatang</span>
@@ -447,7 +372,6 @@
     </div>
 
 <script>
-    // 1. Konfigurasi Client Supabase
     const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
     const { createClient } = supabase;
@@ -470,8 +394,6 @@
 
             if (ev) {
                 const tglFormat = new Date(ev.event_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-                
-                // Cek status berdasarkan Hari Ini
                 const hariIni = new Date().toISOString().split('T')[0];
                 const badge = document.getElementById('viewStatusBadge');
                 const btnWA = document.getElementById('btnHubungiWA');
@@ -486,31 +408,27 @@
                     badge.style.cssText = "background: #fff7ed; color: #ed8805;";
                 }
 
-                // Masukkan data dasar ke HTML
                 document.getElementById('eventPosterImg').src = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
                 document.getElementById('viewTitle').innerText = ev.title;
                 document.getElementById('viewDate').innerText = tglFormat;
-                document.getElementById('subDate').innerText = tglFormat;
+                
+                // SUNTIK DATA JAM ACARA KE HTML (FIXED)
+                document.getElementById('subDate').innerText = ev.event_time || '08:00 WIB';
+                
                 document.getElementById('viewLocationName').innerText = ev.location;
                 document.getElementById('viewProvinsi').innerText = ev.provinsi;
                 document.getElementById('viewFooterLocation').innerText = `${ev.location}, ${ev.provinsi}`;
-
-                // SINKRONISASI DATA DINAMIS KAPASITAS & HARGA TIKET (FIXED)
                 document.getElementById('viewQuota').innerText = ev.quota || 'Tidak Dibatasi';
                 document.getElementById('viewPrice').innerText = ev.price || 'Gratis';
-
-                // Suntik data deskripsi dari Supabase ke kotak "Tentang Event"
                 document.getElementById('viewDescription').innerText = ev.description || 'Tidak ada deskripsi lengkap mengenai kegiatan event ini.';
 
-                // Logika Iframe Google Maps Otomatis berbasis Alamat Teks
                 const alamatQuery = encodeURIComponent(`${ev.location}, ${ev.provinsi}`);
                 document.getElementById('mapsIframe').src = `https://maps.google.com/maps?q=${alamatQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
 
-                // Atur klik pendaftaran WhatsApp otomatis bawa pesan teks
                 if (ev.event_date >= hariIni) {
                     btnWA.onclick = function() {
                         const nomorWA = "6285641039650";
-                        const teksWA = `Halo Admin HeyaCamp! 👋\nSaya berminat daftar gabung ke event Komunitas: *${ev.title}*.\n\n📅 *Tanggal:* ${tglFormat}\n📍 *Lokasi:* ${ev.location}\n\nMohon info detail pendaftaran dan koordinasinya ya!`;
+                        const teksWA = `Halo Admin HeyaCamp! 👋\nSaya berminat daftar gabung ke event Komunitas: *${ev.title}*.\n\n📅 *Tanggal:* ${tglFormat}\n⏰ *Jam Kumpul:* ${ev.event_time || '08:00 WIB'}\n📍 *Lokasi:* ${ev.location}\n\nMohon info detail pendaftaran dan koordinasinya ya!`;
                         window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(teksWA)}`, '_blank');
                     };
                 }
