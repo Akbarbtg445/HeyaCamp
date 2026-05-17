@@ -10,7 +10,7 @@
         /* =========================================
            1. RESET & GLOBAL STYLES (NUNITO)
            ========================================= */
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght=400;600;700;800;900&display=swap');
 
         body {
             font-family: 'Nunito', sans-serif;
@@ -212,7 +212,38 @@
         }
 
         /* =========================================
-           5. GOOGLE MAPS SECTION (PERSIS GAMBAR)
+           5. SECTION TENTANG EVENT (DESKRIPSI)
+           ========================================= */
+        .about-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            margin-top: 25px;
+            box-sizing: border-box;
+        }
+
+        .about-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .about-title i { color: #ed8805; }
+
+        .article-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #334155;
+            white-space: pre-line; /* Agar enter/baris baru dari database tetap rapi */
+        }
+
+        /* =========================================
+           6. GOOGLE MAPS SECTION
            ========================================= */
         .maps-card {
             background: white;
@@ -233,7 +264,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .maps-title i { color: #ed8805; }
 
         .wrapper-iframe {
@@ -261,11 +291,11 @@
             font-weight: 600;
         }
 
-        /* Mobile View Hide Utility */
+        /* Mobile View Utility Navigation */
         .mobile-nav { display: none; }
 
         /* =========================================
-           6. RESPONSIVE MOBILE (HP)
+           7. RESPONSIVE MOBILE (HP)
            ========================================= */
         @media (max-width: 768px) {
             .navbar { display: none !important; }
@@ -276,7 +306,6 @@
             .event-header h1 { font-size: 22px; margin: 8px 0; }
             .btn-top-circle { width: 38px; height: 38px; font-size: 14px; }
 
-            /* Jadikan tumpukan ke bawah di mobile */
             .split-layout {
                 grid-template-columns: 1fr !important;
                 gap: 15px;
@@ -285,9 +314,10 @@
             .info-main-card { padding: 20px; }
             .info-grid { grid-template-columns: 1fr !important; gap: 20px; }
 
+            .about-card { padding: 20px; }
             .wrapper-iframe { height: 260px; }
 
-            /* Menu Navigasi Bawah */
+            /* Bottom Menu Navigasi HP */
             .mobile-nav {
                 display: flex !important;
                 position: fixed;
@@ -389,6 +419,13 @@
             </div>
         </div>
 
+        <div class="about-card">
+            <h3 class="about-title"><i class="fa-solid fa-circle-info"></i> Tentang Event</h3>
+            <div class="article-content" id="viewDescription">
+                <p style="color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> Memuat deskripsi kegiatan...</p>
+            </div>
+        </div>
+
         <div class="maps-card">
             <h3 class="maps-title"><i class="fa-solid fa-map-location-dot"></i> Lokasi Event</h3>
             <div class="wrapper-iframe">
@@ -449,7 +486,7 @@
                     badge.style.cssText = "background: #fff7ed; color: #ed8805;";
                 }
 
-                // Masukkan data dasar
+                // Masukkan data dasar ke HTML
                 document.getElementById('eventPosterImg').src = ev.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
                 document.getElementById('viewTitle').innerText = ev.title;
                 document.getElementById('viewDate').innerText = tglFormat;
@@ -458,12 +495,14 @@
                 document.getElementById('viewProvinsi').innerText = ev.provinsi;
                 document.getElementById('viewFooterLocation').innerText = `${ev.location}, ${ev.provinsi}`;
 
-                // 2. LOGIKA GENERATE GOOGLE MAPS EMBED IFRAME SECARA OTOMATIS
-                // Mengonversi alamat teks biasa menjadi format URL safe agar dibaca Google Maps
+                // SUNTIK DATA DESKRIPSI DARI SUPABASE KE KOTAK "TENTANG EVENT"
+                document.getElementById('viewDescription').innerText = ev.description || 'Tidak ada deskripsi lengkap mengenai kegiatan event ini.';
+
+                // Logika Iframe Google Maps Otomatis berbasis Alamat Teks
                 const alamatQuery = encodeURIComponent(`${ev.location}, ${ev.provinsi}`);
                 document.getElementById('mapsIframe').src = `https://maps.google.com/maps?q=${alamatQuery}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
 
-                // Atur klik WhatsApp pendaftaran
+                // Atur klik pendaftaran WhatsApp otomatis bawa pesan teks
                 if (ev.event_date >= hariIni) {
                     btnWA.onclick = function() {
                         const nomorWA = "6285641039650";
