@@ -21,50 +21,29 @@ body {
     align-items: center;
     justify-content: space-between;
     background-color: #ffffff;
-    padding: 10px 25px;
-    border-radius: 60px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    max-width: 1200px;
-    
-    /* Tambahkan Kode di Bawah Ini */
-    position: sticky;      /* Membuat navbar menempel */
-    top: 20px;            /* Memberikan jarak dari atas layar saat melayang */
-    z-index: 1000;         /* Memastikan navbar di atas elemen lain */
-    margin: 0 auto 20px;   /* Margin otomatis ke tengah dan jarak bawah */
+    padding: 0 30px;
+    border-radius: 100px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 1250px;
+    position: sticky;
+    top: 20px;
+    z-index: 1000;
+    margin: 20px auto;
+    height: 65px;
 }
 
-.nav-logo img {
-    height: 40px;
-    object-fit: contain;
+.nav-logo img { height: 35px; object-fit: contain; }
+.nav-links { display: flex; list-style: none; gap: 15px; margin: 0; padding: 0; align-items: center; }
+.nav-links li a { 
+    text-decoration: none; 
+    color: #475569; 
+    font-weight: 700; 
+    font-size: 13.5px; 
+    display: flex; 
+    align-items: center; 
+    gap: 7px; 
 }
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 25px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #4a5568; 
-    font-weight: 700;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 0.3s ease;
-}
-
-.nav-links li a:hover {
-    color: #ed8805; /* Warna hover menyesuaikan tema HeyaCamp */
-}
-
-.nav-links li a i {
-    font-size: 18px;
-}
+.nav-links li a:hover { color: #ea580c; }
 .text-stack { display: flex; flex-direction: column; line-height: 1.1; font-size: 14px; text-align: center; }
 
 /* =========================================
@@ -185,46 +164,99 @@ body {
 .btn-save:active { transform: translateY(4px); box-shadow: 0 1px 0 #c2410c; }
 
 /* =========================================
-   4. RESPONSIVE MOBILE (PEMBERSIHAN TOTAL)
+   4. RESPONSIVE MOBILE (OPTIMASI HP TOTAL)
    ========================================= */
 @media (max-width: 768px) {
-    /* Hapus Navbar Desktop yang berantakan */
-    .navbar { display: none !important; }
-
-    body { padding: 10px; padding-bottom: 100px !important; }
-
-    .container { margin: 20px auto; padding: 0 10px; }
-
-    .form-card { padding: 25px 20px; border-radius: 20px; }
-
-    .grid-2 { grid-template-columns: 1fr; } /* Input tumpuk di HP */
-
-    .form-actions { 
-        flex-direction: column-reverse; 
-        gap: 20px; 
-        align-items: stretch; 
+    /* 1. Paksa Hilangkan Navbar Desktop */
+    .navbar { 
+        display: none !important; 
     }
 
-    .btn-save { width: 100%; text-align: center; }
-    .btn-cancel { text-align: center; }
+    /* 2. Beri ruang di atas dan bawah body */
+    body { 
+        padding: 15px 10px; 
+        padding-top: 25px !important; /* Jarak aman dari notch/status bar HP */
+        padding-bottom: 110px !important; /* Ruang bernapas di atas mobile nav */
+    }
 
-    /* Navigasi Bawah Mobile */
+    /* 3. Container Menyesuaikan Layar */
+    .container { 
+        margin: 0 auto; 
+        padding: 0 5px; 
+    }
+
+    /* 4. Perkecil Padding Card agar Input Lebih Luas */
+    .form-card { 
+        padding: 25px 18px; 
+        border-radius: 20px; 
+    }
+
+    /* 5. Kecilkan Ukuran Judul Form */
+    .form-title {
+        font-size: 22px !important;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+
+    /* 6. Grid Otomatis Menjadi 1 Kolom */
+    .grid-2 { 
+        grid-template-columns: 1fr !important; 
+        gap: 15px;
+    }
+
+    /* 7. Centang Fasilitas (Pills) Menyesuaikan */
+    .facilities-container {
+        gap: 8px;
+    }
+    .facility-label {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    /* 8. Tombol Aksi Menjadi Tumpuk Vertikal */
+    .form-actions { 
+        flex-direction: column-reverse; /* Simpan di atas, Batal di bawah */
+        gap: 15px; 
+        align-items: stretch; 
+        margin-top: 30px;
+        padding-top: 20px;
+    }
+
+    .btn-save { 
+        width: 100%; 
+        text-align: center; 
+        padding: 14px 0;
+        font-size: 15px;
+    }
+    
+    .btn-cancel { 
+        text-align: center; 
+        padding: 5px 0;
+        font-size: 15px;
+    }
+
+    /* Jika ada Upload Box Foto, Buat Otomatis ke Tengah */
+    .photo-upload-box {
+        margin: 0 auto;
+    }
+
+    /* 9. Tampilkan Navbar Bawah dengan Sempurna */
     .mobile-nav {
         display: flex !important;
         position: fixed;
         bottom: 0; left: 0; right: 0;
-        height: 70px;
+        height: 75px;
         background: white;
         justify-content: space-around;
         align-items: center;
-        box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 -3px 20px rgba(0,0,0,0.06);
         z-index: 10000;
-        border-radius: 20px 20px 0 0;
+        border-radius: 25px 25px 0 0;
     }
 }
 
-/* Nav Mobile Utility */
+/* Nav Mobile Items Utility */
 .mobile-nav { display: none; }
-.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 10px; gap: 4px; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
 .mobile-nav-item.active { color: #ed8805; }
-.mobile-nav-item i { font-size: 20px; }
+.mobile-nav-item i { font-size: 22px; }
