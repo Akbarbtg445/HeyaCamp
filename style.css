@@ -321,6 +321,11 @@ th { background: #2d6a4f; color: white; }
 }
 .icon-orange { color: #ed8805; }
 .icon-blue { color: #3b82f6; }
+.icon-green { color: #22c55e; }   /* Hijau */
+.icon-yellow { color: #eab308; }  /* Kuning Emas */
+.icon-red { color: #ef4444; }     /* Merah */
+.icon-purple { color: #a855f7; }  /* Ungu */
+.icon-cyan { color: #06b6d4; }    /* Cyan/Teal */
 
 .agenda-card h3 {
     font-size: 20px;
@@ -414,5 +419,118 @@ th { background: #2d6a4f; color: white; }
 @media (max-width: 480px) {
     .post-container h1 {
         font-size: 28px !important;
+    }
+}
+/* =========================================
+   GAYA KARTU FITUR KOMUNITAS
+   ========================================= */
+.features-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Jarak antar baris grid */
+}
+
+/* Baris Atas: 3 Kolom sejajar */
+.features-grid-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+/* Baris Bawah: 2 Kolom sejajar */
+.features-grid-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+/* Gaya Kartu Utama */
+.feature-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px; /* Sudut membulat halus sesuai gambar */
+    padding: 35px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02); /* Shadow sangat tipis */
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Efek Hover Angkat Halus */
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+/* Styling Ikon Base */
+.feature-icon {
+    font-size: 28px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* VARIASI WARNA IKON SESUAI SCREENSHOT */
+.icon-green { color: #22c55e; }   /* Hijau */
+.icon-yellow { color: #eab308; }  /* Kuning Emas */
+.icon-red { color: #ef4444; }     /* Merah */
+.icon-purple { color: #a855f7; }  /* Ungu */
+.icon-cyan { color: #06b6d4; }    /* Cyan/Teal */
+
+/* Judul Fitur */
+.feature-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a; /* Warna teks gelap kokoh */
+    margin: 0 0 15px 0;
+}
+
+/* Deskripsi Teks */
+.feature-desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #64748b; /* Warna Slate sekunder */
+    margin: 0;
+}
+
+/* =========================================
+   RESPONSIVE MOBILE (HP)
+   ========================================= */
+@media (max-width: 768px) {
+    .features-container {
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    /* Paksa semua grid baris atas dan bawah menjadi 1 kolom saja di HP */
+    .features-grid-top, 
+    .features-grid-bottom {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .feature-card {
+        padding: 25px; /* Kurangi padding di HP agar space efisien */
+        border-radius: 20px;
+    }
+
+    .feature-icon {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .feature-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .feature-desc {
+        font-size: 13.5px;
     }
 }
