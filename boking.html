@@ -52,11 +52,10 @@
                             <th>Alat & Jumlah</th>
                             <th>Tanggal Sewa</th>
                             <th>Status</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="bookingTable">
-                        <tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>
+                        <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -83,7 +82,7 @@
                 if (error) throw error;
 
                 if (!Pesanan || Pesanan.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada pesanan masuk.</td></tr>';
                     return;
                 }
 
@@ -108,34 +107,13 @@
                                 ${item.status || 'Menunggu'}
                             </span>
                         </td>
-                        <td>
-                            <button class="btn-hapus" onclick="hapusPesanan(${item.id})">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
             } catch (err) {
                 console.error("Detail Error:", err);
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data: ' + err.message + '</td></tr>';
-            }
-        }
-
-        // 3. Fungsi Hapus Pesanan
-        async function hapusPesanan(id) {
-            if (confirm("Hapus data pesanan ini?")) {
-                const { error } = await _supabase
-                    .from('Pesanan')
-                    .delete()
-                    .eq('id', id);
-
-                if (error) {
-                    alert("Gagal menghapus data");
-                } else {
-                    muatDataBooking(); 
-                }
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">Gagal memuat data: ' + err.message + '</td></tr>';
             }
         }
 
