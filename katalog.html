@@ -107,40 +107,72 @@
             }
         }
 
-        async function prosesSewaSemua() {
-            const nama = document.getElementById('namaPenyewa').value;
-            const hp = document.getElementById('hpPenyewa').value;
-            const tgl = document.getElementById('tglSewa').value;
-            const alamat = document.getElementById('alamatPenyewa').value;
+       async function prosesSewaSemua() {
+    const nama = document.getElementById('namaPenyewa').value;
+    const hp = document.getElementById('hpPenyewa').value;
+    const tgl = document.getElementById('tglSewa').value;
+    const alamat = document.getElementById('alamatPenyewa').value;
 
-            let itemTerpilih = [];
-            let totalHarga = 0;
+    let itemTerpilih = [];
+    let totalHarga = 0;
 
-            alatOutdoor.forEach(alat => {
-                let qty = cart[alat.id];
-                if (qty > 0) {
-                    itemTerpilih.push({ nama: alat.nama, jumlah: qty, subtotal: alat.harga * qty });
-                    totalHarga += (alat.harga * qty);
-                }
-            });
-
-            if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
-                alert("Lengkapi data dan pilih minimal 1 alat!");
-                return;
-            }
-
-            try {
-                const { error } = await _supabase.from('Pesanan').insert([{
-                    nama_penyewa: nama, nomor_hp: hp, tanggal_sewa: tgl,
-                    alamat: alamat, item_disewa: itemTerpilih, total_harga: totalHarga
-                }]);
-                if (error) throw error;
-                alert("Pesanan berhasil dikirim!");
-                window.open(`https://wa.me/628123456789?text=${encodeURIComponent("Halo, saya " + nama + " ingin menyewa alat...")}`);
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
+    alatOutdoor.forEach(alat => {
+        let qty = cart[alat.id];
+        if (qty > 0) {
+            itemTerpilih.push({ nama: alat.nama, jumlah: qty, subtotal: alat.harga * qty });
+            totalHarga += (alat.harga * qty);
         }
+    });
+
+    if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
+        alert("Lengkapi data dan pilih minimal 1 alat!");
+        return;
+    }
+
+    try {
+        // 1. Simpan data ke database Supabase
+        const { error } = await _supabase.from('Pesanan').insert([{
+            nama_penyewa: nama, nomor_hp: hp, tanggal_sewa: tgl,
+            alamat: alamat, item_disewa: itemTerpilih, total_harga: totalHarga
+        }]);
+        if (error) throw error;
+
+        // 2. Format tanggal Indonesia agar rapi di WA
+        const opsiTgl = { day: 'numeric', month: 'long', year: 'numeric' };
+        const tglFormat = new Date(tgl).toLocaleDateString('id-ID', opsiTgl);
+
+        // 3. Susun teks format nota belanja otomatis untuk WhatsApp
+        let teksWA = `*NOTIFIKASI BOOKING HEYACAMP* ⛺\n`;
+        teksWA += `=========================\n\n`;
+        teksWA += `*Data Penyewa:*\n`;
+        teksWA += `• Nama: ${nama}\n`;
+        teksWA += `• No. HP: ${hp}\n`;
+        teksWA += `• Tgl Sewa: ${tglFormat}\n`;
+        teksWA += `• Alamat: ${alamat || '-'}\n\n`;
+        teksWA += `*Daftar Alat Yang Disewa:*\n`;
+
+        itemTerpilih.forEach((item, index) => {
+            teksWA += `${index + 1}. *${item.nama}*\n`;
+            teksWA += `   Jumlah: ${item.jumlah} Pcs -> Rp ${item.subtotal.toLocaleString('id-ID')}\n`;
+        });
+
+        teksWA += `\n---------------------------------\n`;
+        teksWA += `*Total Pembayaran:* Rp ${totalHarga.toLocaleString('id-ID')}\n`;
+        teksWA += `---------------------------------\n\n`;
+        teksWA += `Mohon segera dikonfirmasi ya Admin HeyaCamp! 🙏`;
+
+        // 4. GANTI NOMOR DI BAWAH INI DENGAN NOMOR WA TOKO KAMU (Awali kode 62 tanpa spasi/plus)
+        const nomorAdminHeyaCamp = "62895360601334"; 
+
+        alert("Pesanan berhasil masuk ke sistem! Mengalihkan ke WhatsApp Admin...");
+
+        // 5. Eksekusi redirect ke WhatsApp
+        window.open(`https://wa.me/${nomorAdminHeyaCamp}?text=${encodeURIComponent(teksWA)}`, '_blank');
+
+    } catch (err) {
+        alert("Error: " + err.message);
+    }
+}
     </script>
 </body>
 </html>
