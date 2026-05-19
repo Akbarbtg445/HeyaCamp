@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Alat - HeyaCamp</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="katalog.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
    <nav class="navbar">
@@ -34,7 +35,7 @@
         <a href="index.html" class="mobile-nav-item"><i class="fa-solid fa-house"></i><span>Beranda</span></a>
         <a href="katalog.html" class="mobile-nav-item active"><i class="fa-solid fa-campground"></i><span>Sewa</span></a>
         <a href="komunitas.html" class="mobile-nav-item"><i class="fa-regular fa-user"></i><span>Komunitas</span></a>
-        <a href="aktivitas.html" class="mobile-nav-item"><i class="fa-solid fa-wave-square"></i><span>Aktivitas</span></a>
+        <a href="ak.html" class="mobile-nav-item"><i class="fa-solid fa-compass"></i><span>Aktivitas</span></a>
         <a href="ca.html" class="mobile-nav-item"><i class="fa-solid fa-tent"></i><span>Area</span></a>
     </div>
 
@@ -44,17 +45,20 @@
 
         <div class="card" style="margin-top: 30px; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
             <h3>Data Penyewa</h3>
-            <input type="text" id="namaPenyewa" placeholder="Nama Lengkap" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
-            <input type="tel" id="hpPenyewa" placeholder="Nomor WhatsApp" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
+            
+            <input type="text" id="namaPenyewa" placeholder="Nama Lengkap (Hanya Huruf & Spasi)" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;" oninput="filterNama(this)">
+            <input type="tel" id="hpPenyewa" placeholder="Nomor WhatsApp (Hanya Angka)" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;" oninput="filterAngka(this)">
             <input type="date" id="tglSewa" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
-            <textarea id="alamatPenyewa" placeholder="Alamat Lengkap" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; height: 80px;"></textarea>
+            <textarea id="alamatPenyewa" placeholder="Alamat Lengkap (Hanya Huruf, Angka & Spasi)" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; height: 80px;" oninput="filterAlamat(this)"></textarea>
+            
             <button id="btnSewa" class="btn" style="background: #1e5631; width: 100%; color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;" onclick="prosesSewaSemua()">Sewa Sekarang</button>
         </div>
-    </div>
+    </main>
+
     <div class="floating-cart" id="floatingCart" onclick="scrollToForm()">
-    <i class="fa-solid fa-basket-shopping"></i>
-    <span class="cart-count" id="cartCount">0</span>
-</div>
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
 
     <script>
         const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co';
@@ -81,7 +85,7 @@
 
         let cart = {};
 
-        // RENDER KATALOG (Hanya dijalankan sekali saat page load)
+        // RENDER KATALOG
         const katalogList = document.getElementById('katalogList');
         alatOutdoor.forEach(alat => {
             cart[alat.id] = 0;
@@ -108,75 +112,124 @@
             if (newVal >= 0) {
                 cart[id] = newVal;
                 document.getElementById(`qty-${id}`).innerText = newVal;
+                hitungTotalKeranjang();
             }
         }
 
-       async function prosesSewaSemua() {
-    const nama = document.getElementById('namaPenyewa').value;
-    const hp = document.getElementById('hpPenyewa').value;
-    const tgl = document.getElementById('tglSewa').value;
-    const alamat = document.getElementById('alamatPenyewa').value;
-
-    let itemTerpilih = [];
-    let totalHarga = 0;
-
-    alatOutdoor.forEach(alat => {
-        let qty = cart[alat.id];
-        if (qty > 0) {
-            itemTerpilih.push({ nama: alat.nama, jumlah: qty, subtotal: alat.harga * qty });
-            totalHarga += (alat.harga * qty);
+        function hitungTotalKeranjang() {
+            let total = 0;
+            Object.values(cart).forEach(qty => total += qty);
+            document.getElementById('cartCount').innerText = total;
         }
-    });
 
-    if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
-        alert("Lengkapi data dan pilih minimal 1 alat!");
-        return;
-    }
+        function scrollToForm() {
+            document.getElementById('namaPenyewa').scrollIntoView({ behavior: 'smooth' });
+        }
 
-    try {
-        // 1. Simpan data ke database Supabase
-        const { error } = await _supabase.from('Pesanan').insert([{
-            nama_penyewa: nama, nomor_hp: hp, tanggal_sewa: tgl,
-            alamat: alamat, item_disewa: itemTerpilih, total_harga: totalHarga
-        }]);
-        if (error) throw error;
+        /* =========================================
+           SISTEM VALIDASI REAL-TIME (PENCEGAHAN)
+           ========================================= */
+        function filterNama(input) {
+            // Hanya mengizinkan huruf besar, huruf kecil, dan spasi (simbol & angka dihapus)
+            input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
+        }
 
-        // 2. Format tanggal Indonesia agar rapi di WA
-        const opsiTgl = { day: 'numeric', month: 'long', year: 'numeric' };
-        const tglFormat = new Date(tgl).toLocaleDateString('id-ID', opsiTgl);
+        function filterAngka(input) {
+            // Hanya mengizinkan angka (huruf, spasi & simbol dihapus)
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
 
-        // 3. Susun teks format nota belanja otomatis untuk WhatsApp
-        let teksWA = `*NOTIFIKASI BOOKING HEYACAMP* ⛺\n`;
-        teksWA += `=========================\n\n`;
-        teksWA += `*Data Penyewa:*\n`;
-        teksWA += `• Nama: ${nama}\n`;
-        teksWA += `• No. HP: ${hp}\n`;
-        teksWA += `• Tgl Sewa: ${tglFormat}\n`;
-        teksWA += `• Alamat: ${alamat || '-'}\n\n`;
-        teksWA += `*Daftar Alat Yang Disewa:*\n`;
+        function filterAlamat(input) {
+            // Hanya mengizinkan huruf, angka, dan spasi (simbol-simbol dihapus)
+            input.value = input.value.replace(/[^a-zA-Z0-9\s]/g, '');
+        }
 
-        itemTerpilih.forEach((item, index) => {
-            teksWA += `${index + 1}. *${item.nama}*\n`;
-            teksWA += `   Jumlah: ${item.jumlah} Pcs -> Rp ${item.subtotal.toLocaleString('id-ID')}\n`;
-        });
+        /* =========================================
+           EKSEKUSI PROSES SEWA (VALIDASI AKHIR)
+           ========================================= */
+        async function prosesSewaSemua() {
+            const nama = document.getElementById('namaPenyewa').value.trim();
+            const hp = document.getElementById('hpPenyewa').value.trim();
+            const tgl = document.getElementById('tglSewa').value;
+            const alamat = document.getElementById('alamatPenyewa').value.trim();
 
-        teksWA += `\n---------------------------------\n`;
-        teksWA += `*Total Pembayaran:* Rp ${totalHarga.toLocaleString('id-ID')}\n`;
-        teksWA += `---------------------------------\n\n`;
-        teksWA += `Mohon segera dikonfirmasi ya Admin HeyaCamp! 🙏`;
+            let itemTerpilih = [];
+            let totalHarga = 0;
 
-        // 4. GANTI NOMOR DI BAWAH INI DENGAN NOMOR WA TOKO KAMU (Awali kode 62 tanpa spasi/plus)
-        const nomorAdminHeyaCamp = "6285641039650"; 
+            alatOutdoor.forEach(alat => {
+                let qty = cart[alat.id];
+                if (qty > 0) {
+                    itemTerpilih.push({ nama: alat.nama, jumlah: qty, subtotal: alat.harga * qty });
+                    totalHarga += (alat.harga * qty);
+                }
+            });
 
-        alert("Pesanan berhasil masuk ke sistem! Mengalihkan ke WhatsApp Admin...");
+            // 1. Validasi Kelengkapan Dasar
+            if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
+                alert("Lengkapi data penyewa dan pilih minimal 1 alat outdoor!");
+                return;
+            }
 
-        // 5. Eksekusi redirect ke WhatsApp
-        window.open(`https://wa.me/${nomorAdminHeyaCamp}?text=${encodeURIComponent(teksWA)}`, '_blank');
+            // 2. Validasi Akhir Karakter (Double Protection)
+            const regexNama = /^[a-zA-Z\s]+$/;
+            const regexHp = /^[0-9]+$/;
+            const regexAlamat = /^[a-zA-Z0-9\s]+$/;
 
-    } catch (err) {
-        alert("Error: " + err.message);
-    }
-}
+            if (!regexNama.test(nama)) {
+                alert("Format nama salah! Tidak boleh menggunakan simbol atau angka.");
+                return;
+            }
+            if (!regexHp.test(hp)) {
+                alert("Format nomor HP salah! Hanya boleh berisi angka.");
+                return;
+            }
+            if (alamat && !regexAlamat.test(alamat)) {
+                alert("Format alamat salah! Harap hapus simbol (seperti koma, titik, strip, dll).");
+                return;
+            }
+
+            try {
+                // Simpan data ke database Supabase
+                const { error } = await _supabase.from('Pesanan').insert([{
+                    nama_penyewa: nama, nomor_hp: hp, tanggal_sewa: tgl,
+                    alamat: alamat, item_disewa: itemTerpilih, total_harga: totalHarga
+                }]);
+                if (error) throw error;
+
+                const opsiTgl = { day: 'numeric', month: 'long', year: 'numeric' };
+                const tglFormat = new Date(tgl).toLocaleDateString('id-ID', opsiTgl);
+
+                // Susun teks format nota belanja otomatis untuk WhatsApp
+                let teksWA = `*NOTIFIKASI BOOKING HEYACAMP* ⛺\n`;
+                teksWA += `=========================\n\n`;
+                teksWA += `*Data Penyewa:*\n`;
+                teksWA += `• Nama: ${nama}\n`;
+                teksWA += `• No. HP: ${hp}\n`;
+                teksWA += `• Tgl Sewa: ${tglFormat}\n`;
+                teksWA += `• Alamat: ${alamat || '-'}\n\n`;
+                teksWA += `*Daftar Alat Yang Disewa:*\n`;
+
+                itemTerpilih.forEach((item, index) => {
+                    teksWA += `${index + 1}. *${item.nama}*\n`;
+                    teksWA += `   Jumlah: ${item.jumlah} Pcs -> Rp ${item.subtotal.toLocaleString('id-ID')}\n`;
+                });
+
+                teksWA += `\n---------------------------------\n`;
+                teksWA += `*Total Pembayaran:* Rp ${totalHarga.toLocaleString('id-ID')}\n`;
+                teksWA += `---------------------------------\n\n`;
+                teksWA += `Mohon segera dikonfirmasi ya Admin HeyaCamp! 🙏`;
+
+                const nomorAdminHeyaCamp = "6285641039650"; 
+
+                alert("Pesanan berhasil masuk ke sistem! Mengalihkan ke WhatsApp Admin...");
+
+                // Redirect ke WhatsApp
+                window.open(`https://wa.me/${nomorAdminHeyaCamp}?text=${encodeURIComponent(teksWA)}`, '_blank');
+
+            } catch (err) {
+                alert("Error saat menyimpan pesanan: " + err.message);
+            }
+        }
     </script>
 </body>
 </html>
