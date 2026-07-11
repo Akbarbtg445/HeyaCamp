@@ -181,44 +181,54 @@ h2 {
     align-items: start; /* Menjaga kartu tidak melar ke bawah */
 }
 
-/* Responsif untuk HP agar menjadi 1 kolom kembali */
-@media (max-width: 992px) {
-    .content-grid {
-        grid-template-columns: 1fr;
-    }
-}
 /* =========================================
-   RESPONSIVE MOBILE (HP)
+   6. RESPONSIVE MOBILE
    ========================================= */
 @media (max-width: 768px) {
-    .features-container {
-        gap: 15px;
-        padding: 0 15px;
+    .navbar { display: none !important; }
+    
+    .container { margin: 20px auto; padding: 0 15px; }
+    
+    .header-section { flex-direction: column; text-align: center; gap: 20px; }
+    .btn-add-camp { width: 100%; justify-content: center; }
+
+    .search-container { 
+        flex-direction: column; 
+        border-radius: 25px; 
+        padding: 20px; 
+        gap: 15px; 
+    }
+    .divider { display: none; }
+    
+    .search-box, .filter-box { 
+        width: 100%; 
+        background: #f8fafc;
+        padding: 12px 15px;
+        border-radius: 12px;
+        box-sizing: border-box;
     }
 
-    /* Paksa semua grid baris atas dan bawah menjadi 1 kolom saja di HP */
-    .features-grid-top, 
-    .features-grid-bottom {
-        grid-template-columns: 1fr !important;
-        gap: 15px;
+    .camp-grid { grid-template-columns: 1fr !important; }
+
+    /* Navigasi Bawah Mobile */
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: 75px;
+        background: white;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        z-index: 9999;
+        border-radius: 25px 25px 0 0;
     }
 
-    .feature-card {
-        padding: 25px; /* Kurangi padding di HP agar space efisien */
-        border-radius: 20px;
-    }
-
-    .feature-icon {
-        font-size: 24px;
-        margin-bottom: 15px;
-    }
-
-    .feature-title {
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
-
-    .feature-desc {
-        font-size: 13.5px;
-    }
+    body { padding-bottom: 100px !important; }
 }
+
+/* Nav Mobile Utility */
+.mobile-nav { display: none; }
+.mobile-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #94a3b8; font-size: 11px; font-weight: 700; gap: 5px; }
+.mobile-nav-item.active { color: #ed8805; }
+.mobile-nav-item i { font-size: 22px; }
