@@ -187,3 +187,38 @@ h2 {
         grid-template-columns: 1fr;
     }
 }
+/* =========================================
+   RESPONSIVE MOBILE (HP)
+   ========================================= */
+@media (max-width: 768px) {
+    .features-container {
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    /* Paksa semua grid baris atas dan bawah menjadi 1 kolom saja di HP */
+    .features-grid-top, 
+    .features-grid-bottom {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+
+    .feature-card {
+        padding: 25px; /* Kurangi padding di HP agar space efisien */
+        border-radius: 20px;
+    }
+
+    .feature-icon {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .feature-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .feature-desc {
+        font-size: 13.5px;
+    }
+}
