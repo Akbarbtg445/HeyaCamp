@@ -118,22 +118,23 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // ==========================================
-        // FUNGSI BARU: Mengubah link Google Drive
-        // ==========================================
-        function convertDriveLink(url) {
-            if (!url) return url;
-            
-            if (url.includes('drive.google.com/file/d/')) {
-                const match = url.match(/\/d\/(.+?)\//);
-                if (match && match[1]) {
-                    const fileId = match[1];
-                    return `https://drive.google.com/uc?export=view&id=${fileId}`;
-                }
-            }
-            return url; 
+       // ==========================================
+// FUNGSI BARU: Mengubah link Google Drive (VERSI LEBIH STABIL)
+// ==========================================
+function convertDriveLink(url) {
+    if (!url) return url;
+    
+    if (url.includes('drive.google.com/file/d/')) {
+        const match = url.match(/\/d\/(.+?)\//);
+        if (match && match[1]) {
+            const fileId = match[1];
+            // Menggunakan endpoint lh3 yang tidak terkena blokir CORS untuk gambar
+            return `https://lh3.googleusercontent.com/d/${fileId}`;
         }
-        // ==========================================
+    }
+    return url; 
+}
+// ==========================================
 
         // 1. Memuat daftar komunitas
         async function fetchCommunities() {
