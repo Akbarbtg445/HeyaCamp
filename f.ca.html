@@ -142,6 +142,23 @@
         const { createClient } = supabase;
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
+        // ==========================================
+        // FUNGSI BARU: Mengubah link Google Drive
+        // ==========================================
+        function convertDriveLink(url) {
+            if (!url) return url;
+            
+            if (url.includes('drive.google.com/file/d/')) {
+                const match = url.match(/\/d\/(.+?)\//);
+                if (match && match[1]) {
+                    const fileId = match[1];
+                    return `https://lh3.googleusercontent.com/d/${fileId}`;
+                }
+            }
+            return url; 
+        }
+        // ==========================================
+
         // 2. Fungsi Kirim Data
         document.getElementById('formAddCamp').addEventListener('submit', async function(e) {
             e.preventDefault(); // Mencegah reload halaman
@@ -150,10 +167,16 @@
             btn.innerText = "Menyimpan ke Database...";
             btn.disabled = true; 
             
-            // Ambil semua data dari inputan
-            const photo1 = document.getElementById('photo1').value;
-            const photo2 = document.getElementById('photo2').value;
-            const photo3 = document.getElementById('photo3').value;
+            // --- AMBIL LINK DARI FORM & KONVERSI ---
+            const rawPhoto1 = document.getElementById('photo1').value;
+            const rawPhoto2 = document.getElementById('photo2').value;
+            const rawPhoto3 = document.getElementById('photo3').value;
+
+            const finalPhoto1 = convertDriveLink(rawPhoto1);
+            const finalPhoto2 = convertDriveLink(rawPhoto2);
+            const finalPhoto3 = convertDriveLink(rawPhoto3);
+            // -----------------------------------------
+
             const name = document.getElementById('campName').value;
             const desc = document.getElementById('campDesc').value;
             const location = document.getElementById('campLocation').value;
@@ -176,9 +199,10 @@
                     price: parseInt(price), // Ubah ke format angka
                     region: region,
                     facilities: facilitiesText,
-                    photo1: photo1,
-                    photo2: photo2,
-                    photo3: photo3
+                    // Memasukkan link foto yang sudah dikonversi
+                    photo1: finalPhoto1,
+                    photo2: finalPhoto2 || null,
+                    photo3: finalPhoto3 || null
                 }
             ]);
 
