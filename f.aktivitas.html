@@ -118,6 +118,23 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRoa3NyZ2V2emluYW1uYmhkcnF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDg5MjYsImV4cCI6MjA5NDIyNDkyNn0.VnAlU6B-ZXMta1cbB9scN2eBQbCkabg_98mJCw5j9ek'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
+        // ==========================================
+        // FUNGSI BARU: Mengubah link Google Drive
+        // ==========================================
+        function convertDriveLink(url) {
+            if (!url) return url;
+            
+            if (url.includes('drive.google.com/file/d/')) {
+                const match = url.match(/\/d\/(.+?)\//);
+                if (match && match[1]) {
+                    const fileId = match[1];
+                    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+                }
+            }
+            return url; 
+        }
+        // ==========================================
+
         // 1. Memuat daftar komunitas
         async function fetchCommunities() {
             const select = document.getElementById('communitySelect');
@@ -150,6 +167,16 @@
             btn.innerText = "Memproses...";
             btn.disabled = true;
 
+            // --- AMBIL LINK DARI FORM & KONVERSI ---
+            const rawPhoto1 = document.getElementById('photo1').value;
+            const rawPhoto2 = document.getElementById('photo2').value;
+            const rawPhoto3 = document.getElementById('photo3').value;
+
+            const finalPhoto1 = convertDriveLink(rawPhoto1);
+            const finalPhoto2 = convertDriveLink(rawPhoto2);
+            const finalPhoto3 = convertDriveLink(rawPhoto3);
+            // -----------------------------------------
+
             const payload = {
                 title: document.getElementById('title').value,
                 community_name: document.getElementById('communitySelect').value,
@@ -157,9 +184,10 @@
                 location: document.getElementById('location').value,
                 category: document.getElementById('category').value,
                 description: document.getElementById('description').value,
-                photo_url: document.getElementById('photo1').value, 
-                photo_extra1: document.getElementById('photo2').value || null, 
-                photo_extra2: document.getElementById('photo3').value || null
+                // Gunakan link yang sudah dikonversi
+                photo_url: finalPhoto1, 
+                photo_extra1: finalPhoto2 || null, 
+                photo_extra2: finalPhoto3 || null
             };
 
             const { error } = await _supabase.from('Aktivitas').insert([payload]);
