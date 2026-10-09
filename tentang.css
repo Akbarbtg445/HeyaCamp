@@ -154,7 +154,35 @@ h2 {
     line-height: 1.6;
     color: #333333;
 }
+/* =========================================
+   STYLE UNTUK LINK INSTAGRAM
+   ========================================= */
+.ig-link {
+    display: inline-flex;      /* Membuat ikon dan teks sejajar secara horizontal */
+    align-items: center;       /* Memastikan posisi vertikal ikon dan teks pas di tengah */
+    gap: 10px;                 /* Jarak antara ikon dan teks */
+    margin-top: 15px;          /* Jarak dari paragraf di atasnya */
+    text-decoration: none;     /* Menghilangkan garis bawah pada link */
+    color: #333333;            /* Warna teks */
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
 
+.ig-link i {
+    font-size: 1.8rem;         /* Mengatur ukuran ikon Instagram agar lebih besar dan proporsional */
+    color: #E1306C;            /* Warna khas logo Instagram */
+    transition: transform 0.3s ease;
+}
+
+/* Efek saat kursor diarahkan ke akun IG (Hover) */
+.ig-link:hover {
+    color: #E1306C;
+}
+
+.ig-link:hover i {
+    transform: scale(1.1);     /* Ikon akan sedikit membesar saat disentuh kursor */
+}
 /* =========================================
    4. MEDIA QUERIES (RESPONSIF MOBILE/TABLET)
    ========================================= */
