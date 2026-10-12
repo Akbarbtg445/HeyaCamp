@@ -137,8 +137,10 @@
     const { createClient } = supabase;
     const _supabase = createClient(supabaseUrl, supabaseKey);
 
+    // DIPERBAIKI: Ambil dan parse postId menjadi Integer agar cocok dengan relasi Foreign Key database
     const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
+    const rawId = urlParams.get('id');
+    const postId = rawId ? parseInt(rawId, 10) : null;
 
     // Penanda status like lokal pembuka web
     let userSudahLike = false;
@@ -299,9 +301,16 @@
         } catch (err) { console.error(err); }
     }
 
-    // SUBMIT TAMBAH URL FOTO GALERI KE SUPABASE
+    // DIPERBAIKI: SUBMIT TAMBAH URL FOTO GALERI DENGAN VALIDASI POST_ID
     document.getElementById('formGallery').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        // Validasi mencegah data dikirim jika postId kosong/tidak valid
+        if (!postId || isNaN(postId)) {
+            alert("Gagal: ID Postingan tidak valid atau tidak ditemukan di URL!");
+            return;
+        }
+
         const urlInput = document.getElementById('galleryInputUrl').value;
 
         try {
