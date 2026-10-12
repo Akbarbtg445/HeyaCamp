@@ -137,13 +137,20 @@
     const { createClient } = supabase;
     const _supabase = createClient(supabaseUrl, supabaseKey);
 
-    // DIPERBAIKI: Ambil dan parse postId menjadi Integer agar cocok dengan relasi Foreign Key database
     const urlParams = new URLSearchParams(window.location.search);
     const rawId = urlParams.get('id');
     const postId = rawId ? parseInt(rawId, 10) : null;
 
-    // Penanda status like lokal pembuka web
     let userSudahLike = false;
+
+    // Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link
+    function convertGoogleDriveUrl(url) {
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            return `https://lh3.googleusercontent.com/d/${match[1]}`;
+        }
+        return url;
+    }
 
     // 2. Fungsi Utama Load Postingan
     async function loadFullPost() {
@@ -269,7 +276,7 @@
             if (error) throw error;
 
             document.getElementById('commentText').value = '';
-            loadComments(postId); // Muat ulang list komentar
+            loadComments(postId);
         } catch (err) {
             alert("Gagal mengirim komentar: " + err.message);
         }
@@ -301,28 +308,30 @@
         } catch (err) { console.error(err); }
     }
 
-    // DIPERBAIKI: SUBMIT TAMBAH URL FOTO GALERI DENGAN VALIDASI POST_ID
+    // SUBMIT TAMBAH URL FOTO GALERI DENGAN KONVERSI OTOMATIS GDRIVE
     document.getElementById('formGallery').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Validasi mencegah data dikirim jika postId kosong/tidak valid
         if (!postId || isNaN(postId)) {
             alert("Gagal: ID Postingan tidak valid atau tidak ditemukan di URL!");
             return;
         }
 
-        const urlInput = document.getElementById('galleryInputUrl').value;
+        const rawUrlInput = document.getElementById('galleryInputUrl').value;
+        
+        // Ubah link GDrive secara otomatis menjadi direct link sebelum masuk ke database
+        const finalImageUrl = convertGoogleDriveUrl(rawUrlInput);
 
         try {
             const { error } = await _supabase
                 .from('Galeri')
-                .insert([{ post_id: postId, image_url: urlInput }]);
+                .insert([{ post_id: postId, image_url: finalImageUrl }]);
 
             if (error) throw error;
 
             document.getElementById('galleryInputUrl').value = '';
             closeGalleryModal();
-            loadGallery(postId); // Muat ulang list foto galeri
+            loadGallery(postId);
         } catch (err) {
             alert("Gagal menambahkan foto: " + err.message);
         }
