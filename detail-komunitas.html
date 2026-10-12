@@ -148,7 +148,6 @@
         </div>
     </main>
 
-    <!-- 1. MODAL HARUS DI SINI (SEBELUM SCRIPT) -->
     <!-- MODAL BUAT POSTINGAN -->
     <div id="modalPost" class="modal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; backdrop-filter: blur(4px);">
         <div style="background:white; padding:30px; border-radius:20px; width:95%; max-width:550px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
@@ -164,8 +163,8 @@
                 </div>
                 <div style="margin-bottom:15px;">
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Link Foto Banner (Opsional)</label>
-                    <input type="url" id="postBanner" placeholder="Masukkan link foto (GitHub/Google Drive)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
-                    <small style="color: #64748b; font-size: 11px;">Gunakan link gambar dari google atau fotomu sendiri.</small>
+                    <input type="url" id="postBanner" placeholder="Masukkan link foto (Google Drive/GitHub)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
+                    <small style="color: #64748b; font-size: 11px;">Gunakan link Google Drive atau gambar publik.</small>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom:15px;">
                     <div>
@@ -189,7 +188,6 @@
         </div>
     </div>
 
-    <!-- 2. SCRIPT DI PALING BAWAH -->
 <script>
 // 1. Konfigurasi Supabase
 const supabaseUrl = 'https://thksrgevzinamnbhdrqz.supabase.co'; 
@@ -200,6 +198,15 @@ const _supabase = createClient(supabaseUrl, supabaseKey);
 const urlParams = new URLSearchParams(window.location.search);
 const commId = urlParams.get('id');
 
+// Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link
+function convertGoogleDriveUrl(url) {
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (match && match[1]) {
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+    }
+    return url;
+}
+
 // Fungsi Modal
 function openPostModal() {
     document.getElementById('modalPost').style.display = 'flex';
@@ -208,7 +215,6 @@ function closePostModal() {
     document.getElementById('modalPost').style.display = 'none';
 }
 
-// 2. Load Detail Komunitas
 // 2. Load Detail Komunitas
 async function loadDetail() {
     if (!commId) {
@@ -243,7 +249,6 @@ async function loadDetail() {
             logoWrapper.innerHTML = `<div class="placeholder" style="font-size:40px; font-weight:bold; color:#ed8805; display:flex; align-items:center; justify-content:center; height:100%;">${komunitas.nama.charAt(0)}</div>`;
         }
 
-        // --- BAGIAN INI YANG TADI HILANG (TAMPILKAN SOSMED) ---
         if (komunitas.sosmed) {
             const containerSosmed = document.getElementById('containerSosmed');
             let htmlSosmed = '';
@@ -278,13 +283,11 @@ async function loadDetail() {
 
             containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
         }
-        // --- AKHIR BAGIAN SOSMED ---
     }
-    
 }
+
 // Fungsi untuk Menghapus Komunitas
 document.getElementById('deleteCommBtn')?.addEventListener('click', async () => {
-    // 1. Konfirmasi ke pengguna
     const confirmDelete = confirm("Apakah Anda yakin ingin menghapus komunitas ini? Semua postingan terkait mungkin tidak akan terhapus secara otomatis kecuali diatur di database.");
     
     if (!confirmDelete) return;
@@ -294,15 +297,13 @@ document.getElementById('deleteCommBtn')?.addEventListener('click', async () => 
     btn.disabled = true;
 
     try {
-        // 2. Jalankan perintah DELETE di Supabase
         const { error } = await _supabase
             .from('Komunitas')
             .delete()
-            .eq('id', commId); // commId diambil dari URL parameter yang sudah ada di kode kamu
+            .eq('id', commId);
 
         if (error) throw error;
 
-        // 3. Jika berhasil, arahkan kembali ke halaman daftar komunitas
         alert("Komunitas berhasil dihapus.");
         window.location.href = 'komunitas.html';
 
@@ -314,29 +315,29 @@ document.getElementById('deleteCommBtn')?.addEventListener('click', async () => 
     }
 });
 
-// 3. Kirim Postingan (Sekarang akan berhasil karena form-nya sudah dibaca)
-// GANTI FUNGSI INI
+// 3. Kirim Postingan dengan Konversi Link GDrive Otomatis
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
     btn.innerText = "Mengirim...";
     btn.disabled = true;
 
-    // Ambil nama komunitas yang sedang aktif dari elemen HTML
     const currentCommName = document.getElementById('commName').innerText;
+    
+    // Ambil input banner dan ubah otomatis jika itu link Google Drive
+    const rawBanner = document.getElementById('postBanner').value;
+    const finalBanner = rawBanner ? convertGoogleDriveUrl(rawBanner) : 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
 
-    // Sesuaikan data dengan kolom di tabel 'Aktivitas'
     const postData = {
-        title: document.getElementById('postActivity').value,      // Judul kegiatan
-        community_name: currentCommName,                           // Nama komunitas otomatis
-        activity_date: document.getElementById('postDate').value,  // Tanggal
-        location: document.getElementById('postLocation').value,   // Lokasi
-        category: "Camping",                                       // Kategori default
-        description: document.getElementById('postContent').value, // Isi cerita
-        photo_url: document.getElementById('postBanner').value || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800'
+        title: document.getElementById('postActivity').value,
+        community_name: currentCommName,
+        activity_date: document.getElementById('postDate').value,
+        location: document.getElementById('postLocation').value,
+        category: "Camping",
+        description: document.getElementById('postContent').value,
+        photo_url: finalBanner
     };
 
-    // SIMPAN KE TABEL 'Aktivitas'
     const { error } = await _supabase.from('Aktivitas').insert([postData]);
 
     if (error) {
@@ -344,7 +345,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
     } else {
         alert("Berhasil! Ceritamu sekarang muncul di halaman Aktivitas.");
         closePostModal();
-        loadPosts(); // Refresh tampilan tab aktivitas di halaman ini
+        loadPosts();
         document.getElementById('formPostingan').reset();
     }
     btn.innerText = "Posting Sekarang";
@@ -360,44 +361,50 @@ async function loadPosts() {
 
     try {
         const { data: posts, error } = await _supabase
-            .from('Aktivitas') // UBAH DARI 'Postingan' KE 'Aktivitas'
+            .from('Aktivitas')
             .select('*')
-            .eq('community_name', currentCommName) // Filter agar hanya muncul postingan komunitas ini
+            .eq('community_name', currentCommName)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
         let html = '';
         if (posts && posts.length > 0) {
-            // Tombol buat postingan tetap ada di atas
             html += `<button class="btn-post" style="margin-bottom:30px; width:100%; background:#ed8805; color:white; padding:15px; border-radius:12px; border:none; cursor:pointer; font-weight:bold; font-size:16px;" onclick="openPostModal()">+ Bagikan Cerita Baru</button>`;
             
-            // Cari bagian loop posts.forEach di detail-komunitas.html
-posts.forEach(p => {
-    const formattedDate = new Date(p.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-    
-    html += `
-        <a href="detail-postingan.html?id=${p.id}" class="post-card-link" style="text-decoration: none; color: inherit; display: block;">
-            <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
-                <div style="width: 35%; min-width: 200px;">
-                    <img src="${p.photo_url}" style="width: 100%; height: 100%; object-fit: cover; height: 100%;">
-                </div>
-                <div style="width: 65%; padding: 25px;">
-                    <h2 style="margin: 0 0 10px 0; font-size: 22px; color: #0f172a;">${p.title}</h2>
-                    <p style="color: #64748b; font-size: 14px; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                        ${p.description}
-                    </p>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-location-dot"></i> ${p.location}</span>
-                        <span style="font-size: 12px; color: #94a3b8;">${formattedDate}</span>
-                    </div>
-                </div>
-            </div>
-        </a>`;
-});
+            posts.forEach(p => {
+                const formattedDate = new Date(p.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+                
+                html += `
+                    <a href="detail-postingan.html?id=${p.id}" class="post-card-link" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
+                            <div style="width: 35%; min-width: 200px;">
+                                <img src="${p.photo_url}" style="width: 100%; height: 100%; object-fit: cover; height: 100%;">
+                            </div>
+                            <div style="width: 65%; padding: 25px;">
+                                <h2 style="margin: 0 0 10px 0; font-size: 22px; color: #0f172a;">${p.title}</h2>
+                                <p style="color: #64748b; font-size: 14px; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    ${p.description}
+                                </p>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 12px; color: #94a3b8;"><i class="fa-solid fa-location-dot"></i> ${p.location}</span>
+                                    <span style="font-size: 12px; color: #94a3b8;">${formattedDate}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>`;
+            });
             activityContainer.innerHTML = html;
         } else {
-            // Tampilan jika kosong (sama seperti kode lamamu)
+            activityContainer.innerHTML = `
+                <div class="activity-card">
+                    <div class="empty-state">
+                        <div class="icon-circle"><i class="fa-regular fa-comment-dots"></i></div>
+                        <h3>Belum ada aktivitas</h3>
+                        <p>Jadilah member pertama yang membagikan cerita seru di region ini!</p>
+                        <button class="btn-post" onclick="openPostModal()">Buat Postingan</button>
+                    </div>
+                </div>`;
         }
     } catch (err) {
         console.error("Gagal load:", err);
@@ -422,7 +429,6 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
 }
 
-// Jalankan saat startup
 window.onload = async () => {
     console.log("Halaman dimuat, memulai pengambilan data...");
     try {
