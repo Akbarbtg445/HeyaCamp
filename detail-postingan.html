@@ -143,11 +143,11 @@
 
     let userSudahLike = false;
 
-    // Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link yang lebih stabil
+    // Fungsi helper dikembalikan menggunakan format lh3.googleusercontent.com yang stabil untuk CSS background & img
     function convertGoogleDriveUrl(url) {
         const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
-            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            return `https://lh3.googleusercontent.com/d/${match[1]}`;
         }
         return url;
     }
@@ -282,7 +282,7 @@
         }
     });
 
-    // 5. FUNGSI LOAD GALERI FOTO (DENGAN PENANGANAN ERROR IMAGE)
+    // 5. FUNGSI LOAD GALERI FOTO
     async function loadGallery(currentPostId) {
         const section = document.getElementById('gallerySection');
         const grid = document.getElementById('galleryGrid');
@@ -302,7 +302,7 @@
                     const fixedUrl = convertGoogleDriveUrl(photo.image_url);
                     html += `
                         <div style="border-radius: 15px; overflow: hidden; aspect-ratio: 1/1; background: #f1f5f9; border: 1px solid #e2e8f0;">
-                            <img src="${fixedUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400';">
+                            <img src="${fixedUrl}" style="width:100%; height:100%; object-fit:cover;">
                         </div>`;
                 });
                 grid.innerHTML = html;
@@ -356,7 +356,7 @@
                 others.forEach(item => {
                     const itemPhoto = item.photo_url ? convertGoogleDriveUrl(item.photo_url) : '';
                     html += `<a href="detail-postingan.html?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; gap:10px; margin-bottom:15px;">
-                        <img src="${itemPhoto}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=200';">
+                        <img src="${itemPhoto}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;">
                         <div><h4 style="margin:0; font-size:14px;">${item.title}</h4><small>${item.location}</small></div>
                     </a>`;
                 });
