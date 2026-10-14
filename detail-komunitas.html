@@ -32,27 +32,27 @@
         </ul>
     </nav>
     <div class="mobile-nav">
-    <a href="index.html" class="mobile-nav-item">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
-    </a>
-    <a href="katalog.html" class="mobile-nav-item">
-        <i class="fa-solid fa-campground"></i>
-        <span>Sewa</span>
-    </a>
-    <a href="komunitas.html" class="mobile-nav-item active">
-        <i class="fa-regular fa-user"></i>
-        <span>Komunitas</span>
-    </a>
-    <a href="aktivitas.html" class="mobile-nav-item">
-        <i class="fa-solid fa-wave-square"></i>
-        <span>Aktivitas</span>
-    </a>
-    <a href="ca.html" class="mobile-nav-item">
-        <i class="fa-solid fa-tent"></i>
-        <span>Area</span>
-    </a>
-</div>
+        <a href="index.html" class="mobile-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="katalog.html" class="mobile-nav-item">
+            <i class="fa-solid fa-campground"></i>
+            <span>Sewa</span>
+        </a>
+        <a href="komunitas.html" class="mobile-nav-item active">
+            <i class="fa-regular fa-user"></i>
+            <span>Komunitas</span>
+        </a>
+        <a href="aktivitas.html" class="mobile-nav-item">
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Aktivitas</span>
+        </a>
+        <a href="ca.html" class="mobile-nav-item">
+            <i class="fa-solid fa-tent"></i>
+            <span>Area</span>
+        </a>
+    </div>
 
     <header class="hero-section" id="heroBg">
         <div class="hero-overlay"></div>
@@ -101,16 +101,16 @@
                 </div>
 
                 <div id="tabEvent" class="tab-content">
-    <div class="activity-card" style="border: 2px dashed #e2e8f0; border-radius: 24px;">
-        <div class="empty-state">
-            <div class="icon-circle">
-                <i class="fa-regular fa-calendar"></i>
-            </div>
-            <h3>Belum ada event</h3>
-            <p>Region ini belum memiliki event mendatang.</p>
-        </div>
-    </div>
-</div>
+                    <div class="activity-card" style="border: 2px dashed #e2e8f0; border-radius: 24px;">
+                        <div class="empty-state">
+                            <div class="icon-circle">
+                                <i class="fa-regular fa-calendar"></i>
+                            </div>
+                            <h3>Belum ada event</h3>
+                            <p>Region ini belum memiliki event mendatang.</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <aside class="sidebar">
@@ -161,7 +161,7 @@
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
                     <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Sidringo" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
                 </div>
-                <!-- Dropdown Kategori Baru -->
+                <!-- Dropdown Kategori -->
                 <div style="margin-bottom:15px;">
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Kategori</label>
                     <select id="postCategory" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; background:white;" required>
@@ -328,7 +328,7 @@ document.getElementById('deleteCommBtn')?.addEventListener('click', async () => 
     }
 });
 
-// 3. Kirim Postingan dengan Konversi Link GDrive Otomatis & Kategori Dinamis
+// 3. Kirim Postingan Termasuk Kategori dan Author (Nama Pembuat)
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -337,7 +337,6 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
 
     const currentCommName = document.getElementById('commName').innerText;
     
-    // Ambil input banner dan ubah otomatis jika itu link Google Drive
     const rawBanner = document.getElementById('postBanner').value;
     const finalBanner = rawBanner ? convertGoogleDriveUrl(rawBanner) : 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
 
@@ -346,9 +345,10 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
         community_name: currentCommName,
         activity_date: document.getElementById('postDate').value,
         location: document.getElementById('postLocation').value,
-        category: document.getElementById('postCategory').value, // Diambil dari pilihan dropdown
+        category: document.getElementById('postCategory').value,
         description: document.getElementById('postContent').value,
-        photo_url: finalBanner
+        photo_url: finalBanner,
+        author: document.getElementById('postUser').value // <-- Menyimpan nama pembuat cerita
     };
 
     const { error } = await _supabase.from('Aktivitas').insert([postData]);
