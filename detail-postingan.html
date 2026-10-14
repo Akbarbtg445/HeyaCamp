@@ -143,11 +143,11 @@
 
     let userSudahLike = false;
 
-    // Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link
+    // Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link yang lebih stabil
     function convertGoogleDriveUrl(url) {
         const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
-            return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
         }
         return url;
     }
@@ -167,7 +167,7 @@
 
             if (post) {
                 const formattedDate = new Date(post.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-                const bannerImg = post.photo_url || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
+                const bannerImg = post.photo_url ? convertGoogleDriveUrl(post.photo_url) : 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200';
 
                 document.getElementById('postHero').style.backgroundImage = `linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('${bannerImg}')`;
                 document.getElementById('viewTitle').innerText = post.title;
@@ -189,7 +189,7 @@
         }
     }
 
-    // 3. FUNGSI INTERAKTIF TOMBOL LIKE (REAL-TIME UPDATE TO SUPABASE)
+    // 3. FUNGSI INTERAKTIF TOMBOL LIKE
     async function addLike() {
         if (!postId) return;
 
@@ -262,7 +262,7 @@
         } catch (err) { console.error(err); }
     }
 
-    // SUBMIT KOMENTAR BARU KE SUPABASE
+    // SUBMIT KOMENTAR BARU
     document.getElementById('formKomentar').addEventListener('submit', async function(e) {
         e.preventDefault();
         const usernameInput = document.getElementById('commentUser').value;
@@ -282,7 +282,7 @@
         }
     });
 
-    // 5. FUNGSI LOAD GALERI FOTO
+    // 5. FUNGSI LOAD GALERI FOTO (DENGAN PENANGANAN ERROR IMAGE)
     async function loadGallery(currentPostId) {
         const section = document.getElementById('gallerySection');
         const grid = document.getElementById('galleryGrid');
@@ -299,7 +299,11 @@
                 document.getElementById('galleryCount').innerText = photos.length;
                 let html = '';
                 photos.forEach(photo => {
-                    html += `<div style="border-radius: 15px; overflow: hidden; aspect-ratio: 1/1;"><img src="${photo.image_url}" style="width:100%; height:100%; object-fit:cover;"></div>`;
+                    const fixedUrl = convertGoogleDriveUrl(photo.image_url);
+                    html += `
+                        <div style="border-radius: 15px; overflow: hidden; aspect-ratio: 1/1; background: #f1f5f9; border: 1px solid #e2e8f0;">
+                            <img src="${fixedUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400';">
+                        </div>`;
                 });
                 grid.innerHTML = html;
             } else {
@@ -308,7 +312,7 @@
         } catch (err) { console.error(err); }
     }
 
-    // SUBMIT TAMBAH URL FOTO GALERI DENGAN KONVERSI OTOMATIS GDRIVE
+    // SUBMIT TAMBAH URL FOTO GALERI
     document.getElementById('formGallery').addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -318,8 +322,6 @@
         }
 
         const rawUrlInput = document.getElementById('galleryInputUrl').value;
-        
-        // Ubah link GDrive secara otomatis menjadi direct link sebelum masuk ke database
         const finalImageUrl = convertGoogleDriveUrl(rawUrlInput);
 
         try {
@@ -352,8 +354,9 @@
             if (others && others.length > 0) {
                 let html = '';
                 others.forEach(item => {
+                    const itemPhoto = item.photo_url ? convertGoogleDriveUrl(item.photo_url) : '';
                     html += `<a href="detail-postingan.html?id=${item.id}" style="text-decoration:none; color:inherit; display:flex; gap:10px; margin-bottom:15px;">
-                        <img src="${item.photo_url}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;">
+                        <img src="${itemPhoto}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=200';">
                         <div><h4 style="margin:0; font-size:14px;">${item.title}</h4><small>${item.location}</small></div>
                     </a>`;
                 });
@@ -364,7 +367,7 @@
         } catch (err) { console.error(err); }
     }
 
-    // 7. UTILITY FUNCTIONS (SCROLL, MODAL, COPY LINK)
+    // 7. UTILITY FUNCTIONS
     function scrollToKomentar() {
         document.getElementById('commentsSection').scrollIntoView({ behavior: 'smooth' });
     }
