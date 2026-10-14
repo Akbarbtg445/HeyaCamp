@@ -161,6 +161,19 @@
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
                     <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Sidringo" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
                 </div>
+                <!-- Dropdown Kategori Baru -->
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; margin-bottom:5px; font-weight:600;">Kategori</label>
+                    <select id="postCategory" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; background:white;" required>
+                        <option value="" disabled selected>Pilih kategori</option>
+                        <option value="Camping">Camping</option>
+                        <option value="Hiking">Hiking</option>
+                        <option value="Glamping">Glamping</option>
+                        <option value="Touring">Touring</option>
+                        <option value="Review">Review</option>
+                        <option value="Tutorial">Tutorial</option>
+                    </select>
+                </div>
                 <div style="margin-bottom:15px;">
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Link Foto Banner (Opsional)</label>
                     <input type="url" id="postBanner" placeholder="Masukkan link foto (Google Drive/GitHub)..." style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;">
@@ -315,7 +328,7 @@ document.getElementById('deleteCommBtn')?.addEventListener('click', async () => 
     }
 });
 
-// 3. Kirim Postingan dengan Konversi Link GDrive Otomatis
+// 3. Kirim Postingan dengan Konversi Link GDrive Otomatis & Kategori Dinamis
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -333,7 +346,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
         community_name: currentCommName,
         activity_date: document.getElementById('postDate').value,
         location: document.getElementById('postLocation').value,
-        category: "Camping",
+        category: document.getElementById('postCategory').value, // Diambil dari pilihan dropdown
         description: document.getElementById('postContent').value,
         photo_url: finalBanner
     };
