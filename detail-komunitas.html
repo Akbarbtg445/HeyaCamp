@@ -130,6 +130,7 @@
                 <div class="about-card">
                     <div class="card-header">
                         <h3>Tentang Komunitas</h3>
+                        
                     </div>
                     <p id="commDesc" class="description">Deskripsi...</p>
                 </div>
@@ -248,7 +249,7 @@ async function loadDetail() {
     if (komunitas) {
         document.getElementById('commName').innerText = komunitas.nama;
         document.getElementById('commDesc').innerText = komunitas.deskripsi;
-        
+        document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
 
         if (komunitas.cover) {
             document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
