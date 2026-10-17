@@ -249,7 +249,7 @@ async function loadDetail() {
     if (komunitas) {
         document.getElementById('commName').innerText = komunitas.nama;
         document.getElementById('commDesc').innerText = komunitas.deskripsi;
-        document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
+        
 
         if (komunitas.cover) {
             document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
