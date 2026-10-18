@@ -63,7 +63,10 @@
                 </div>
                 <div class="profile-info">
                     <h1 id="commName">Memuat...</h1>
-                    <!-- Meta Info Disini -->
+                    <!-- Meta Info Anggota -->
+                    <p id="sideBadge" style="color: #cbd5e1; font-size: 14px; margin-top: 5px; font-weight: 500;">
+                        <i class="fa-solid fa-users"></i> Memuat anggota...
+                    </p>
                 </div>
             </div>
             <div style="display: flex; gap: 10px;">
@@ -130,7 +133,6 @@
                 <div class="about-card">
                     <div class="card-header">
                         <h3>Tentang Komunitas</h3>
-                        
                     </div>
                     <p id="commDesc" class="description">Deskripsi...</p>
                 </div>
@@ -161,7 +163,6 @@
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Nama Kegiatan</label>
                     <input type="text" id="postActivity" placeholder="Contoh: Solo Camp Sidringo" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px;" required>
                 </div>
-                <!-- Dropdown Kategori -->
                 <div style="margin-bottom:15px;">
                     <label style="display:block; margin-bottom:5px; font-weight:600;">Kategori</label>
                     <select id="postCategory" style="width:100%; padding:12px; border:1px solid #e2e8f0; border-radius:10px; background:white;" required>
@@ -211,13 +212,16 @@ const _supabase = createClient(supabaseUrl, supabaseKey);
 const urlParams = new URLSearchParams(window.location.search);
 const commId = urlParams.get('id');
 
-// Fungsi helper untuk konversi otomatis link Google Drive menjadi direct link
+// Fungsi helper konversi Google Drive (Hanya jika link dari Drive, selain itu dilewati agar GIF tidak rusak)
 function convertGoogleDriveUrl(url) {
-    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if (match && match[1]) {
-        return `https://lh3.googleusercontent.com/d/${match[1]}`;
+    if (!url) return '';
+    if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            return `https://lh3.googleusercontent.com/d/${match[1]}`;
+        }
     }
-    return url;
+    return url; // Mengembalikan link asli (seperti .gif langsung) tanpa modifikasi
 }
 
 // Fungsi Modal
@@ -247,28 +251,46 @@ async function loadDetail() {
     }
 
     if (komunitas) {
-        document.getElementById('commName').innerText = komunitas.nama;
-        document.getElementById('commDesc').innerText = komunitas.deskripsi;
-        document.getElementById('sideBadge').innerText = `${komunitas.anggota || 0} Anggota`;
-
-        if (komunitas.cover) {
-            document.getElementById('heroBg').style.backgroundImage = `url(${komunitas.cover})`;
+        document.getElementById('commName').innerText = komunitas.nama || '';
+        document.getElementById('commDesc').innerText = komunitas.deskripsi || '';
+        
+        const sideBadgeEl = document.getElementById('sideBadge');
+        if (sideBadgeEl) {
+            sideBadgeEl.innerHTML = `<i class="fa-solid fa-users"></i> ${komunitas.anggota || 0} Anggota`;
         }
 
+        // Tampilkan Banner / Cover (Mendukung file GIF atau format gambar lain)
+        if (komunitas.cover) {
+            const coverUrl = convertGoogleDriveUrl(komunitas.cover);
+            const heroBg = document.getElementById('heroBg');
+            heroBg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${coverUrl})`;
+            heroBg.style.backgroundSize = 'cover';
+            heroBg.style.backgroundPosition = 'center';
+            heroBg.style.backgroundRepeat = 'no-repeat';
+        }
+
+        // Tampilkan Logo
         const logoWrapper = document.getElementById('commLogo');
         if (komunitas.logo) {
-            logoWrapper.innerHTML = `<img src="${komunitas.logo}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
+            const logoUrl = convertGoogleDriveUrl(komunitas.logo);
+            logoWrapper.innerHTML = `<img src="${logoUrl}" alt="Logo" style="width:100%; height:100%; object-fit:cover; border-radius:18px;">`;
         } else {
-            logoWrapper.innerHTML = `<div class="placeholder" style="font-size:40px; font-weight:bold; color:#ed8805; display:flex; align-items:center; justify-content:center; height:100%;">${komunitas.nama.charAt(0)}</div>`;
+            logoWrapper.innerHTML = `<div class="placeholder" style="font-size:40px; font-weight:bold; color:#ed8805; display:flex; align-items:center; justify-content:center; height:100%;">${komunitas.nama ? komunitas.nama.charAt(0) : 'K'}</div>`;
         }
 
-        if (komunitas.sosmed) {
+        // Tampilkan Sosial Media
+        let sosmedData = komunitas.sosmed;
+        if (typeof sosmedData === 'string') {
+            try { sosmedData = JSON.parse(sosmedData); } catch (e) { sosmedData = null; }
+        }
+
+        if (sosmedData) {
             const containerSosmed = document.getElementById('containerSosmed');
             let htmlSosmed = '';
 
-            if (komunitas.sosmed.instagram) {
+            if (sosmedData.instagram) {
                 htmlSosmed += `
-                    <a href="${komunitas.sosmed.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
+                    <a href="${sosmedData.instagram}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #fff5f8; padding: 15px; border-radius: 15px; text-decoration: none; margin-bottom: 10px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <i class="fa-brands fa-instagram" style="font-size: 24px; color: #e1306c;"></i>
                             <div>
@@ -280,9 +302,10 @@ async function loadDetail() {
                     </a>`;
             }
 
-            if (komunitas.sosmed.grupWa) {
+            if (sosmedData.grupWa || sosmedData.whatsapp) {
+                const waLink = sosmedData.grupWa || sosmedData.whatsapp;
                 htmlSosmed += `
-                    <a href="${komunitas.sosmed.grupWa}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
+                    <a href="${waLink}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: #f0fff4; padding: 15px; border-radius: 15px; text-decoration: none;">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <i class="fa-brands fa-whatsapp" style="font-size: 24px; color: #25d366;"></i>
                             <div>
@@ -295,14 +318,15 @@ async function loadDetail() {
             }
 
             containerSosmed.innerHTML = htmlSosmed || '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
+        } else {
+            document.getElementById('containerSosmed').innerHTML = '<p style="color:#64748b; font-size:14px; text-align:center;">Tidak ada kontak tersedia</p>';
         }
     }
 }
 
-// Fungsi untuk Menghapus Komunitas
+// 3. Fungsi untuk Menghapus Komunitas
 document.getElementById('deleteCommBtn')?.addEventListener('click', async () => {
-    const confirmDelete = confirm("Apakah Anda yakin ingin menghapus komunitas ini? Semua postingan terkait mungkin tidak akan terhapus secara otomatis kecuali diatur di database.");
-    
+    const confirmDelete = confirm("Apakah Anda yakin ingin menghapus komunitas ini?");
     if (!confirmDelete) return;
 
     const btn = document.getElementById('deleteCommBtn');
@@ -328,7 +352,7 @@ document.getElementById('deleteCommBtn')?.addEventListener('click', async () => 
     }
 });
 
-// 3. Kirim Postingan Termasuk Kategori dan Author (Nama Pembuat)
+// 4. Kirim Postingan
 document.getElementById('formPostingan')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -336,7 +360,6 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
     btn.disabled = true;
 
     const currentCommName = document.getElementById('commName').innerText;
-    
     const rawBanner = document.getElementById('postBanner').value;
     const finalBanner = rawBanner ? convertGoogleDriveUrl(rawBanner) : 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800';
 
@@ -348,7 +371,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
         category: document.getElementById('postCategory').value,
         description: document.getElementById('postContent').value,
         photo_url: finalBanner,
-        author: document.getElementById('postUser').value // <-- Menyimpan nama pembuat cerita
+        author: document.getElementById('postUser').value
     };
 
     const { error } = await _supabase.from('Aktivitas').insert([postData]);
@@ -365,7 +388,7 @@ document.getElementById('formPostingan')?.addEventListener('submit', async funct
     btn.disabled = false;
 });
 
-// 4. Tampilkan Postingan
+// 5. Tampilkan Postingan
 async function loadPosts() {
     const activityContainer = document.getElementById('tabAktivitas');
     const currentCommName = document.getElementById('commName').innerText;
@@ -389,10 +412,10 @@ async function loadPosts() {
                 const formattedDate = new Date(p.activity_date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
                 
                 html += `
-                    <a href="detail-postingan.html?id=${p.id}" class="post-card-link" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="detail-postingan.html?id=${p.id}" class="post-card-link" style="text-decoration: none; color: inherit; display: block; width: 100%;">
                         <div class="post-card" style="background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 25px; border: 1px solid #f1f5f9; display: flex; text-align: left;">
                             <div style="width: 35%; min-width: 200px;">
-                                <img src="${p.photo_url}" style="width: 100%; height: 100%; object-fit: cover; height: 100%;">
+                                <img src="${p.photo_url}" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             <div style="width: 65%; padding: 25px;">
                                 <h2 style="margin: 0 0 10px 0; font-size: 22px; color: #0f172a;">${p.title}</h2>
@@ -443,7 +466,6 @@ function openTab(evt, tabName) {
 }
 
 window.onload = async () => {
-    console.log("Halaman dimuat, memulai pengambilan data...");
     try {
         await loadDetail();
     } catch (e) {
