@@ -63,10 +63,6 @@
                 </div>
                 <div class="profile-info">
                     <h1 id="commName">Memuat...</h1>
-                    <!-- Meta Info Anggota -->
-                    <p id="sideBadge" style="color: #cbd5e1; font-size: 14px; margin-top: 5px; font-weight: 500;">
-                        <i class="fa-solid fa-users"></i> Memuat anggota...
-                    </p>
                 </div>
             </div>
             <div style="display: flex; gap: 10px;">
@@ -212,7 +208,7 @@ const _supabase = createClient(supabaseUrl, supabaseKey);
 const urlParams = new URLSearchParams(window.location.search);
 const commId = urlParams.get('id');
 
-// Fungsi helper konversi Google Drive (Hanya jika link dari Drive, selain itu dilewati agar GIF tidak rusak)
+// Fungsi helper konversi Google Drive (Mendukung GIF & Gambar langsung)
 function convertGoogleDriveUrl(url) {
     if (!url) return '';
     if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
@@ -221,7 +217,7 @@ function convertGoogleDriveUrl(url) {
             return `https://lh3.googleusercontent.com/d/${match[1]}`;
         }
     }
-    return url; // Mengembalikan link asli (seperti .gif langsung) tanpa modifikasi
+    return url; 
 }
 
 // Fungsi Modal
@@ -253,13 +249,8 @@ async function loadDetail() {
     if (komunitas) {
         document.getElementById('commName').innerText = komunitas.nama || '';
         document.getElementById('commDesc').innerText = komunitas.deskripsi || '';
-        
-        const sideBadgeEl = document.getElementById('sideBadge');
-        if (sideBadgeEl) {
-            sideBadgeEl.innerHTML = `<i class="fa-solid fa-users"></i> ${komunitas.anggota || 0} Anggota`;
-        }
 
-        // Tampilkan Banner / Cover (Mendukung file GIF atau format gambar lain)
+        // Tampilkan Banner / Cover (Mendukung GIF)
         if (komunitas.cover) {
             const coverUrl = convertGoogleDriveUrl(komunitas.cover);
             const heroBg = document.getElementById('heroBg');
