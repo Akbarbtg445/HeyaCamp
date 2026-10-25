@@ -87,7 +87,7 @@
                 const { data: Pesanan, error } = await _supabase
                     .from('view_status_sewa')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('id', { ascending: false });
 
                 if (error) throw error;
 
