@@ -69,13 +69,23 @@
         const { createClient } = supabase;
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // 2. Fungsi Ambil Data Pesanan
+        // 2. Fungsi Sensor Nama (Privasi)
+        function samarkanNama(nama) {
+            if (!nama) return 'Penyewa';
+            return nama.split(' ').map(kata => {
+                if (kata.length <= 2) return kata; // Biarkan jika kata terlalu pendek
+                return kata.substring(0, 2) + '*'.repeat(kata.length - 2);
+            }).join(' ');
+        }
+
+        // 3. Fungsi Ambil Data Pesanan dari VIEW
         async function muatDataBooking() {
             const tbody = document.getElementById('bookingTable');
             
             try {
+                // PERHATIAN: Ambil data dari view_status_sewa, BUKAN dari Pesanan
                 const { data: Pesanan, error } = await _supabase
-                    .from('Pesanan')
+                    .from('view_status_sewa')
                     .select('*')
                     .order('created_at', { ascending: false });
 
@@ -95,10 +105,13 @@
                         `${alat.nama} <strong>(x${alat.jumlah})</strong>`
                     ).join('<br>');
 
+                    // Menerapkan sensor pada nama penyewa
+                    const namaAman = samarkanNama(item.nama_penyewa);
+
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>
-                            <strong>${item.nama_penyewa}</strong>
+                            <strong>${namaAman}</strong>
                         </td>
                         <td>${rincianAlat}</td>
                         <td>${item.tanggal_sewa}</td>
