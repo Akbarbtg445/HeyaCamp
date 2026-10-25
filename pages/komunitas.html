@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,26 +31,26 @@
         </ul>
     </nav>
     <div class="mobile-nav">
-    <a href="../index.html" class="mobile-nav-item">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
-    </a>
-    <a href="katalog.html" class="mobile-nav-item">
-        <i class="fa-solid fa-campground"></i>
-        <span>Sewa</span>
-    </a>
-    <a href="komunitas.html" class="mobile-nav-item active"> <i class="fa-regular fa-user"></i>
-        <span>Komunitas</span>
-    </a>
-    <a href="aktivitas.html" class="mobile-nav-item">
-        <i class="fa-solid fa-wave-square"></i>
-        <span>Aktivitas</span>
-    </a>
-    <a href="ca.html" class="mobile-nav-item">
-        <i class="fa-solid fa-tent"></i>
-        <span>Area</span>
-    </a>
-</div>
+        <a href="../index.html" class="mobile-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="katalog.html" class="mobile-nav-item">
+            <i class="fa-solid fa-campground"></i>
+            <span>Sewa</span>
+        </a>
+        <a href="komunitas.html" class="mobile-nav-item active"> <i class="fa-regular fa-user"></i>
+            <span>Komunitas</span>
+        </a>
+        <a href="aktivitas.html" class="mobile-nav-item">
+            <i class="fa-solid fa-wave-square"></i>
+            <span>Aktivitas</span>
+        </a>
+        <a href="ca.html" class="mobile-nav-item">
+            <i class="fa-solid fa-tent"></i>
+            <span>Area</span>
+        </a>
+    </div>
 
     <section class="community-header">
         <div class="header-content">
@@ -82,36 +82,57 @@
     const { createClient } = supabase;
     const _supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 2. Fungsi Utama Ambil Data
+    // 2. Fungsi Sanitasi (Mencegah XSS)
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag])
+        );
+    }
+
+    // 3. Fungsi Utama Ambil Data
     async function tampilkanKomunitas() {
         const container = document.getElementById('listKomunitasBaru');
         
         try {
-            // Ambil data dari tabel 'Komunitas' (K besar)
+            // Ambil data dari tabel 'Komunitas'
             const { data: daftarKomunitas, error } = await _supabase
                 .from('Komunitas')
                 .select('*')
-                .order('created_at', { ascending: false }); // Biar yang terbaru di atas
+                .order('created_at', { ascending: false });
 
             if (error) throw error;
 
             if (daftarKomunitas && daftarKomunitas.length > 0) {
-                container.innerHTML = daftarKomunitas.map(item => `
+                container.innerHTML = daftarKomunitas.map(item => {
+                    // Terapkan fungsi sanitasi pada setiap teks yang akan dirender
+                    const namaAman = escapeHTML(item.nama);
+                    const deskripsiAman = escapeHTML(item.deskripsi);
+                    const coverAman = escapeHTML(item.cover) || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500';
+                    const logoAman = escapeHTML(item.logo) || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama));
+
+                    return `
                     <a href="detail-komunitas.html?id=${item.id}" class="card-link">
                         <div class="community-card">
                             <div class="card-cover">
-                                <img src="${item.cover || 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=500'}" alt="Cover">
+                                <img src="${coverAman}" alt="Cover">
                             </div>
                             <div class="card-body">
                                 <div class="card-logo">
-                                    <img src="${item.logo || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.nama)}" alt="Logo">
+                                    <img src="${logoAman}" alt="Logo">
                                 </div>
-                                <h4 class="card-title">${item.nama}</h4>
-                                <p class="card-desc">${item.deskripsi}</p>
+                                <h4 class="card-title">${namaAman}</h4>
+                                <p class="card-desc">${deskripsiAman}</p>
                             </div>
                         </div>
                     </a>
-                `).join('');
+                `}).join('');
             } else {
                 container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>Belum ada komunitas yang terdaftar.</p>";
             }
@@ -121,7 +142,7 @@
         }
     }
 
-    // 3. Jalankan fungsi saat halaman siap
+    // 4. Jalankan fungsi saat halaman siap
     document.addEventListener('DOMContentLoaded', tampilkanKomunitas);
 </script>
 </body>
