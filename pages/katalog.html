@@ -66,39 +66,57 @@
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         const alatOutdoor = [
-            { id: 1, nama: "Tenda Baseway Pavilo", harga: 35000,stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Tenda%20Pavilo.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
-            { id: 2, nama: "Tenda WildShell JayaDipa", harga: 35000,stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20wild%20shel.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
-            { id: 3, nama: "Tenda", harga: 20000,stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20single%20layer.jpg", desc: "Tenda Single layer, Kapasitas 4 orang, Frame Alo" },
-            { id: 4, nama: "Cerier Consina Terabi", harga: 20000,stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/terabi.jpg", desc: "Kapasitas 60Liter, Include Raincover" },
-            { id: 5, nama: "Cerier Antarestar Ranger", harga: 20000,stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Antarestar1.png", desc: "Kapasitas 65Liter, Include Raincover" },
-            { id: 6, nama: "Cerier CO-TREX TENGGARONG", harga: 20000, stok: 1,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Syaratketentuan.png", desc: "Kapasitas 60Liter, include Raincover" },
-            { id: 7, nama: "Irco Polar Series", harga: 10000,stok: 8, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/sb.jpg", desc: "Ada yang include bantal ada yang tidak" },
-            { id: 8, nama: "HeadLamp", harga: 5000,stok: 5, img: "../images/PXL_20260830_120830129.MP.jpg", desc: "Ada Yang Pakai Batrai, Ada yang pakai Charger Type B(cas-casan HP Biasa)" },
-            { id: 9, nama: "Matras Outdoor", harga: 5000,stok: 8, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/matras.jpg", desc: "Warna Hitam / Warna Biru" },
-            { id: 10, nama: "Trecking Pole Naturhike", harga: 5000,stok: 2, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/treking%20pole.jpg", desc: "Panjang 100 cm/ Panjang 135cm Warna Biru" },
-            { id: 11, nama: "Coking Set", harga: 10000, stok: 2,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/cokingset%201jpg.jpg", desc: "Isi 2 Set Panci,Include Wadah" },
-            { id: 12, nama: "Kompor Portable", harga: 10000, stok: 3,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/kompor%20portable.jpg", desc: "Include Wadah" },
-            { id: 13, nama: "Gas Kaleng", harga: 10000,stok: 4, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/gas.jpg", desc: "Menyediakan Isi ulang Gas, Jika mau isi ulang gas kaleng bekas kaleng jgn dibuang" },
-            { id: 14, nama: "Kursi Outdoor Speed", harga: 15000, stok: 2,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/arival.jpg", desc: "Warna Coklat List Orange Ukuran XXL" },
-            { id: 15, nama: "Kursi Outdoor Speed", harga: 15000, stok: 2,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/coklat.jpg", desc: "Warna Coklat Ukuran XXL" },
-            { id: 16, nama: "Meja Outdoor Speed", harga: 10000, stok: 1,img: "https://akbarbtg445.github.io/Alat-yang-disewakan/meja%20speed.jpg", desc: "Warna Coklat Ukuran XXL" },
-            { id: 17, nama: "Jaket Gunung", harga: 20000, stok: 0,img: "https://github.com/Akbarbtg445/Alat-yang-disewakan/blob/main/jaket.jpeg?raw=true", desc: "Ukuran XL" },
-            { id: 18, nama: "Sepatu Trail 910 Yuza Evo", harga: 30000, stok: 1,img: "../images/yuza.jpeg", desc: "Ukuran 44 Warna Abu-Abu" },
-            { id: 19, nama: "Sepatu Trail", harga: 30000, stok: 0,img: "../images/acg.jpeg", desc: "Ukuran 44 Warna Putih" },
+            { id: 1, nama: "Tenda Baseway Pavilo", harga: 35000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Tenda%20Pavilo.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
+            { id: 2, nama: "Tenda WildShell JayaDipa", harga: 35000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20wild%20shel.png", desc: "Tenda Double layer, Kapasitas 4 orang, Frame Aloy" },
+            { id: 3, nama: "Tenda", harga: 20000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/tenda%20single%20layer.jpg", desc: "Tenda Single layer, Kapasitas 4 orang, Frame Alo" },
+            { id: 4, nama: "Cerier Consina Terabi", harga: 20000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/terabi.jpg", desc: "Kapasitas 60Liter, Include Raincover" },
+            { id: 5, nama: "Cerier Antarestar Ranger", harga: 20000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Antarestar1.png", desc: "Kapasitas 65Liter, Include Raincover" },
+            { id: 6, nama: "Cerier CO-TREX TENGGARONG", harga: 20000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/Syaratketentuan.png", desc: "Kapasitas 60Liter, include Raincover" },
+            { id: 7, nama: "Irco Polar Series", harga: 10000, stok: 8, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/sb.jpg", desc: "Ada yang include bantal ada yang tidak" },
+            { id: 8, nama: "HeadLamp", harga: 5000, stok: 5, img: "../images/PXL_20260830_120830129.MP.jpg", desc: "Ada Yang Pakai Batrai, Ada yang pakai Charger Type B(cas-casan HP Biasa)" },
+            { id: 9, nama: "Matras Outdoor", harga: 5000, stok: 8, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/matras.jpg", desc: "Warna Hitam / Warna Biru" },
+            { id: 10, nama: "Trecking Pole Naturhike", harga: 5000, stok: 2, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/treking%20pole.jpg", desc: "Panjang 100 cm/ Panjang 135cm Warna Biru" },
+            { id: 11, nama: "Coking Set", harga: 10000, stok: 2, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/cokingset%201jpg.jpg", desc: "Isi 2 Set Panci,Include Wadah" },
+            { id: 12, nama: "Kompor Portable", harga: 10000, stok: 3, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/kompor%20portable.jpg", desc: "Include Wadah" },
+            { id: 13, nama: "Gas Kaleng", harga: 10000, stok: 4, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/gas.jpg", desc: "Menyediakan Isi ulang Gas, Jika mau isi ulang gas kaleng bekas kaleng jgn dibuang" },
+            { id: 14, nama: "Kursi Outdoor Speed", harga: 15000, stok: 2, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/arival.jpg", desc: "Warna Coklat List Orange Ukuran XXL" },
+            { id: 15, nama: "Kursi Outdoor Speed", harga: 15000, stok: 2, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/coklat.jpg", desc: "Warna Coklat Ukuran XXL" },
+            { id: 16, nama: "Meja Outdoor Speed", harga: 10000, stok: 1, img: "https://akbarbtg445.github.io/Alat-yang-disewakan/meja%20speed.jpg", desc: "Warna Coklat Ukuran XXL" },
+            { id: 17, nama: "Jaket Gunung", harga: 20000, stok: 0, img: "https://github.com/Akbarbtg445/Alat-yang-disewakan/blob/main/jaket.jpeg?raw=true", desc: "Ukuran XL" },
+            { id: 18, nama: "Sepatu Trail 910 Yuza Evo", harga: 30000, stok: 1, img: "../images/yuza.jpeg", desc: "Ukuran 44 Warna Abu-Abu" },
+            { id: 19, nama: "Sepatu Trail", harga: 30000, stok: 0, img: "../images/acg.jpeg", desc: "Ukuran 44 Warna Putih" },
         ];
 
         let cart = {};
 
-        // RENDER KATALOG
+        // Fungsi Sanitasi XSS
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag])
+            );
+        }
+
+        // RENDER KATALOG DENGAN AMAN
         const katalogList = document.getElementById('katalogList');
         alatOutdoor.forEach(alat => {
             cart[alat.id] = 0;
+            const namaAman = escapeHTML(alat.nama);
+            const descAman = escapeHTML(alat.desc);
+            const imgAman = escapeHTML(alat.img);
+
             katalogList.innerHTML += `
                 <div class="card" style="background: white; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
-                        <img src="${alat.img}" alt="${alat.nama}" style="width:100%; height: 140px; object-fit: contain; border-radius: 8px;">
-                        <h3 style="font-size: 1rem; margin: 10px 0 5px;">${alat.nama}</h3>
-                        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">${alat.desc}</p>
+                        <img src="${imgAman}" alt="${namaAman}" style="width:100%; height: 140px; object-fit: contain; border-radius: 8px;">
+                        <h3 style="font-size: 1rem; margin: 10px 0 5px;">${namaAman}</h3>
+                        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">${descAman}</p>
                     </div>
                     <div>
                         <p style="font-weight: bold; color: #1e5631;">Rp ${alat.harga.toLocaleString()}/hari</p>
@@ -112,21 +130,17 @@
         });
 
         function updateQty(id, delta) {
-    // Cari data alat berdasarkan ID untuk mengecek batas stok
-    const alat = alatOutdoor.find(item => item.id === id);
-    
-    let newVal = cart[id] + delta;
-    
-    // Cek apakah jumlah tidak kurang dari 0 DAN tidak lebih dari stok
-    if (newVal >= 0 && newVal <= alat.stok) {
-        cart[id] = newVal;
-        document.getElementById(`qty-${id}`).innerText = newVal;
-        hitungTotalKeranjang();
-    } else if (newVal > alat.stok) {
-        // Munculkan peringatan jika user menekan tombol '+' melebihi stok
-        alert(`Maaf, sisa stok ${alat.nama} hanya ${alat.stok} unit.`);
-    }
-}
+            const alat = alatOutdoor.find(item => item.id === id);
+            let newVal = cart[id] + delta;
+            
+            if (newVal >= 0 && newVal <= alat.stok) {
+                cart[id] = newVal;
+                document.getElementById(`qty-${id}`).innerText = newVal;
+                hitungTotalKeranjang();
+            } else if (newVal > alat.stok) {
+                alert(`Maaf, sisa stok ${alat.nama} hanya ${alat.stok} unit.`);
+            }
+        }
 
         function hitungTotalKeranjang() {
             let total = 0;
@@ -138,27 +152,18 @@
             document.getElementById('namaPenyewa').scrollIntoView({ behavior: 'smooth' });
         }
 
-        /* =========================================
-           SISTEM VALIDASI REAL-TIME (PENCEGAHAN)
-           ========================================= */
         function filterNama(input) {
-            // Hanya mengizinkan huruf besar, huruf kecil, dan spasi (simbol & angka dihapus)
             input.value = input.value.replace(/[^a-zA-Z\s]/g, '');
         }
 
         function filterAngka(input) {
-            // Hanya mengizinkan angka (huruf, spasi & simbol dihapus)
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
         function filterAlamat(input) {
-            // Hanya mengizinkan huruf, angka, dan spasi (simbol-simbol dihapus)
             input.value = input.value.replace(/[^a-zA-Z0-9\s]/g, '');
         }
 
-        /* =========================================
-           EKSEKUSI PROSES SEWA (VALIDASI AKHIR)
-           ========================================= */
         async function prosesSewaSemua() {
             const nama = document.getElementById('namaPenyewa').value.trim();
             const hp = document.getElementById('hpPenyewa').value.trim();
@@ -176,13 +181,11 @@
                 }
             });
 
-            // 1. Validasi Kelengkapan Dasar
             if (!nama || !hp || !tgl || itemTerpilih.length === 0) {
                 alert("Lengkapi data penyewa dan pilih minimal 1 alat outdoor!");
                 return;
             }
 
-            // 2. Validasi Akhir Karakter (Double Protection)
             const regexNama = /^[a-zA-Z\s]+$/;
             const regexHp = /^[0-9]+$/;
             const regexAlamat = /^[a-zA-Z0-9\s]+$/;
@@ -211,7 +214,6 @@
                 const opsiTgl = { day: 'numeric', month: 'long', year: 'numeric' };
                 const tglFormat = new Date(tgl).toLocaleDateString('id-ID', opsiTgl);
 
-                // Susun teks format nota belanja otomatis untuk WhatsApp
                 let teksWA = `*NOTIFIKASI BOOKING HEYACAMP* ⛺\n`;
                 teksWA += `=========================\n\n`;
                 teksWA += `*Data Penyewa:*\n`;
@@ -235,7 +237,6 @@
 
                 alert("Pesanan berhasil masuk ke sistem! Mengalihkan ke WhatsApp Admin...");
 
-                // Redirect ke WhatsApp
                 window.open(`https://wa.me/${nomorAdminHeyaCamp}?text=${encodeURIComponent(teksWA)}`, '_blank');
 
             } catch (err) {
